@@ -14,7 +14,6 @@ class GridRender {
 	}
 
 	void RenderGrid(TextureManager const *textureManager, Grid &grid);
-	void RenderUi(const int hp, const int pointsToEvo, const int maxHP);
 	void DrawEnemy(TextureManager const *textureManager, const Vector2 position,
 				   const int type);
 
@@ -22,7 +21,7 @@ class GridRender {
 	void HidenCellRender();
 	void ReveledCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void PointsNotTakenCellRender(int x, int y, Grid &grid, Vector2 offset);
-	void HintingCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void HintingCellRender(int x, int y, Grid &grid, Vector2 offset, float scale);
 	void StartingCellRender(int x, int y, Grid &grid, Vector2 offset);
 
 	const TextureManager *textureManager = nullptr;

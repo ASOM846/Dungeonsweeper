@@ -12,12 +12,10 @@ class GridManager {
 	~GridManager() = default;
 
 	void Init();
-	void Update();
-	void Render(const TextureManager *textureManager);
+	void Update(int &hp, int &maxHp, int &pointsToEvo);
+	void Render(const TextureManager *textureManager, int hp, int pointsToEvo, int maxHp);
 
-	int hp = 4;
-	int maxHp = 4;
-	int pointsToEvo = 0;
+
 
   private:
 	Grid grid;

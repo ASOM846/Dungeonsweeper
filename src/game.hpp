@@ -1,21 +1,27 @@
 #pragma once
-#include <raylib.h>
 #include "grid/gridManager.hpp"
 #include "textureManager.hpp"
+#include "graphics/ui.hpp"
+#include <raylib.h>
 
 class Game {
-    public:
-    Game() = default;
-    ~Game() = default;
+  public:
+	Game() = default;
+	~Game() = default;
 
-    void Init();
+	void Init();
 
-    void Run();
+	void Run();
 
-    void Update();
-    void Draw();
+	void Update();
+	void Draw();
 
-private:
-    GridManager gridManager;
-    TextureManager textureManager;
+  private:
+	int hp = 4;
+	int maxHp = 4;
+	int pointsToEvo = 0;
+
+	GridManager gridManager;
+	TextureManager textureManager;
+	UI ui;
 };

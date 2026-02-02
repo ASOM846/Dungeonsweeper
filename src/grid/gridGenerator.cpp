@@ -7,8 +7,14 @@ void GridGenerator::Init(Grid &grid) {
 			c.hint = 0;
 			c.defeted = false;
 			c.state = GridGenerator::CellState::Hidden;
+			c.specialFunction = Grid::SpecialFunction::None;
 			c.val = (GetRandomValue(1, 2) == 1) ? PickW(kMonsterW)
 												: 0; // 1/2 na potworka
+
+			if (GetRandomValue(1, 100) <= 5) {
+				c.specialFunction = Grid::SpecialFunction::Heal;
+				c.val = 0;
+			}
 		}
 	}
 
@@ -37,7 +43,7 @@ void GridGenerator::Update(Grid &grid, int &hp, int &maxHp, int &pointsToEvo) {
 			OnHidenClick(x, y, grid, hp);
 			break;
 		case CellState::Revealed:
-			OnRevealedClick(x, y, grid, hp);
+			OnRevealedClick(x, y, grid, hp, maxHp);
 			break;
 		case CellState::pointsNotTaken:
 			OnPointsNotTakenClick(x, y, grid, pointsToEvo);
@@ -83,7 +89,13 @@ void GridGenerator::RecalculateHints(Grid &grid) {
 }
 
 void GridGenerator::OnHidenClick(int x, int y, Grid &grid, int &hp) {
-	if (grid.cells[y][x].val > 0) {
+	auto &cell = grid.cells[y][x];
+	if (cell.specialFunction == SpecialFunction::Heal) {
+		cell.state = CellState::Revealed;
+		return;
+	}
+
+	if (cell.val > 0) {
 		hp -= grid.cells[y][x].val;
 		grid.cells[y][x].state = CellState::pointsNotTaken;
 	} else {
@@ -91,9 +103,18 @@ void GridGenerator::OnHidenClick(int x, int y, Grid &grid, int &hp) {
 	}
 }
 
-void GridGenerator::OnRevealedClick(int x, int y, Grid &grid, int &hp) {
-	hp -= grid.cells[y][x].val;
-	grid.cells[y][x].state = CellState::pointsNotTaken;
+void GridGenerator::OnRevealedClick(int x, int y, Grid &grid, int &hp,
+								 int &maxHp) {
+	auto &cell = grid.cells[y][x];
+	if (cell.specialFunction == SpecialFunction::Heal) {
+		hp = maxHp;
+		cell.defeted = true;
+		cell.state = CellState::Hinting;
+		return;
+	}
+
+	hp -= cell.val;
+	cell.state = CellState::pointsNotTaken;
 }
 
 void GridGenerator::OnPointsNotTakenClick(int x, int y, Grid &grid,
@@ -103,9 +124,7 @@ void GridGenerator::OnPointsNotTakenClick(int x, int y, Grid &grid,
 	grid.cells[y][x].defeted = true;
 }
 
-void GridGenerator::OnHintingClick(int x, int y, Grid &grid) {
-
-}
+void GridGenerator::OnHintingClick(int x, int y, Grid &grid) {}
 void GridGenerator::OnStartingClick(int x, int y, Grid &grid) {
 	grid.cells[y][x].val = 0;
 	UncoverStartingCellNeighbors(x, y, grid.cells);

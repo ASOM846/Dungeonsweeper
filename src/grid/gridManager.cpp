@@ -4,11 +4,10 @@ void GridManager::Init() {
     gridGenerator.Init(grid);
 }
 
-void GridManager::Update() {
+void GridManager::Update(int &hp, int &maxHp, int &pointsToEvo) {
     gridGenerator.Update(grid, hp, maxHp, pointsToEvo);
 }
 
-void GridManager::Render(const TextureManager *textureManager) {
+void GridManager::Render(const TextureManager *textureManager, int hp, int pointsToEvo, int maxHp) {
     gridRender.RenderGrid(textureManager, grid);
-    gridRender.RenderUi(hp, pointsToEvo, maxHp);
 }

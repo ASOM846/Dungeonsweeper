@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/antek/Github/mineswepper/build"
+			"value" : "/home/antek/Github/Dungeonsweeper/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -155,10 +155,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "CXX compiler"
+					"value" : "No help, variable specified on the command line."
 				}
 			],
-			"type" : "STRING",
+			"type" : "FILEPATH",
 			"value" : "/usr/bin/g++"
 		},
 		{
@@ -427,7 +427,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/antek/Github/mineswepper/build/CMakeFiles/pkgRedirects"
+			"value" : "/home/antek/Github/Dungeonsweeper/build/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -487,7 +487,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/antek/Github/mineswepper"
+			"value" : "/home/antek/Github/Dungeonsweeper"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1123,7 +1123,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/antek/Github/mineswepper/build"
+			"value" : "/home/antek/Github/Dungeonsweeper/build"
 		},
 		{
 			"name" : "mineswepper_IS_TOP_LEVEL",
@@ -1147,7 +1147,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/antek/Github/mineswepper"
+			"value" : "/home/antek/Github/Dungeonsweeper"
 		},
 		{
 			"name" : "raylib_DIR",

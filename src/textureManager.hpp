@@ -16,6 +16,7 @@ enum class TextureId {
     Enemy10,
     Enemy11,
     BeginButton,
+    HeartFull,
     Floor1,
 };
 
@@ -37,6 +38,7 @@ public:
         load(TextureId::Enemy10, "assets/enemy10.png");
         load(TextureId::Enemy11, "assets/enemy11.png");
         load(TextureId::BeginButton, "assets/buttonBegin.png");
+        load(TextureId::HeartFull, "assets/heartFull.png");
         load(TextureId::Floor1, "assets/floor1.png");
     }
 

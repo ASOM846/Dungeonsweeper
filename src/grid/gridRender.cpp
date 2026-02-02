@@ -30,18 +30,15 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 				break;
 			case Grid::CellState::Hinting: {
 				HintingCellRender(static_cast<int>(x), static_cast<int>(y),
-								  grid, offset);
+								  grid, offset, scale);
 				break;
 			}
 			case Grid::CellState::Starting:
 				StartingCellRender(static_cast<int>(x), static_cast<int>(y),
 								   grid, offset);
 				break;
-            case Grid::CellState::HpUp:
-                // No special rendering for HpUp cells
-                break;
-            default:
-                break;
+			default:
+				break;
 			}
 			DrawRectangleLines(x * size + offset.x, y * size + offset.y, size,
 							   size, BLACK);
@@ -51,6 +48,19 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Heal) {
+		const Texture2D &heartTex = textureManager->get(TextureId::HeartFull);
+		const float heartScale =
+			(size * 0.6f) / static_cast<float>(heartTex.width);
+		const float scaledW = heartTex.width * heartScale;
+		const float scaledH = heartTex.height * heartScale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+
+		DrawTextureEx(heartTex, pos, 0.0f, heartScale, WHITE);
+		return;
+	}
+
 	if (grid.cells[y][x].val > 0) {
 		std::string text = std::to_string(grid.cells[y][x].val);
 		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
@@ -77,8 +87,11 @@ void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
 	}
 }
 
-void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset) {
+void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset, float scale) {
 	int size = Grid::CELL_SIZE;
+	DrawTextureEx(textureManager->get(TextureId::Floor1),
+				  {x * size + offset.x, y * size + offset.y}, 0.0f, scale,
+				  {100, 100, 100, 255});
 	int hint = gUtils::GetNeighboursSum(static_cast<int>(x),
 										static_cast<int>(y), grid.cells);
 	if (hint != 0) {
@@ -90,19 +103,11 @@ void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 void GridRender::StartingCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
-	DrawTextureEx(textureManager->get(TextureId::BeginButton),
-                  {x * size + offset.x, y * size + offset.y}, 0.0f,
-                  size / static_cast<float>(textureManager->get(TextureId::Floor1).width), WHITE);
-}
-
-void GridRender::RenderUi(const int hp, const int pointsToEvo,
-						  const int maxHp) {
-	std::string text3 = std::to_string(hp);
-	DrawText(("HP: " + text3).c_str(), 10, 10, 20, BLUE);
-
-	text3 = std::to_string(pointsToEvo);
-	std::string text4 = std::to_string(maxHp);
-	DrawText(("EV: " + text3 + "/" + text4).c_str(), 10, 50, 20, BLUE);
+	DrawTextureEx(
+		textureManager->get(TextureId::BeginButton),
+		{x * size + offset.x, y * size + offset.y}, 0.0f,
+		size / static_cast<float>(textureManager->get(TextureId::Floor1).width),
+		WHITE);
 }
 
 void GridRender::DrawEnemy(TextureManager const *textureManager,

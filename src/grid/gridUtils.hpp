@@ -1,9 +1,10 @@
 #pragma once
 
+#include "grid.hpp"
+#include "../graphics/ui.hpp"
 #include <array>
 #include <cstddef>
 #include <raylib.h>
-#include "grid.hpp"
 
 namespace gUtils {
 inline Vector2 GetOffset(Grid &grid) {
@@ -13,7 +14,7 @@ inline Vector2 GetOffset(Grid &grid) {
 	const int mapWidth = static_cast<int>(grid.cells[0].size()) * tileSize;
 	const int mapHeight = static_cast<int>(grid.cells.size()) * tileSize;
 
-	result.x = (GetScreenWidth() - mapWidth) / 2;
+	result.x = (GetScreenWidth() - mapWidth - UI::UI_BAR_WIDTH) / 2;
 	result.y = (GetScreenHeight() - mapHeight) / 2;
 
 	return result;
