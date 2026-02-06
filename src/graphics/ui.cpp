@@ -1,7 +1,9 @@
 #include "ui.hpp"
+#include "../game.hpp"
 #include <algorithm>
 
-void UI::RenderUi(const PlayerStats &playerStats, const bool isLose) const {
+void UI::RenderUi(const PlayerStats &playerStats,
+				  const GameState &gameState) const {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
 
@@ -171,8 +173,17 @@ void UI::RenderUi(const PlayerStats &playerStats, const bool isLose) const {
 	const int footerY = evoY + evoH + 32;
 
 	std::string hintText = "Playing...";
-	if (isLose) {
-		hintText = "You lose! Press anywhere to restart.";
+
+	switch (gameState) {
+	case GameState::Playing:
+		hintText = "Playing...";
+		break;
+	case GameState::Lose:
+		hintText = "You lost! \nPress R to restart.";
+		break;
+	default:
+		hintText = "";
+		break;
 	}
 	DrawText(hintText.c_str(), cardX + 12, footerY, 16,
 			 Color{200, 170, 140, 255});

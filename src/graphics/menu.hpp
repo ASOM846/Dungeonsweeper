@@ -5,12 +5,20 @@
 #include "button.hpp"
 #include <raylib.h>
 
+enum class MenuState {
+	MainMenu,
+	Settings,
+	Modes,
+	GameShoudlStart,
+};
+
 class Menu {
   public:
 	Menu() : IsStartGame(false) {}
 	~Menu() = default;
 
 	void Init();
+	void Reset();
 	void Update();
 	void Render(TextureManager &textureManager);
 
@@ -22,8 +30,12 @@ class Menu {
 
   private:
 	NewButton startGameButton;
+	NewButton settingsButton;
+
 	bool IsStartGame;
 
-	const int bigButtonHeight = 52;
-	const int bigButtonWidth = 260;
+	MenuState currentState;
+	const int bigButtonHeight = 70;
+	const int bigButtonWidth = 300;
+	const int mainButtionsSpacing = 20;
 };

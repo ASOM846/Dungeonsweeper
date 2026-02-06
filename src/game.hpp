@@ -1,16 +1,17 @@
 #pragma once
 #include "entity/playerStats.hpp"
-#include "graphics/ui.hpp"
 #include "grid/gridManager.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
 #include <iostream>
 #include <raylib.h>
 
+class UI;
+
 enum class GameState {
 	Playing,
-	Win,
 	Lose,
+	ShoudlReturnToMenu,
 };
 
 class Game {
@@ -19,12 +20,14 @@ class Game {
 	~Game() = default;
 
 	void Init();
-
-	void Run();
+	void Reset();
 
 	void Update();
 	void Render();
 
+	bool ShouldReturnToMenu() const {
+		return gameState == GameState::ShoudlReturnToMenu;
+	}
 	TextureManager &GetTextureManager() { return textureManager; }
 
   private:
@@ -36,12 +39,9 @@ class Game {
 
 	void UpdateLose();
 	void RenderLose();
-	void Reset();
 
   private:
 	GameState gameState;
-
-	bool shoudlReturnToMenu;
 
 	PlayerStats playerStats;
 	EvolutionSystem evolutionSystem;

@@ -4,6 +4,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+enum class GameState;
+
 class UI {
   public:
 	UI() = default;
@@ -11,7 +13,8 @@ class UI {
 
 	void Init(TextureManager *tm) { textureManager = tm; }
 
-	void RenderUi(const PlayerStats &playerStats, const bool isLose) const;
+	void RenderUi(const PlayerStats &playerStats,
+				  const GameState &gameState) const;
 	void RenderLose(const PlayerStats &playerStats) const;
 
 	const int GetBarWidth() const { return UI_BAR_WIDTH; }

@@ -25,11 +25,14 @@ void WindowManager::Update() {
 	case AppMode::Menu:
 		menu.Update();
 		if (menu.IsStartGamePressed()) {
-			currentMode = AppMode::Game;
+			SwitchMode(AppMode::Game);
 		}
 		break;
 	case AppMode::Game:
 		game.Update();
+		if (game.ShouldReturnToMenu()) {
+			SwitchMode(AppMode::Menu);
+		}
 		break;
 	}
 }
@@ -39,6 +42,7 @@ void WindowManager::Render() {
 	ClearBackground(RAYWHITE);
 
 	switch (currentMode) {
+		void Run();
 	case AppMode::Menu:
 		menu.Render(game.GetTextureManager());
 		break;
@@ -48,4 +52,20 @@ void WindowManager::Render() {
 	}
 
 	EndDrawing();
+}
+
+void WindowManager::SwitchMode(AppMode newMode) {
+	if (newMode == currentMode)
+		return;
+
+	switch (newMode) {
+	case AppMode::Menu:
+		currentMode = AppMode::Menu;
+		menu.Reset();
+		break;
+	case AppMode::Game:
+		currentMode = AppMode::Game;
+		game.Reset();
+		break;
+	}
 }

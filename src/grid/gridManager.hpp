@@ -13,7 +13,7 @@ class GridManager {
 	GridManager() = default;
 	~GridManager() = default;
 
-	void Init();
+	void InitGrid();
 	void Update(PlayerStats &playerStats);
 	void Render(const TextureManager *textureManager,
 				const PlayerStats &playerStats);

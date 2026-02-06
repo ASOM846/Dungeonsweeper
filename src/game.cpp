@@ -1,8 +1,9 @@
 #include "game.hpp"
+#include "graphics/ui.hpp"
+#include <raylib.h>
 
 void Game::Init() {
 	textureManager.loadAll();
-	gridManager.Init();
 	ui.Init(&textureManager);
 
 	Reset();
@@ -36,8 +37,8 @@ void Game::Render() {
 
 void Game::Reset() {
 	playerStats = PlayerStats();
-	shoudlReturnToMenu = false;
 	gameState = GameState::Playing;
+	gridManager.InitGrid();
 }
 
 void Game::UpdatePlaying() {
@@ -55,11 +56,13 @@ void Game::UpdatePlaying() {
 
 void Game::RenderPlaying() {
 	gridManager.Render(&textureManager, playerStats);
-	ui.RenderUi(playerStats, false);
+	ui.RenderUi(playerStats, gameState);
 }
 
 void Game::UpdateLose() {
-	UpdatePlaying();
+	if (IsKeyDown(KEY_R)) {
+		gameState = GameState::ShoudlReturnToMenu;
+	}
 }
 
 void Game::RenderLose() {

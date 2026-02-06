@@ -1,6 +1,6 @@
 #include "gridManager.hpp"
 
-void GridManager::Init() {
+void GridManager::InitGrid() {
 	gridGenerator.Init(grid);
 }
 

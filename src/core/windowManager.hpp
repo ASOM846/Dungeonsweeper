@@ -22,6 +22,8 @@ class WindowManager {
 	void Update();
 	void Render();
 
+	void SwitchMode(AppMode newMode);
+
 	Game game;
 	Menu menu;
 
