@@ -1,7 +1,10 @@
 #pragma once
-#include "grid/gridManager.hpp"
-#include "textureManager.hpp"
+#include "entity/playerStats.hpp"
 #include "graphics/ui.hpp"
+#include "grid/gridManager.hpp"
+#include "systems/evolutionSystem.hpp"
+#include "textureManager.hpp"
+#include <iostream>
 #include <raylib.h>
 
 class Game {
@@ -14,13 +17,13 @@ class Game {
 	void Run();
 
 	void Update();
-	void Draw();
+	void Render();
+
+	TextureManager &GetTextureManager() { return textureManager; }
 
   private:
-	int hp = 4;
-	int maxHp = 4;
-	int pointsToEvo = 0;
-
+	PlayerStats playerStats;
+	EvolutionSystem evolutionSystem;
 	GridManager gridManager;
 	TextureManager textureManager;
 	UI ui;

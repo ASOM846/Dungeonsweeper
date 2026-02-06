@@ -1,13 +1,14 @@
 #include "gridManager.hpp"
 
 void GridManager::Init() {
-    gridGenerator.Init(grid);
+	gridGenerator.Init(grid);
 }
 
-void GridManager::Update(int &hp, int &maxHp, int &pointsToEvo) {
-    gridGenerator.Update(grid, hp, maxHp, pointsToEvo);
+void GridManager::Update(PlayerStats &playerStats) {
+	gridInterpreter.Update(grid, playerStats);
 }
 
-void GridManager::Render(const TextureManager *textureManager, int hp, int pointsToEvo, int maxHp) {
-    gridRender.RenderGrid(textureManager, grid);
+void GridManager::Render(const TextureManager *textureManager,
+						 const PlayerStats &playerStats) {
+	gridRender.RenderGrid(textureManager, grid);
 }

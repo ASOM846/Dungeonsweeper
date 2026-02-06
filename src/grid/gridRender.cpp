@@ -1,7 +1,7 @@
 #include "gridRender.hpp"
 
 void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
-	this->textureManager = textureManager;
+		this->textureManager = textureManager;
 	if (!this->textureManager) {
 		return;
 	}
@@ -61,6 +61,19 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Mana) {
+		const Texture2D &manaTex = textureManager->get(TextureId::Coin);
+		const float scale =
+			(size * 0.6f) / static_cast<float>(manaTex.width);
+		const float scaledW = manaTex.width * scale;
+		const float scaledH = manaTex.height * scale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+
+		DrawTextureEx(manaTex, pos, 0.0f, scale, WHITE);
+		return;
+	}
+
 	if (grid.cells[y][x].val > 0) {
 		std::string text = std::to_string(grid.cells[y][x].val);
 		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
@@ -87,7 +100,8 @@ void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
 	}
 }
 
-void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset, float scale) {
+void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
+								   float scale) {
 	int size = Grid::CELL_SIZE;
 	DrawTextureEx(textureManager->get(TextureId::Floor1),
 				  {x * size + offset.x, y * size + offset.y}, 0.0f, scale,

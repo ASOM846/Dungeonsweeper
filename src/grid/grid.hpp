@@ -7,6 +7,7 @@ struct Grid {
 	static constexpr int WIDTH = 10;
 	static constexpr int HEIGHT = 10;
 	static constexpr int CELL_SIZE = 56;
+	//static constexpr int CELL_SIZE = 80;
 
 	enum class CellState {
 		// main states
@@ -20,6 +21,7 @@ struct Grid {
 	enum class SpecialFunction {
 		None,
 		Heal,
+		Mana,
 	};
 
 	struct Cell {

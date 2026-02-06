@@ -1,7 +1,7 @@
-#include "game.hpp"
+#include "core/windowManager.hpp"
 int main() {
-    Game game;
+	WindowManager windowManager;
 
-    game.Init();
-    game.Run();
+	windowManager.Init();
+	windowManager.Run();
 }
