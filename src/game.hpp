@@ -7,6 +7,12 @@
 #include <iostream>
 #include <raylib.h>
 
+enum class GameState {
+	Playing,
+	Win,
+	Lose,
+};
+
 class Game {
   public:
 	Game() = default;
@@ -22,6 +28,21 @@ class Game {
 	TextureManager &GetTextureManager() { return textureManager; }
 
   private:
+	void UpdatePlaying();
+	void RenderPlaying();
+
+	void UpdateWin();
+	void RenderWin();
+
+	void UpdateLose();
+	void RenderLose();
+	void Reset();
+
+  private:
+	GameState gameState;
+
+	bool shoudlReturnToMenu;
+
 	PlayerStats playerStats;
 	EvolutionSystem evolutionSystem;
 	GridManager gridManager;

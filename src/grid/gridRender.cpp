@@ -1,7 +1,24 @@
 #include "gridRender.hpp"
 
+namespace {
+inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
+								  float rotation, float scale, Color tint) {
+	Rectangle source{0.0f, 0.0f, static_cast<float>(texture.width),
+					 static_cast<float>(texture.height)};
+
+	const float destW = texture.width * scale;
+	const float destH = texture.height * scale;
+
+	Rectangle dest{position.x + destW * 0.5f, position.y + destH * 0.5f, destW,
+			   destH};
+	Vector2 origin{destW * 0.5f, destH * 0.5f};
+
+	DrawTexturePro(texture, source, dest, origin, rotation, tint);
+}
+} // namespace
+
 void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
-		this->textureManager = textureManager;
+	this->textureManager = textureManager;
 	if (!this->textureManager) {
 		return;
 	}
@@ -13,9 +30,13 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 
 	for (size_t x = 0; x < Grid::WIDTH; ++x) {
 		for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-			DrawTextureEx(textureManager->get(TextureId::Floor1),
-						  {x * size + offset.x, y * size + offset.y}, 0.0f,
-						  scale, WHITE);
+			TextureId floorTextureId =
+				GetFloorTextureId(grid.cells[y][x].textureNumber);
+
+			DrawTextureExCentered(textureManager->get(floorTextureId),
+								  {x * size + offset.x, y * size + offset.y},
+								  grid.cells[y][x].rotation * 90.0f, scale,
+								  WHITE);
 
 			switch (grid.cells[y][x].state) {
 			case Grid::CellState::Hidden:
@@ -46,6 +67,30 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 	}
 }
 
+TextureId GridRender::GetFloorTextureId(int type) {
+	switch (type) {
+	case 1:
+		return TextureId::Floor1;
+	case 2:
+		return TextureId::Floor2;
+	case 3:
+		return TextureId::Floor3;
+	case 4:
+		return TextureId::Floor4;
+	case 5:
+		return TextureId::Floor5;
+	case 6:
+		return TextureId::Floor6;
+	case 7:
+		return TextureId::Floor7;
+	case 8:
+		return TextureId::Floor8;
+	default:
+		return TextureId::Floor1;
+		TextureId textureId;
+	}
+}
+
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Heal) {
@@ -63,8 +108,7 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Mana) {
 		const Texture2D &manaTex = textureManager->get(TextureId::Coin);
-		const float scale =
-			(size * 0.6f) / static_cast<float>(manaTex.width);
+		const float scale = (size * 0.6f) / static_cast<float>(manaTex.width);
 		const float scaledW = manaTex.width * scale;
 		const float scaledH = manaTex.height * scale;
 		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
@@ -103,9 +147,13 @@ void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
 void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
 								   float scale) {
 	int size = Grid::CELL_SIZE;
-	DrawTextureEx(textureManager->get(TextureId::Floor1),
-				  {x * size + offset.x, y * size + offset.y}, 0.0f, scale,
-				  {100, 100, 100, 255});
+	TextureId floorTextureId =
+		GetFloorTextureId(grid.cells[y][x].textureNumber);
+
+	DrawTextureExCentered(textureManager->get(floorTextureId),
+						  {x * size + offset.x, y * size + offset.y},
+						  grid.cells[y][x].rotation * 90.0f, scale,
+						  {100, 100, 100, 255});
 	int hint = gUtils::GetNeighboursSum(static_cast<int>(x),
 										static_cast<int>(y), grid.cells);
 	if (hint != 0) {
@@ -164,6 +212,9 @@ void GridRender::DrawEnemy(TextureManager const *textureManager,
 		break;
 	case 11:
 		textureId = TextureId::Enemy11;
+		break;
+	case 100:
+		textureId = TextureId::Bomb;
 		break;
 	default:
 		return; // Unknown type

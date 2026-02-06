@@ -17,9 +17,17 @@ enum class TextureId {
 	Enemy11,
 	BeginButton,
 	Player,
+	Bomb,
 	Coin,
 	HeartFull,
 	Floor1,
+	Floor2,
+	Floor3,
+	Floor4,
+	Floor5,
+	Floor6,
+	Floor7,
+	Floor8,
 };
 
 class TextureManager {
@@ -41,9 +49,17 @@ class TextureManager {
 		load(TextureId::Enemy11, "assets/enemy11.png");
 		load(TextureId::BeginButton, "assets/buttonBegin.png");
 		load(TextureId::Player, "assets/player.png");
+		load(TextureId::Bomb, "assets/bomb.png");
 		load(TextureId::Coin, "assets/coin.png");
 		load(TextureId::HeartFull, "assets/heartFull.png");
 		load(TextureId::Floor1, "assets/floor1.png");
+		load(TextureId::Floor2, "assets/floor2.png");
+		load(TextureId::Floor3, "assets/floor3.png");
+		load(TextureId::Floor4, "assets/floor4.png");
+		load(TextureId::Floor5, "assets/floor5.png");
+		load(TextureId::Floor6, "assets/floor6.png");
+		load(TextureId::Floor7, "assets/floor7.png");
+		load(TextureId::Floor8, "assets/floor8.png");
 	}
 
 	const Texture2D &get(TextureId id) const {

@@ -1,7 +1,7 @@
 #include "ui.hpp"
 #include <algorithm>
 
-void UI::RenderUi(const PlayerStats &playerStats) const {
+void UI::RenderUi(const PlayerStats &playerStats, const bool isLose) const {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
 
@@ -36,6 +36,7 @@ void UI::RenderUi(const PlayerStats &playerStats) const {
 	const int avatarPad = 12;
 	const int avatarCardH = avatarSize + avatarPad * 2 + 24;
 	const int avatarY = headerH + 12;
+
 	DrawRectangleRounded(
 		Rectangle{static_cast<float>(cardX), static_cast<float>(avatarY),
 				  static_cast<float>(cardW), static_cast<float>(avatarCardH)},
@@ -155,8 +156,25 @@ void UI::RenderUi(const PlayerStats &playerStats) const {
 		DrawText(ratioText, ratioX, labelY, labelFontSize,
 				 Color{200, 170, 140, 255});
 	}
+
+	const int evoY2 = avatarY + avatarCardH + cardH + evoH + 48;
+	DrawRectangleRounded(
+		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY2),
+				  static_cast<float>(cardW), static_cast<float>(avatarFrameY)},
+		0.2f, 8, Color{34, 30, 26, 255});
+	DrawRectangleLinesEx(
+		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY2),
+				  static_cast<float>(cardW), static_cast<float>(avatarFrameY)},
+		2.0f, Color{90, 72, 54, 255});
+
 	// Footer hints
-	const int footerY = evoY + evoH + 18;
-	DrawText("Loot. Survive. Ascend.", cardX + 8, footerY, 14,
-			 Color{130, 110, 90, 255});
+	const int footerY = evoY + evoH + 32;
+
+	std::string hintText = "Playing...";
+	if (isLose) {
+		hintText = "You lose! Press anywhere to restart.";
+	}
+	DrawText(hintText.c_str(), cardX + 12, footerY, 16,
+			 Color{200, 170, 140, 255});
 }
+void RenderLose(const PlayerStats &playerStats) {}

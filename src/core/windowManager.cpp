@@ -1,6 +1,6 @@
 #include "windowManager.hpp"
 void WindowManager::Init() {
-	InitWindow(800, 600, "My Application");
+	InitWindow(1280, 720, "My Application");
 	SetTargetFPS(60);
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowState(FLAG_VSYNC_HINT);

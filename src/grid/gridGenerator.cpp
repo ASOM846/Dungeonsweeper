@@ -8,6 +8,8 @@ void GridGenerator::Init(Grid &grid) {
 			c.defeted = false;
 			c.state = GridGenerator::CellState::Hidden;
 			c.specialFunction = Grid::SpecialFunction::None;
+			c.textureNumber = GetRandomValue(1, 8);
+			c.rotation = GetRandomValue(0, 3);
 
 			int seed = GetRandomValue(1, 20);
 			if (seed <= 15) {

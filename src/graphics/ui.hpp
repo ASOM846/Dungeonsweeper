@@ -11,7 +11,8 @@ class UI {
 
 	void Init(TextureManager *tm) { textureManager = tm; }
 
-	void RenderUi(const PlayerStats &playerStats) const;
+	void RenderUi(const PlayerStats &playerStats, const bool isLose) const;
+	void RenderLose(const PlayerStats &playerStats) const;
 
 	const int GetBarWidth() const { return UI_BAR_WIDTH; }
 	constexpr static int UI_BAR_WIDTH = 200;
