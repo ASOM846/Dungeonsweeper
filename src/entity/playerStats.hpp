@@ -2,13 +2,17 @@
 
 struct PlayerStats {
 	int score = 0;
-	int hp = 5;
+	int hp = 15;
 	bool hpHalf = false;
 	int maxHp = 5;
 	bool drawHalfHp = false;
 	int pointsToEvo = 4;
 	int currentPointsToEvo = 0;
 	int keys = 0;
+
+	bool hasRedSword = true;
+	bool hasGreenSword = true;
+	bool hasGoldSword = true;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;

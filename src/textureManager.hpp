@@ -18,6 +18,7 @@ enum class TextureId {
 	OgreBig,
 	OgreSmall,
 	BeginButton,
+	Necromancer,
 	Player,
 	Bomb,
 	Coin,
@@ -56,6 +57,7 @@ class TextureManager {
 		load(TextureId::Enemy11, "assets/enemy11.png");
 		load(TextureId::OgreBig, "assets/ogreBig.png");
 		load(TextureId::OgreSmall, "assets/ogreSmall.png");
+		load(TextureId::Necromancer, "assets/necromancer.png");
 		load(TextureId::BeginButton, "assets/buttonBegin.png");
 		load(TextureId::Player, "assets/player.png");
 		load(TextureId::Bomb, "assets/bomb.png");

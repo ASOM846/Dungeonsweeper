@@ -1,11 +1,12 @@
 #include "ui.hpp"
-#include "button.hpp"
 #include "../game.hpp"
+#include "button.hpp"
 #include <algorithm>
 
 namespace {
-void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds,
-				 int fontSize, float spacing, Color tint) {
+void DrawWrappedText(const Font &font, const std::string &text,
+					 Rectangle bounds, int fontSize, float spacing,
+					 Color tint) {
 	if (text.empty() || bounds.width <= 0.0f || bounds.height <= 0.0f) {
 		return;
 	}
@@ -14,9 +15,12 @@ void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds
 	float cursorY = bounds.y;
 
 	size_t start = 0;
-	while (start < text.size() && cursorY + lineHeight <= bounds.y + bounds.height) {
+	while (start < text.size() &&
+		   cursorY + lineHeight <= bounds.y + bounds.height) {
 		// Skip leading spaces/newlines
-		while (start < text.size() && (text[start] == ' ' || text[start] == '\n' || text[start] == '\r' || text[start] == '\t')) {
+		while (start < text.size() &&
+			   (text[start] == ' ' || text[start] == '\n' ||
+				text[start] == '\r' || text[start] == '\t')) {
 			if (text[start] == '\n') {
 				cursorY += lineHeight;
 				if (cursorY + lineHeight > bounds.y + bounds.height) {
@@ -39,7 +43,8 @@ void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds
 				lastBreak = end;
 			}
 			std::string candidate = text.substr(start, end - start + 1);
-			Vector2 size = MeasureTextEx(font, candidate.c_str(), static_cast<float>(fontSize), spacing);
+			Vector2 size = MeasureTextEx(font, candidate.c_str(),
+										 static_cast<float>(fontSize), spacing);
 			if (size.x > bounds.width) {
 				break;
 			}
@@ -51,7 +56,8 @@ void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds
 		if (!foundAny) {
 			// Force at least one character to render
 			lineEnd = std::min(start + 1, text.size());
-		} else if (lineEnd < text.size() && text[lineEnd] != '\n' && lastBreak > start) {
+		} else if (lineEnd < text.size() && text[lineEnd] != '\n' &&
+				   lastBreak > start) {
 			// Prefer breaking at last space when we overflowed
 			lineEnd = lastBreak;
 		}
@@ -62,7 +68,8 @@ void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds
 			line.pop_back();
 		}
 
-		DrawTextEx(font, line.c_str(), Vector2{bounds.x, cursorY}, static_cast<float>(fontSize), spacing, tint);
+		DrawTextEx(font, line.c_str(), Vector2{bounds.x, cursorY},
+				   static_cast<float>(fontSize), spacing, tint);
 		cursorY += lineHeight;
 
 		// Advance start
@@ -70,15 +77,49 @@ void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds
 		while (start < text.size() && text[start] == ' ') {
 			++start;
 		}
-		if (start < text.size() && (text[start] == '\n' || text[start] == '\r')) {
+		if (start < text.size() &&
+			(text[start] == '\n' || text[start] == '\r')) {
 			++start;
 		}
 	}
 }
+
+void DrawTriColorTriangleIndicator(Rectangle bounds, bool redOn, bool greenOn,
+							   bool goldOn) {
+	if (bounds.width <= 1.0f || bounds.height <= 1.0f) {
+		return;
+	}
+
+	// Big triangle vertices (A top, B bottom-left, C bottom-right)
+	Vector2 a{bounds.x + bounds.width * 0.5f, bounds.y};
+	Vector2 b{bounds.x, bounds.y + bounds.height};
+	Vector2 c{bounds.x + bounds.width, bounds.y + bounds.height};
+
+	// Midpoints (used to form a "triforce" layout: 3 triangles + empty center)
+	Vector2 ab{(a.x + b.x) * 0.5f, (a.y + b.y) * 0.5f};
+	Vector2 ac{(a.x + c.x) * 0.5f, (a.y + c.y) * 0.5f};
+	Vector2 bc{(b.x + c.x) * 0.5f, (b.y + c.y) * 0.5f};
+
+	const Color off = Color{50, 44, 38, 255};
+	const Color colRed = redOn ? Color{185, 70, 55, 255} : off;
+	const Color colGreen = greenOn ? Color{70, 160, 95, 255} : off;
+	const Color colGold = goldOn ? Color{210, 175, 70, 255} : off;
+	const Color line = Color{120, 96, 72, 255};
+
+	// Top = gold, bottom-left = red, bottom-right = green
+	DrawTriangle(a, ab, ac, colGold);
+	DrawTriangle(ab, b, bc, colRed);
+	DrawTriangle(ac, bc, c, colGreen);
+
+	// Outline the three sub-triangles (keeps the "hole" visible)
+	DrawTriangleLines(a, ab, ac, line);
+	DrawTriangleLines(ab, b, bc, line);
+	DrawTriangleLines(ac, bc, c, line);
+	DrawTriangleLines(a, b, c, line);
+}
 } // namespace
 
-void UI::RenderUi(const PlayerStats &playerStats,
-				  const GameState &gameState) {
+void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
 
@@ -261,6 +302,19 @@ void UI::RenderUi(const PlayerStats &playerStats,
 				 Color{200, 170, 140, 255});
 	}
 
+	// Tri-color triangle indicator (colors depend only on bools)
+	{
+		const float triPadTop = 18.0f;
+		const float triW = std::min(120.0f, static_cast<float>(cardW) - 20.0f);
+		const float triH = triW * 0.8660254f;
+		const float triX = static_cast<float>(cardX) +
+						   (static_cast<float>(cardW) - triW) * 0.5f;
+		const float triY = static_cast<float>(evoY + evoH) + triPadTop;
+		DrawTriColorTriangleIndicator(
+			Rectangle{triX, triY, triW, triH}, playerStats.hasRedSword,
+			playerStats.hasGreenSword, playerStats.hasGoldSword);
+	}
+
 	// Message box overlay (draw last so it stays on top)
 	RenderMessageBox();
 }
@@ -310,11 +364,10 @@ void UI::RenderMessageBox() {
 	const float textPadX = 18.0f;
 	const float textTop = 18.0f;
 	const float buttonAreaH = 70.0f;
-	Rectangle textRect{boxX + textPadX, boxY + textTop,
-				  boxW - textPadX * 2.0f,
-				  boxH - textTop - buttonAreaH};
+	Rectangle textRect{boxX + textPadX, boxY + textTop, boxW - textPadX * 2.0f,
+					   boxH - textTop - buttonAreaH};
 	DrawWrappedText(GetFontDefault(), messageBoxText, textRect, fontSize, 1.0f,
-				Color{220, 200, 170, 255});
+					Color{220, 200, 170, 255});
 
 	// OK button
 	NewButton okBtn;
@@ -322,7 +375,7 @@ void UI::RenderMessageBox() {
 	const float okH = 44.0f;
 	okBtn = NewButton(0.0f, 0.0f, okW, okH, "OK");
 	okBtn.SetColors(Color{34, 30, 26, 255}, Color{120, 96, 72, 255},
-				Color{220, 200, 170, 255});
+					Color{220, 200, 170, 255});
 	const float okX = boxX + (boxW - okW) * 0.5f;
 	const float okY = boxY + boxH - okH - 16.0f;
 	okBtn.SetPosition(okX, okY);

@@ -66,9 +66,11 @@ class GridGenerator {
 	void Render(const TextureManager *textureManager, Grid &grid);
 
   private:
-	void PlaceSpecialFunction(Grid &grid, Grid::SpecialFunction funct,
-							  int count);
+	static void PlaceSpecialFunction(Grid &grid, Grid::SpecialFunction funct,
+									 int count);
 	void InitOgre(Grid &grid);
 	int GetFlorTextureNumber();
 	SpecialFunction GetSpecialFunction();
+
+	friend class GridInterpreter;
 };

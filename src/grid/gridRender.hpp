@@ -15,10 +15,10 @@ class GridRender {
 
 	void RenderGrid(TextureManager const *textureManager, Grid &grid,
 					GameMode gameMode);
-	void DrawEnemy(TextureManager const *textureManager, const Vector2 position,
-				   const int type,
-				   Grid::SpecialFunction specialFunction =
-					   Grid::SpecialFunction::None);
+	void DrawEnemy(
+		TextureManager const *textureManager, const Vector2 position,
+		const int type,
+		Grid::SpecialFunction specialFunction = Grid::SpecialFunction::None);
 
   private:
 	TextureId GetFloorTextureId(int type);

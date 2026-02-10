@@ -112,6 +112,12 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
+	if (grid.cells[y][x].specialFunction ==
+		Grid::SpecialFunction::Necromancer) {
+		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
+				  grid.cells[y][x].val, grid.cells[y][x].specialFunction);
+	}
+
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Mana) {
 		const Texture2D &manaTex = textureManager->get(TextureId::Coin);
 		const float scale = (size * 0.6f) / static_cast<float>(manaTex.width);
@@ -245,6 +251,8 @@ void GridRender::DrawEnemy(TextureManager const *textureManager,
 		textureId = TextureId::OgreBig;
 	} else if (specialFunction == Grid::SpecialFunction::OgreSmall) {
 		textureId = TextureId::OgreSmall;
+	} else if (specialFunction == Grid::SpecialFunction::Necromancer) {
+		textureId = TextureId::Necromancer;
 	} else {
 		switch (type) {
 		case 1:

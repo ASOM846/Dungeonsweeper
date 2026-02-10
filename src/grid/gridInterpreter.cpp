@@ -1,5 +1,6 @@
 #include "gridInterpreter.hpp"
 #include "../entity/playerStats.hpp"
+#include "gridGenerator.hpp"
 
 void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	if (this->ui == nullptr)
@@ -35,7 +36,7 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 		switch (grid.cells[y][x].state) {
 		case CellState::Hidden:
-			OnHidenClick(x, y, grid, playerStats.hp);
+			OnHidenClick(x, y, grid, playerStats);
 			break;
 		case CellState::Revealed:
 			OnRevealedClick(x, y, grid, playerStats);
@@ -61,7 +62,8 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	}
 }
 
-void GridInterpreter::OnHidenClick(int x, int y, Grid &grid, int &hp) {
+void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
+								   PlayerStats &playerStats) {
 	auto &cell = grid.cells[y][x];
 	if (cell.specialFunction == SpecialFunction::Ladder ||
 		cell.specialFunction == SpecialFunction::Mana ||
@@ -72,12 +74,7 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid, int &hp) {
 		return;
 	}
 
-	if (cell.val > 0) {
-		hp -= grid.cells[y][x].val;
-		grid.cells[y][x].state = CellState::pointsNotTaken;
-	} else {
-		grid.cells[y][x].state = CellState::Hinting;
-	}
+	OnRevealedClick(x, y, grid, playerStats);
 }
 
 void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
@@ -87,6 +84,25 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 	if (cell.specialFunction == SpecialFunction::Starting) {
 		cell.defeted = true;
 		OnStartingClick(x, y, grid);
+		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::Necromancer) {
+		const int roll = GetRandomValue(0, 2);
+		if (roll == 0) {
+			playerStats.hp -= cell.val;
+			playerStats.currentPointsToEvo += 3;
+			cell.defeted = true;
+			cell.state = CellState::pointsNotTaken;
+			return;
+		}
+
+		cell.defeted = true;
+		cell.state = CellState::Hinting;
+		cell.specialFunction = SpecialFunction::None;
+		cell.val = 0;
+		GridGenerator::PlaceSpecialFunction(grid, SpecialFunction::Necromancer,
+											1);
 		return;
 	}
 

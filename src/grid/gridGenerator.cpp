@@ -32,6 +32,9 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 
 	InitOgre(grid);
 
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Necromancer,
+						 Grid::NUMBER_OF_NECROMANCERS);
+
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Heal,
 						 Grid::NUMBER_OF_HEARTS);
 
@@ -50,11 +53,11 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1);
 	}
 
-	for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-		for (size_t x = 0; x < Grid::WIDTH; ++x) {
-			grid.cells[y][x].state = Grid::CellState::Revealed;
-		}
-	}
+	// for (size_t y = 0; y < Grid::HEIGHT; ++y) {
+	// 	for (size_t x = 0; x < Grid::WIDTH; ++x) {
+	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
+	// 	}
+	// }
 }
 
 void GridGenerator::PlaceSpecialFunction(Grid &grid,
@@ -72,6 +75,10 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 
 			grid.cells[y][x].specialFunction = funct;
 			grid.cells[y][x].val = 0;
+
+			if (funct == Grid::SpecialFunction::Necromancer) {
+				grid.cells[y][x].val = 6;
+			}
 
 			if (funct == Grid::SpecialFunction::Starting ||
 				funct == Grid::SpecialFunction::Wizzard) {
@@ -139,6 +146,7 @@ int GridGenerator::GetFlorTextureNumber() {
 
 	return seed - 6;
 }
+
 GridGenerator::SpecialFunction GridGenerator::GetSpecialFunction() {
 	static const std::array<std::pair<GridGenerator::SpecialFunction, int>, 2>
 		kSpecials = {std::make_pair(GridGenerator::SpecialFunction::Heal, 14),
