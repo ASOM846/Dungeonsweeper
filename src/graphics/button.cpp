@@ -1,5 +1,7 @@
 #include "button.hpp"
 
+#include <algorithm>
+
 Color Green = Color{25, 25, 112, 255};		 // Midnight Blue
 Color HoverColor = Color{72, 61, 139, 255};	 // Dark Slate Blue
 Color PressedColor = Color{47, 79, 79, 255}; // Dark Slate Gray
@@ -216,6 +218,14 @@ void NewButton::Toggle() {
 void NewButton::SetPosition(float newX, float newY) {
 	x = newX;
 	y = newY;
+}
+
+void NewButton::SetSize(float newWidth, float newHeight) {
+	width = newWidth;
+	height = newHeight;
+
+	int computed = static_cast<int>(height * 0.36f);
+	fontSize = std::clamp(computed, 18, 28);
 }
 
 float NewButton::GetWidth() const {

@@ -1,6 +1,9 @@
 #include "gridGenerator.hpp"
 
-void GridGenerator::Init(Grid &grid) {
+void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
+						 GameMode gameMode) {
+	(void)gameMode;
+	// Base fill
 	for (size_t y = 0; y < Grid::HEIGHT; ++y) {
 		for (size_t x = 0; x < Grid::WIDTH; ++x) {
 			auto &c = grid.cells[y][x];
@@ -8,35 +11,137 @@ void GridGenerator::Init(Grid &grid) {
 			c.defeted = false;
 			c.state = GridGenerator::CellState::Hidden;
 			c.specialFunction = Grid::SpecialFunction::None;
-			c.textureNumber = GetRandomValue(1, 8);
+			c.textureNumber = GetFlorTextureNumber();
 			c.rotation = GetRandomValue(0, 3);
+			c.flagged = false;
 
 			int seed = GetRandomValue(1, 20);
 			if (seed <= 15) {
-				c.val = PickW(kMonsterW);
-			} else if (seed <= 17) {
-				c.specialFunction = GetSpecialFunction();
+				if (playerStats.currentLevel < 3) {
+					c.val = PickW(kMonsterW);
+				} else {
+					c.val = PickW(kMonsterW2);
+				}
 			} else {
 				c.val = 0;
 			}
 		}
 	}
 
-	// for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-	// 	for (size_t x = 0; x < Grid::WIDTH; ++x) {
-	// 		grid.cells[y][x].state = GridGenerator::CellState::Revealed;
-	// 	}
-	// }
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1);
 
-	int randomX = GetRandomValue(0, Grid::WIDTH - 1);
-	int randomY = GetRandomValue(0, Grid::HEIGHT - 1);
-	grid.cells[randomY][randomX].val = 0;
-	grid.cells[randomY][randomX].state = GridGenerator::CellState::Starting;
+	InitOgre(grid);
+
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Heal,
+						 Grid::NUMBER_OF_HEARTS);
+
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Mana,
+						 Grid::NUMBER_OF_MANA);
+
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::ChestKey,
+						 Grid::NUMBER_OF_KEYS);
+
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Chest,
+						 Grid::NUMBER_OF_CHESTS);
+
+	if (gameMode == GameMode::Classic) {
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1);
+	} else {
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1);
+	}
+
+	for (size_t y = 0; y < Grid::HEIGHT; ++y) {
+		for (size_t x = 0; x < Grid::WIDTH; ++x) {
+			grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
+void GridGenerator::PlaceSpecialFunction(Grid &grid,
+										 Grid::SpecialFunction funct,
+										 int count = 1) {
+	for (int i = 0; i < count; ++i) {
+		for (int attempts = 0; attempts < 500; ++attempts) {
+			const int x = GetRandomValue(0, Grid::WIDTH - 1);
+			const int y = GetRandomValue(0, Grid::HEIGHT - 1);
+
+			if (grid.cells[y][x].specialFunction !=
+				Grid::SpecialFunction::None) {
+				continue;
+			}
+
+			grid.cells[y][x].specialFunction = funct;
+			grid.cells[y][x].val = 0;
+
+			if (funct == Grid::SpecialFunction::Starting ||
+				funct == Grid::SpecialFunction::Wizzard) {
+				if (funct == Grid::SpecialFunction::Starting) {
+					grid.cells[y][x].val = 0;
+				} else {
+					grid.cells[y][x].val = 13;
+				}
+				grid.cells[y][x].state = Grid::CellState::Revealed;
+			}
+			break;
+		}
+	}
+}
+
+void GridGenerator::InitOgre(Grid &grid) {
+	static constexpr std::array<std::pair<int, int>, 8> kRelativePositions = {
+		std::pair<int, int>{-1, 0},	 std::pair<int, int>{1, 0},
+		std::pair<int, int>{0, -1},	 std::pair<int, int>{0, 1},
+		std::pair<int, int>{-1, -1}, std::pair<int, int>{-1, 1},
+		std::pair<int, int>{1, -1},	 std::pair<int, int>{1, 1},
+	};
+
+	for (int attempts = 0; attempts < 500; ++attempts) {
+		const int x = GetRandomValue(1, Grid::WIDTH - 2);
+		const int y = GetRandomValue(1, Grid::HEIGHT - 2);
+
+		auto isFree = [&](int cx, int cy) {
+			return grid.cells[cy][cx].specialFunction ==
+				   Grid::SpecialFunction::None;
+		};
+
+		if (!isFree(x, y)) {
+			continue;
+		}
+
+		bool canPlace = true;
+		for (const auto &[dx, dy] : kRelativePositions) {
+			if (!isFree(x + dx, y + dy)) {
+				canPlace = false;
+				break;
+			}
+		}
+
+		if (!canPlace) {
+			continue;
+		}
+
+		grid.cells[y][x].specialFunction = Grid::SpecialFunction::OgreBig;
+		grid.cells[y][x].val = 8;
+
+		for (const auto &[dx, dy] : kRelativePositions) {
+			auto &neighbor = grid.cells[y + dy][x + dx];
+			neighbor.specialFunction = Grid::SpecialFunction::OgreSmall;
+			neighbor.val = 5;
+		}
+		return;
+	}
+}
+
+int GridGenerator::GetFlorTextureNumber() {
+	int seed = GetRandomValue(1, 14);
+	if (seed <= 6)
+		return 1;
+
+	return seed - 6;
+}
 GridGenerator::SpecialFunction GridGenerator::GetSpecialFunction() {
 	static const std::array<std::pair<GridGenerator::SpecialFunction, int>, 2>
-		kSpecials = {std::make_pair(GridGenerator::SpecialFunction::Heal, 10),
+		kSpecials = {std::make_pair(GridGenerator::SpecialFunction::Heal, 14),
 					 std::make_pair(GridGenerator::SpecialFunction::Mana, 10)};
 	int total = 0;
 	for (const auto &e : kSpecials)

@@ -10,14 +10,15 @@ inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
 	const float destH = texture.height * scale;
 
 	Rectangle dest{position.x + destW * 0.5f, position.y + destH * 0.5f, destW,
-			   destH};
+				   destH};
 	Vector2 origin{destW * 0.5f, destH * 0.5f};
 
 	DrawTexturePro(texture, source, dest, origin, rotation, tint);
 }
 } // namespace
 
-void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
+void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
+							GameMode gameMode) {
 	this->textureManager = textureManager;
 	if (!this->textureManager) {
 		return;
@@ -38,6 +39,13 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 								  grid.cells[y][x].rotation * 90.0f, scale,
 								  WHITE);
 
+			if (grid.cells[y][x].flagged) {
+				DrawTextureExCentered(
+					textureManager->get(TextureId::Skull),
+					{x * size + offset.x, y * size + offset.y}, 0.0f, scale,
+					WHITE);
+			}
+
 			switch (grid.cells[y][x].state) {
 			case Grid::CellState::Hidden:
 				break;
@@ -54,10 +62,6 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid) {
 								  grid, offset, scale);
 				break;
 			}
-			case Grid::CellState::Starting:
-				StartingCellRender(static_cast<int>(x), static_cast<int>(y),
-								   grid, offset);
-				break;
 			default:
 				break;
 			}
@@ -93,6 +97,8 @@ TextureId GridRender::GetFloorTextureId(int type) {
 
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
+	Grid::Cell &current = grid.cells[y][x];
+
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Heal) {
 		const Texture2D &heartTex = textureManager->get(TextureId::HeartFull);
 		const float heartScale =
@@ -118,14 +124,68 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Ladder) {
+		const Texture2D &ladderTex = textureManager->get(TextureId::Ladder);
+		const float scale = (size * 0.6f) / static_cast<float>(ladderTex.width);
+		const float scaledW = ladderTex.width * scale;
+		const float scaledH = ladderTex.height * scale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+
+		DrawTextureEx(ladderTex, pos, 0.0f, scale, WHITE);
+
+		DrawRectangleLinesEx({x * size + offset.x, y * size + offset.y,
+							  static_cast<float>(size),
+							  static_cast<float>(size)},
+							 10.0f, BLUE);
+		return;
+	}
+
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Wizzard) {
+		const Texture2D &ladderTex =
+			textureManager->get(TextureId::BlueWizzard);
+		const float scale = (size * 0.6f) / static_cast<float>(ladderTex.width);
+		const float scaledW = ladderTex.width * scale;
+		const float scaledH = ladderTex.height * scale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+		DrawTextureEx(ladderTex, pos, 0.0f, scale, WHITE);
+	}
+
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Starting) {
+		StartingCellRender(x, y, grid, offset);
+	}
+
+	if (current.specialFunction == Grid::SpecialFunction::Chest) {
+		const Texture2D &chestTex = textureManager->get(TextureId::Chest);
+		const float scale = (size * 0.6f) / static_cast<float>(chestTex.width);
+		const float scaledW = chestTex.width * scale;
+		const float scaledH = chestTex.height * scale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+
+		DrawTextureEx(chestTex, pos, 0.0f, scale, WHITE);
+		return;
+	}
+
+	if (current.specialFunction == Grid::SpecialFunction::ChestKey) {
+		const Texture2D &keyTex = textureManager->get(TextureId::Key);
+		const float scale = (size * 0.6f) / static_cast<float>(keyTex.width);
+		const float scaledW = keyTex.width * scale;
+		const float scaledH = keyTex.height * scale;
+		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+					   y * size + offset.y + (size - scaledH) * 0.5f};
+
+		DrawTextureEx(keyTex, pos, 0.0f, scale, WHITE);
+		return;
+	}
+
 	if (grid.cells[y][x].val > 0) {
 		std::string text = std::to_string(grid.cells[y][x].val);
 		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
-				  grid.cells[y][x].val);
+				  grid.cells[y][x].val, grid.cells[y][x].specialFunction);
 		DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
 				 static_cast<int>(y * size + offset.y + 8), 20, RED);
-	} else {
-		grid.cells[y][x].state = Grid::CellState::Hinting;
 	}
 }
 
@@ -133,7 +193,7 @@ void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
 										  Vector2 offset) {
 	int size = Grid::CELL_SIZE;
 	DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
-			  grid.cells[y][x].val);
+			  grid.cells[y][x].val, grid.cells[y][x].specialFunction);
 	DrawRectangleLinesEx({x * size + offset.x, y * size + offset.y,
 						  static_cast<float>(size), static_cast<float>(size)},
 						 2.0f, ORANGE);
@@ -173,51 +233,59 @@ void GridRender::StartingCellRender(int x, int y, Grid &grid, Vector2 offset) {
 }
 
 void GridRender::DrawEnemy(TextureManager const *textureManager,
-						   const Vector2 position, const int type) {
+						   const Vector2 position, const int type,
+						   Grid::SpecialFunction specialFunction) {
 	if (!textureManager) {
 		return;
 	}
 
 	TextureId textureId;
-	switch (type) {
-	case 1:
-		textureId = TextureId::Enemy1;
-		break;
-	case 2:
-		textureId = TextureId::Enemy2;
-		break;
-	case 3:
-		textureId = TextureId::Enemy3;
-		break;
-	case 4:
-		textureId = TextureId::Enemy4;
-		break;
-	case 5:
-		textureId = TextureId::Enemy5;
-		break;
-	case 6:
-		textureId = TextureId::Enemy6;
-		break;
-	case 7:
-		textureId = TextureId::Enemy7;
-		break;
-	case 8:
-		textureId = TextureId::Enemy8;
-		break;
-	case 9:
-		textureId = TextureId::Enemy9;
-		break;
-	case 10:
-		textureId = TextureId::Enemy10;
-		break;
-	case 11:
-		textureId = TextureId::Enemy11;
-		break;
-	case 100:
-		textureId = TextureId::Bomb;
-		break;
-	default:
-		return; // Unknown type
+
+	if (specialFunction == Grid::SpecialFunction::OgreBig) {
+		textureId = TextureId::OgreBig;
+	} else if (specialFunction == Grid::SpecialFunction::OgreSmall) {
+		textureId = TextureId::OgreSmall;
+	} else {
+		switch (type) {
+		case 1:
+			textureId = TextureId::Enemy1;
+			break;
+		case 2:
+			textureId = TextureId::Enemy2;
+			break;
+		case 3:
+			textureId = TextureId::Enemy3;
+			break;
+		case 4:
+			textureId = TextureId::Enemy4;
+			break;
+		case 5:
+			textureId = TextureId::Enemy5;
+			break;
+		case 6:
+			textureId = TextureId::Enemy6;
+			break;
+		case 7:
+			textureId = TextureId::Enemy7;
+			break;
+		case 8:
+			textureId = TextureId::Enemy8;
+			break;
+		case 9:
+			textureId = TextureId::Enemy9;
+			break;
+		case 10:
+			textureId = TextureId::Enemy10;
+			break;
+		case 11:
+			textureId = TextureId::Enemy11;
+			break;
+		case 100:
+			textureId = TextureId::Bomb;
+			break;
+		default:
+			return; // Unknown type
+		}
 	}
 
 	const Texture2D &tex = textureManager->get(textureId);

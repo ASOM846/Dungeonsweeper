@@ -1,4 +1,5 @@
 #pragma once
+#include "gameMode.hpp"
 #include "entity/playerStats.hpp"
 #include "grid/gridManager.hpp"
 #include "systems/evolutionSystem.hpp"
@@ -25,6 +26,9 @@ class Game {
 	void Update();
 	void Render();
 
+	void InitClassicGame();
+	void InitEndlessGame();
+
 	bool ShouldReturnToMenu() const {
 		return gameState == GameState::ShoudlReturnToMenu;
 	}
@@ -42,6 +46,7 @@ class Game {
 
   private:
 	GameState gameState;
+	GameMode gameMode = GameMode::Classic;
 
 	PlayerStats playerStats;
 	EvolutionSystem evolutionSystem;

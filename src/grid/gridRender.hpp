@@ -1,5 +1,6 @@
 #pragma once
 #include "../entity/playerStats.hpp"
+#include "../gameMode.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridUtils.hpp"
@@ -12,9 +13,12 @@ class GridRender {
 
 	void setPtr(const TextureManager &tm) { textureManager = &tm; }
 
-	void RenderGrid(TextureManager const *textureManager, Grid &grid);
+	void RenderGrid(TextureManager const *textureManager, Grid &grid,
+					GameMode gameMode);
 	void DrawEnemy(TextureManager const *textureManager, const Vector2 position,
-				   const int type);
+				   const int type,
+				   Grid::SpecialFunction specialFunction =
+					   Grid::SpecialFunction::None);
 
   private:
 	TextureId GetFloorTextureId(int type);

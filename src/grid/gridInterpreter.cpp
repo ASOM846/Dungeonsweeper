@@ -1,35 +1,50 @@
 #include "gridInterpreter.hpp"
+#include "../entity/playerStats.hpp"
 
-void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats) {
+void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
+	if (this->ui == nullptr)
+		this->ui = &ui;
+
+	RecalculateHints(grid);
+
+	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
+		!IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+		return;
+	}
+
 	Vector2 mousePos = GetMousePosition();
+	Vector2 offset = gUtils::GetOffset(grid);
+	int size = Grid::CELL_SIZE;
+	int x = static_cast<int>((mousePos.x - offset.x) / size);
+	int y = static_cast<int>((mousePos.y - offset.y) / size);
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		Vector2 offset = gUtils::GetOffset(grid);
-		int size = Grid::CELL_SIZE;
+	if (x < 0 || y < 0 || x >= static_cast<int>(Grid::WIDTH) ||
+		y >= static_cast<int>(Grid::HEIGHT)) {
+		return;
+	}
 
-		int x = static_cast<int>((mousePos.x - offset.x) / size);
-		int y = static_cast<int>((mousePos.y - offset.y) / size);
-
-		if (x < 0 || y < 0 || x >= Grid::WIDTH || y >= Grid::HEIGHT) {
+	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+		if (grid.cells[y][x].state == CellState::Revealed ||
+			grid.cells[y][x].state == CellState::pointsNotTaken) {
 			return;
 		}
 
+		grid.cells[y][x].flagged = !grid.cells[y][x].flagged;
+	}
+
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
 		switch (grid.cells[y][x].state) {
 		case CellState::Hidden:
 			OnHidenClick(x, y, grid, playerStats.hp);
 			break;
 		case CellState::Revealed:
-			OnRevealedClick(x, y, grid, playerStats.hp, playerStats.maxHp,
-							playerStats.currentPointsToEvo);
+			OnRevealedClick(x, y, grid, playerStats);
 			break;
 		case CellState::pointsNotTaken:
 			OnPointsNotTakenClick(x, y, grid, playerStats.currentPointsToEvo);
 			break;
 		case CellState::Hinting:
 			OnHintingClick(x, y, grid);
-			break;
-		case CellState::Starting:
-			OnStartingClick(x, y, grid);
 			break;
 		default:
 			break;
@@ -44,13 +59,15 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats) {
 			}
 		}
 	}
-
-	RecalculateHints(grid);
 }
 
 void GridInterpreter::OnHidenClick(int x, int y, Grid &grid, int &hp) {
 	auto &cell = grid.cells[y][x];
-	if (cell.specialFunction == SpecialFunction::Heal) {
+	if (cell.specialFunction == SpecialFunction::Ladder ||
+		cell.specialFunction == SpecialFunction::Mana ||
+		cell.specialFunction == SpecialFunction::Heal ||
+		cell.specialFunction == SpecialFunction::Chest ||
+		cell.specialFunction == SpecialFunction::ChestKey) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -63,23 +80,61 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid, int &hp) {
 	}
 }
 
-void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid, int &hp,
-									  int &maxHp, int &currentPointsToEvo) {
+void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
+									  PlayerStats &playerStats) {
 	auto &cell = grid.cells[y][x];
+
+	if (cell.specialFunction == SpecialFunction::Starting) {
+		cell.defeted = true;
+		OnStartingClick(x, y, grid);
+		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::ChestKey) {
+		cell.defeted = true;
+		playerStats.keys++;
+		cell.state = CellState::Hinting;
+		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::Chest) {
+		if (playerStats.keys <= 0) {
+			ui->TriggerMessageBox("You need a key to open this chest!");
+			cell.state = CellState::Revealed;
+			return;
+		}
+
+		cell.defeted = true;
+		playerStats.keys--;
+		playerStats.currentPointsToEvo += 15;
+		cell.state = CellState::Hinting;
+		return;
+	}
 
 	cell.defeted = true;
 	cell.state = CellState::Hinting;
 	if (cell.specialFunction == SpecialFunction::Heal) {
-		hp = maxHp;
+		playerStats.HealToFull();
 		return;
 	}
 
 	if (cell.specialFunction == SpecialFunction::Mana) {
-		currentPointsToEvo += 3;
+		playerStats.currentPointsToEvo += 3;
 		return;
 	}
 
-	hp -= cell.val;
+	if (cell.specialFunction == SpecialFunction::Ladder) {
+		playerStats.currentLevel++;
+		playerStats.shoudlNewLevelStart = true;
+		return;
+	}
+
+	if (cell.val <= 0) {
+		cell.state = CellState::Hinting;
+		return;
+	}
+
+	playerStats.hp -= cell.val;
 	cell.state = CellState::pointsNotTaken;
 }
 
@@ -101,7 +156,7 @@ void GridInterpreter::RecalculateHints(Grid &grid) {}
 void GridInterpreter::OnStartingClick(int x, int y, Grid &grid) {
 	grid.cells[y][x].val = 0;
 	UncoverStartingCellNeighbors(x, y, grid.cells);
-	grid.cells[y][x].state = CellState::Revealed;
+	grid.cells[y][x].state = CellState::Hinting;
 }
 
 void GridInterpreter::OnHealthClick(int x, int y, Grid &grid, int &hp,
@@ -120,7 +175,12 @@ void GridInterpreter::UncoverStartingCellNeighbors(
 			ry >= static_cast<int>(Grid::HEIGHT)) {
 			return;
 		}
-		cells[ry][rx].state = CellState::Revealed;
+		auto &cell = cells[ry][rx];
+		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
+			cell.state = CellState::Hinting;
+		} else {
+			cell.state = CellState::Revealed;
+		}
 	};
 
 	for (int dy = -1; dy <= 1; ++dy) {

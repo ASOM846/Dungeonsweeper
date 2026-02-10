@@ -35,27 +35,46 @@ void Game::Render() {
 	}
 }
 
+void Game::InitClassicGame() {
+	gameMode = GameMode::Classic;
+}
+
+void Game::InitEndlessGame() {
+	gameMode = GameMode::Endless;
+}
+
 void Game::Reset() {
 	playerStats = PlayerStats();
+	ui.CloseMessageBox();
 	gameState = GameState::Playing;
-	gridManager.InitGrid();
+	gridManager.InitGrid(playerStats, gameMode);
 }
 
 void Game::UpdatePlaying() {
+	if (ui.IsMessageBoxOpen()) {
+		return;
+	}
+
 	evolutionSystem.Update(playerStats);
-	gridManager.Update(playerStats);
+	gridManager.Update(playerStats, ui);
 
 	if (playerStats.hp < 0) {
+		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
 		gameState = GameState::Lose;
 	}
 
-	std::cout << "HP: " << playerStats.hp << "/" << playerStats.maxHp
+	if (playerStats.shoudlNewLevelStart) {
+		playerStats.shoudlNewLevelStart = false;
+		gridManager.InitGrid(playerStats, gameMode);
+	}
+
+	std::cout << "HP: " << playerStats.GetHp() << "/" << playerStats.GetMaxHp()
 			  << " | Evo: " << playerStats.currentPointsToEvo << "/"
 			  << playerStats.pointsToEvo << std::endl;
 }
 
 void Game::RenderPlaying() {
-	gridManager.Render(&textureManager, playerStats);
+	gridManager.Render(&textureManager, playerStats, gameMode);
 	ui.RenderUi(playerStats, gameState);
 }
 

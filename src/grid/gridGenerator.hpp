@@ -6,24 +6,38 @@
 #include <string>
 #include <utility>
 
+#include "../gameMode.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridUtils.hpp"
 
 namespace {
-constexpr std::array<std::pair<int, int>, 12> kMonsterW{
-	{{1, 11},
-	 {2, 11},
-	 {3, 10},
-	 {4, 8},
-	 {5, 7},
-	 {6, 5},
-	 {7, 4},
-	 {8, 5},
-	 {9, 2},
-	 {10, 1},
-	 {11, 1},
-	 {100, 9}}}; // hp increaser
+constexpr std::array<std::pair<int, int>, 12> kMonsterW{{{1, 11},
+														 {2, 11},
+														 {3, 10},
+														 {4, 8},
+														 {5, 7},
+														 {6, 5},
+														 {7, 4},
+														 {8, 5},
+														 {9, 2},
+														 {10, 1},
+														 {11, 1},
+														 {100, 6}}};
+
+constexpr std::array<std::pair<int, int>, 12> kMonsterW2{{{1, 9},
+														  {2, 9},
+														  {3, 8},
+														  {4, 5},
+														  {5, 6},
+														  {6, 5},
+														  {7, 7},
+														  {8, 8},
+														  {9, 9},
+														  {10, 6},
+														  {11, 6},
+														  {100, 15}}};
+
 template <size_t N> int PickW(const std::array<std::pair<int, int>, N> &t) {
 	int total = 0;
 	for (auto &e : t)
@@ -46,11 +60,15 @@ class GridGenerator {
 	using Cell = Grid::Cell;
 	using SpecialFunction = Grid::SpecialFunction;
 
-	void Init(Grid &grid);
+	void Init(Grid &grid, PlayerStats &playerStats, GameMode gameMode);
 
 	void Update(Grid &grid, int &hp, int &maxHp, int &pointsToEvo);
 	void Render(const TextureManager *textureManager, Grid &grid);
 
   private:
+	void PlaceSpecialFunction(Grid &grid, Grid::SpecialFunction funct,
+							  int count);
+	void InitOgre(Grid &grid);
+	int GetFlorTextureNumber();
 	SpecialFunction GetSpecialFunction();
 };

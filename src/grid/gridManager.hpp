@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../entity/playerStats.hpp"
+#include "../gameMode.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridGenerator.hpp"
@@ -13,10 +14,10 @@ class GridManager {
 	GridManager() = default;
 	~GridManager() = default;
 
-	void InitGrid();
-	void Update(PlayerStats &playerStats);
+	void InitGrid(PlayerStats &playerStats, GameMode gameMode);
+	void Update(PlayerStats &playerStats, UI &ui);
 	void Render(const TextureManager *textureManager,
-				const PlayerStats &playerStats);
+				const PlayerStats &playerStats, GameMode gameMode);
 
   private:
 	Grid grid;

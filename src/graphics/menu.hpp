@@ -9,12 +9,13 @@ enum class MenuState {
 	MainMenu,
 	Settings,
 	Modes,
-	GameShoudlStart,
+	ClassicGameShoudlStart,
+	EndlessGameShouldStart,
 };
 
 class Menu {
   public:
-	Menu() : IsStartGame(false) {}
+	Menu() : IsStartGame(false), currentState(MenuState::MainMenu) {}
 	~Menu() = default;
 
 	void Init();
@@ -24,12 +25,15 @@ class Menu {
 
 	bool IsStartGamePressed() const;
 
+	MenuState GetCurrentState() const { return currentState; }
+
   private:
 	void UpdateButtonsPosition();
 	void RenderBackground(const TextureManager &TextureManager) const;
 
   private:
-	NewButton startGameButton;
+	NewButton classicGameButton;
+	NewButton endlessGameButton;
 	NewButton settingsButton;
 
 	bool IsStartGame;

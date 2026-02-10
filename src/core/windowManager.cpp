@@ -24,7 +24,12 @@ void WindowManager::Update() {
 	switch (currentMode) {
 	case AppMode::Menu:
 		menu.Update();
-		if (menu.IsStartGamePressed()) {
+		if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
+			game.InitClassicGame();
+			SwitchMode(AppMode::Game);
+		}
+		if (menu.GetCurrentState() == MenuState::EndlessGameShouldStart) {
+			game.InitEndlessGame();
 			SwitchMode(AppMode::Game);
 		}
 		break;
@@ -39,7 +44,7 @@ void WindowManager::Update() {
 
 void WindowManager::Render() {
 	BeginDrawing();
-	ClearBackground(RAYWHITE);
+	ClearBackground(BLACK);
 
 	switch (currentMode) {
 		void Run();

@@ -44,6 +44,7 @@ class NewButton {
 	void Update();
 	void Toggle();
 	void SetPosition(float newX, float newY);
+	void SetSize(float newWidth, float newHeight);
 	float GetWidth() const;
 	float GetHeight() const;
 	float GetX() const;

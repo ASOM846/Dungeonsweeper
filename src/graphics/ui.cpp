@@ -1,15 +1,96 @@
 #include "ui.hpp"
+#include "button.hpp"
 #include "../game.hpp"
 #include <algorithm>
 
+namespace {
+void DrawWrappedText(const Font &font, const std::string &text, Rectangle bounds,
+				 int fontSize, float spacing, Color tint) {
+	if (text.empty() || bounds.width <= 0.0f || bounds.height <= 0.0f) {
+		return;
+	}
+
+	const float lineHeight = static_cast<float>(fontSize) + spacing;
+	float cursorY = bounds.y;
+
+	size_t start = 0;
+	while (start < text.size() && cursorY + lineHeight <= bounds.y + bounds.height) {
+		// Skip leading spaces/newlines
+		while (start < text.size() && (text[start] == ' ' || text[start] == '\n' || text[start] == '\r' || text[start] == '\t')) {
+			if (text[start] == '\n') {
+				cursorY += lineHeight;
+				if (cursorY + lineHeight > bounds.y + bounds.height) {
+					return;
+				}
+			}
+			++start;
+		}
+		if (start >= text.size()) {
+			break;
+		}
+
+		size_t end = start;
+		size_t lastBreak = start;
+		bool foundAny = false;
+
+		// Find the longest substring that fits in bounds.width
+		while (end < text.size() && text[end] != '\n' && text[end] != '\r') {
+			if (text[end] == ' ') {
+				lastBreak = end;
+			}
+			std::string candidate = text.substr(start, end - start + 1);
+			Vector2 size = MeasureTextEx(font, candidate.c_str(), static_cast<float>(fontSize), spacing);
+			if (size.x > bounds.width) {
+				break;
+			}
+			foundAny = true;
+			++end;
+		}
+
+		size_t lineEnd = end;
+		if (!foundAny) {
+			// Force at least one character to render
+			lineEnd = std::min(start + 1, text.size());
+		} else if (lineEnd < text.size() && text[lineEnd] != '\n' && lastBreak > start) {
+			// Prefer breaking at last space when we overflowed
+			lineEnd = lastBreak;
+		}
+
+		std::string line = text.substr(start, lineEnd - start);
+		// Trim trailing spaces
+		while (!line.empty() && line.back() == ' ') {
+			line.pop_back();
+		}
+
+		DrawTextEx(font, line.c_str(), Vector2{bounds.x, cursorY}, static_cast<float>(fontSize), spacing, tint);
+		cursorY += lineHeight;
+
+		// Advance start
+		start = lineEnd;
+		while (start < text.size() && text[start] == ' ') {
+			++start;
+		}
+		if (start < text.size() && (text[start] == '\n' || text[start] == '\r')) {
+			++start;
+		}
+	}
+}
+} // namespace
+
 void UI::RenderUi(const PlayerStats &playerStats,
-				  const GameState &gameState) const {
+				  const GameState &gameState) {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
 
 	const int screenW = GetScreenWidth();
 	Vector2 position = {static_cast<float>(screenW - barWidth), 0.0f};
 
+	if (IsKeyPressed(KEY_TAB)) {
+		TriggerMessageBox(
+			"Use WASD or arrow keys to move, left click to reveal a cell, "
+			"right click to flag/unflag a cell. Reach the ladder to go to the "
+			"next level. Good luck!");
+	}
 	// Panel background
 	DrawRectangleGradientV(static_cast<int>(position.x), 0, barWidth, barHeight,
 						   Color{28, 24, 20, 255}, Color{18, 16, 14, 255});
@@ -88,8 +169,10 @@ void UI::RenderUi(const PlayerStats &playerStats,
 	const float spacing = 6.0f;
 	const int heartsPerRow = 5;
 	const float rowSpacing = 10.0f;
+	const int maxHeartSlots =
+		playerStats.maxHp + (playerStats.drawHalfHp ? 1 : 0);
 	const int rows =
-		std::max(1, (playerStats.maxHp + heartsPerRow - 1) / heartsPerRow);
+		std::max(1, (maxHeartSlots + heartsPerRow - 1) / heartsPerRow);
 
 	const float availableW = static_cast<float>(cardW) - paddingX * 2.0f;
 	const float availableH =
@@ -115,6 +198,25 @@ void UI::RenderUi(const PlayerStats &playerStats,
 
 		DrawTextureEx(heartTex, pos, 0.0f, heartScale,
 					  (i < playerStats.hp) ? WHITE : GRAY);
+	}
+
+	// Optional half-heart (drawn as left half of the full-heart texture)
+	if (playerStats.drawHalfHp) {
+		const int i = playerStats.maxHp;
+		const int row = i / heartsPerRow;
+		const int col = i % heartsPerRow;
+		const float baseX =
+			static_cast<float>(cardX) + paddingX + col * (scaledW + spacing);
+		const float baseY =
+			static_cast<float>(cardY) + paddingY + row * (scaledH + rowSpacing);
+
+		Rectangle src{0.0f, 0.0f, heartTex.width * 0.5f,
+					  static_cast<float>(heartTex.height)};
+		Rectangle dst{baseX, baseY, scaledW * 0.5f, scaledH};
+		Vector2 origin{0.0f, 0.0f};
+
+		const Color tint = playerStats.hpHalf ? WHITE : GRAY;
+		DrawTexturePro(heartTex, src, dst, origin, 0.0f, tint);
 	}
 
 	// Evolution bar
@@ -159,33 +261,75 @@ void UI::RenderUi(const PlayerStats &playerStats,
 				 Color{200, 170, 140, 255});
 	}
 
-	const int evoY2 = avatarY + avatarCardH + cardH + evoH + 48;
-	DrawRectangleRounded(
-		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY2),
-				  static_cast<float>(cardW), static_cast<float>(avatarFrameY)},
-		0.2f, 8, Color{34, 30, 26, 255});
-	DrawRectangleLinesEx(
-		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY2),
-				  static_cast<float>(cardW), static_cast<float>(avatarFrameY)},
-		2.0f, Color{90, 72, 54, 255});
-
-	// Footer hints
-	const int footerY = evoY + evoH + 32;
-
-	std::string hintText = "Playing...";
-
-	switch (gameState) {
-	case GameState::Playing:
-		hintText = "Playing...";
-		break;
-	case GameState::Lose:
-		hintText = "You lost! \nPress R to restart.";
-		break;
-	default:
-		hintText = "";
-		break;
-	}
-	DrawText(hintText.c_str(), cardX + 12, footerY, 16,
-			 Color{200, 170, 140, 255});
+	// Message box overlay (draw last so it stays on top)
+	RenderMessageBox();
 }
-void RenderLose(const PlayerStats &playerStats) {}
+
+void UI::RenderLose(const PlayerStats &playerStats) {
+	(void)playerStats;
+	RenderMessageBox();
+}
+
+void UI::TriggerMessageBox(const char *message) {
+	if (message == nullptr) {
+		return;
+	}
+	messageBoxText = message;
+	messageBoxOpen = true;
+}
+
+void UI::CloseMessageBox() {
+	messageBoxOpen = false;
+	messageBoxText.clear();
+}
+
+void UI::RenderMessageBox() {
+	if (!messageBoxOpen) {
+		return;
+	}
+
+	const int screenW = GetScreenWidth();
+	const int screenH = GetScreenHeight();
+
+	// Dim background
+	DrawRectangle(0, 0, screenW, screenH, Color{0, 0, 0, 150});
+
+	// Dialog
+	const float maxW = 560.0f;
+	const float boxW = std::min(maxW, static_cast<float>(screenW) - 48.0f);
+	const float boxH = 220.0f;
+	const float boxX = (static_cast<float>(screenW) - boxW) * 0.5f;
+	const float boxY = (static_cast<float>(screenH) - boxH) * 0.5f;
+	Rectangle box{boxX, boxY, boxW, boxH};
+
+	DrawRectangleRounded(box, 0.2f, 8, Color{34, 30, 26, 255});
+	DrawRectangleLinesEx(box, 2.0f, Color{120, 96, 72, 255});
+
+	// Message text (wrapped)
+	const int fontSize = 20;
+	const float textPadX = 18.0f;
+	const float textTop = 18.0f;
+	const float buttonAreaH = 70.0f;
+	Rectangle textRect{boxX + textPadX, boxY + textTop,
+				  boxW - textPadX * 2.0f,
+				  boxH - textTop - buttonAreaH};
+	DrawWrappedText(GetFontDefault(), messageBoxText, textRect, fontSize, 1.0f,
+				Color{220, 200, 170, 255});
+
+	// OK button
+	NewButton okBtn;
+	const float okW = 140.0f;
+	const float okH = 44.0f;
+	okBtn = NewButton(0.0f, 0.0f, okW, okH, "OK");
+	okBtn.SetColors(Color{34, 30, 26, 255}, Color{120, 96, 72, 255},
+				Color{220, 200, 170, 255});
+	const float okX = boxX + (boxW - okW) * 0.5f;
+	const float okY = boxY + boxH - okH - 16.0f;
+	okBtn.SetPosition(okX, okY);
+	okBtn.Update();
+	okBtn.Draw();
+
+	if (okBtn.IsClicked()) {
+		CloseMessageBox();
+	}
+}
