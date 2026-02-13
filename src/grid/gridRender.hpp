@@ -28,6 +28,8 @@ class GridRender {
 	void HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
 						   float scale);
 	void StartingCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void RenderTexture(int x, int y, const TextureId &texId,
+					   const Vector2 offset, float rotation = 0.0f);
 
 	const TextureManager *textureManager = nullptr;
 };

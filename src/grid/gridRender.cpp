@@ -100,15 +100,7 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	Grid::Cell &current = grid.cells[y][x];
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Heal) {
-		const Texture2D &heartTex = textureManager->get(TextureId::HeartFull);
-		const float heartScale =
-			(size * 0.6f) / static_cast<float>(heartTex.width);
-		const float scaledW = heartTex.width * heartScale;
-		const float scaledH = heartTex.height * heartScale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
-
-		DrawTextureEx(heartTex, pos, 0.0f, heartScale, WHITE);
+		RenderTexture(x, y, TextureId::HeartFull, offset);
 		return;
 	}
 
@@ -119,27 +111,12 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	}
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Mana) {
-		const Texture2D &manaTex = textureManager->get(TextureId::Coin);
-		const float scale = (size * 0.6f) / static_cast<float>(manaTex.width);
-		const float scaledW = manaTex.width * scale;
-		const float scaledH = manaTex.height * scale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
-
-		DrawTextureEx(manaTex, pos, 0.0f, scale, WHITE);
+		RenderTexture(x, y, TextureId::Coin, offset);
 		return;
 	}
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Ladder) {
-		const Texture2D &ladderTex = textureManager->get(TextureId::Ladder);
-		const float scale = (size * 0.6f) / static_cast<float>(ladderTex.width);
-		const float scaledW = ladderTex.width * scale;
-		const float scaledH = ladderTex.height * scale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
-
-		DrawTextureEx(ladderTex, pos, 0.0f, scale, WHITE);
-
+		RenderTexture(x, y, TextureId::Ladder, offset);
 		DrawRectangleLinesEx({x * size + offset.x, y * size + offset.y,
 							  static_cast<float>(size),
 							  static_cast<float>(size)},
@@ -148,14 +125,7 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	}
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Wizzard) {
-		const Texture2D &ladderTex =
-			textureManager->get(TextureId::BlueWizzard);
-		const float scale = (size * 0.6f) / static_cast<float>(ladderTex.width);
-		const float scaledW = ladderTex.width * scale;
-		const float scaledH = ladderTex.height * scale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
-		DrawTextureEx(ladderTex, pos, 0.0f, scale, WHITE);
+		RenderTexture(x, y, TextureId::BlueWizzard, offset);
 	}
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Starting) {
@@ -163,26 +133,27 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	}
 
 	if (current.specialFunction == Grid::SpecialFunction::Chest) {
-		const Texture2D &chestTex = textureManager->get(TextureId::Chest);
-		const float scale = (size * 0.6f) / static_cast<float>(chestTex.width);
-		const float scaledW = chestTex.width * scale;
-		const float scaledH = chestTex.height * scale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
-
-		DrawTextureEx(chestTex, pos, 0.0f, scale, WHITE);
+		RenderTexture(x, y, TextureId::Chest, offset);
 		return;
 	}
 
 	if (current.specialFunction == Grid::SpecialFunction::ChestKey) {
-		const Texture2D &keyTex = textureManager->get(TextureId::Key);
-		const float scale = (size * 0.6f) / static_cast<float>(keyTex.width);
-		const float scaledW = keyTex.width * scale;
-		const float scaledH = keyTex.height * scale;
-		Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
-					   y * size + offset.y + (size - scaledH) * 0.5f};
+		RenderTexture(x, y, TextureId::Key, offset);
+		return;
+	}
 
-		DrawTextureEx(keyTex, pos, 0.0f, scale, WHITE);
+	if (current.specialFunction == Grid::SpecialFunction::SwordRed) {
+		RenderTexture(x, y, TextureId::SwordRed, offset, 45.0f);
+		return;
+	}
+
+	if (current.specialFunction == Grid::SpecialFunction::SwordGreen) {
+		RenderTexture(x, y, TextureId::SwordGreen, offset, 45.0f);
+		return;
+	}
+
+	if (current.specialFunction == Grid::SpecialFunction::SwordGold) {
+		RenderTexture(x, y, TextureId::SwordGold, offset, 45.0f);
 		return;
 	}
 
@@ -236,6 +207,20 @@ void GridRender::StartingCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		{x * size + offset.x, y * size + offset.y}, 0.0f,
 		size / static_cast<float>(textureManager->get(TextureId::Floor1).width),
 		WHITE);
+}
+
+void GridRender::RenderTexture(int x, int y, const TextureId &texId,
+							   const Vector2 offset, float rotation) {
+	const int size = Grid::CELL_SIZE;
+
+	const Texture2D &tex = textureManager->get(texId);
+	const float scale = (size * 0.6f) / static_cast<float>(tex.width);
+	const float scaledW = tex.width * scale;
+	const float scaledH = tex.height * scale;
+	Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+				   y * size + offset.y + (size - scaledH) * 0.5f};
+
+	DrawTextureExCentered(tex, pos, rotation, scale, WHITE);
 }
 
 void GridRender::DrawEnemy(TextureManager const *textureManager,

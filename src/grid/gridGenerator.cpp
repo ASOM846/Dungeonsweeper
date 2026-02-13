@@ -41,6 +41,10 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Mana,
 						 Grid::NUMBER_OF_MANA);
 
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::SwordRed, 1);
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::SwordGreen, 1);
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::SwordGold, 1);
+
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::ChestKey,
 						 Grid::NUMBER_OF_KEYS);
 
