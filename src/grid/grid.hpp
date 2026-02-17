@@ -1,15 +1,13 @@
 #pragma once
-#include <array>
 #include <raylib.h>
+#include <vector>
 
 struct Grid {
   public:
-	// static constexpr int WIDTH = 13;
-	// static constexpr int HEIGHT = 10;
-	static constexpr int WIDTH = 13;
-	static constexpr int HEIGHT = 10;
+	int GetWidth() { return width; }
+	int GetHeight() { return height; }
+
 	static constexpr int CELL_SIZE = 66;
-	// static constexpr int CELL_SIZE = 80;
 
 	static constexpr int NUMBER_OF_HEARTS = 5;
 	static constexpr int NUMBER_OF_MANA = 6;
@@ -18,11 +16,10 @@ struct Grid {
 	static constexpr int NUMBER_OF_NECROMANCERS = 1;
 
 	enum class CellState {
-		// main states
-		Hidden,			// not giving info
-		Revealed,		// showing cell hp(value)
-		pointsNotTaken, // showing cell val and different colour
-		Hinting,		// showing hint value
+		Hidden,
+		Revealed,
+		pointsNotTaken,
+		Hinting,
 	};
 
 	enum class SpecialFunction {
@@ -53,5 +50,11 @@ struct Grid {
 		SpecialFunction specialFunction = SpecialFunction::None;
 	};
 
-	std::array<std::array<Cell, WIDTH>, HEIGHT> cells;
+	std::vector<std::vector<Cell>> cells;
+
+	Grid(int w, int h) : width(w), height(h), cells(h, std::vector<Cell>(w)) {}
+
+  private:
+	int width = 13;
+	int height = 10;
 };

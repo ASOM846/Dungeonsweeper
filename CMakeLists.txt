@@ -7,7 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Opcje ---------------------------------------------------------------
 # Włącz FAST_BUILD domyślnie — wyłącz ręcznie z -DFAST_BUILD=OFF jeśli chcesz
-option(FAST_BUILD "Enable fast build helpers (ccache/sccache, PCH, UNITY_BUILD, faster compile flags)" ON)
+option(FAST_BUILD "Enable fast build helpers (ccache/sccache, PCH, UNITY_BUILD, 
+faster compile flags)" ON)
 option(RAYLIB_USE_SUBMODULE "Use external/raylib subdirectory if present" OFF)
 
 # Domyślny typ buildu - Debug (szybsza kompilacja i sensowne dla devel)

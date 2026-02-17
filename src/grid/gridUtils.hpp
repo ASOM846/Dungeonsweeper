@@ -1,10 +1,10 @@
 #pragma once
 
-#include "grid.hpp"
 #include "../graphics/ui.hpp"
-#include <array>
+#include "grid.hpp"
 #include <cstddef>
 #include <raylib.h>
+#include <vector>
 
 namespace gUtils {
 inline Vector2 GetOffset(Grid &grid) {
@@ -20,9 +20,9 @@ inline Vector2 GetOffset(Grid &grid) {
 	return result;
 }
 
-inline int GetNeighboursSum(
-	int x, int y,
-	std::array<std::array<Grid::Cell, Grid::WIDTH>, Grid::HEIGHT> &cells) {
+inline int GetNeighboursSum(int x, int y,
+							std::vector<std::vector<Grid::Cell>> &cells,
+							Grid &grid) {
 	int sum = 0;
 	int bX = x;
 	int bY = y;
@@ -37,7 +37,8 @@ inline int GetNeighboursSum(
 				continue;
 			}
 
-			if (bX < 0 || bY < 0 || bX >= Grid::WIDTH || bY >= Grid::HEIGHT) {
+			if (bX < 0 || bY < 0 || bX >= grid.GetWidth() ||
+				bY >= grid.GetHeight()) {
 				bY++;
 				continue;
 			}
