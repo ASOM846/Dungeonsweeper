@@ -1,6 +1,7 @@
 #include "gridInterpreter.hpp"
 #include "../entity/playerStats.hpp"
 #include "gridGenerator.hpp"
+#include <iostream>
 
 void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	if (this->ui == nullptr)
@@ -24,7 +25,11 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 		return;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) &&
+		!playerStats.inputLocker.IsLocked()) {
+		playerStats.inputLocker.LockFor(1);
+		std::cout << "INPUT LOKCEDDDDDDDDDDDDDD" << std::endl;
+
 		if (grid.cells[y][x].state == CellState::Revealed ||
 			grid.cells[y][x].state == CellState::pointsNotTaken) {
 			return;
@@ -33,7 +38,12 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 		grid.cells[y][x].flagged = !grid.cells[y][x].flagged;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
+		!playerStats.inputLocker.IsLocked()) {
+
+		playerStats.inputLocker.LockFor(1);
+		std::cout << "INPUT LOKCEDDDDDDDDDDDDDD" << std::endl;
+
 		switch (grid.cells[y][x].state) {
 		case CellState::Hidden:
 			OnHidenClick(x, y, grid, playerStats);
@@ -72,7 +82,8 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
 		cell.specialFunction == SpecialFunction::ChestKey ||
 		cell.specialFunction == SpecialFunction::SwordRed ||
 		cell.specialFunction == SpecialFunction::SwordGreen ||
-		cell.specialFunction == SpecialFunction::SwordGold) {
+		cell.specialFunction == SpecialFunction::SwordGold ||
+		cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -164,6 +175,13 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 		playerStats.hasGoldSword = true;
 		playerStats.currentPointsToEvo += 3;
 		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
+		cell.LowerGrid = new Grid(13, 10, &grid);
+		GridGenerator generator;
+		generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
+		grid = *cell.LowerGrid;
 	}
 
 	if (cell.val <= 0) {

@@ -1,14 +1,15 @@
 #include "gridManager.hpp"
 
 void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode) {
-	gridGenerator.Init(grid, playerStats, gameMode);
+	currentGrid = new Grid(13, 10, nullptr);
+	gridGenerator.Init(*currentGrid, playerStats, gameMode);
 }
 
 void GridManager::Update(PlayerStats &playerStats, UI &ui) {
-	gridInterpreter.Update(grid, playerStats, ui);
+	gridInterpreter.Update(*currentGrid, playerStats, ui);
 }
 
 void GridManager::Render(const TextureManager *textureManager,
 						 const PlayerStats &playerStats, GameMode gameMode) {
-	gridRender.RenderGrid(textureManager, grid, gameMode);
+	gridRender.RenderGrid(textureManager, *currentGrid, gameMode);
 }

@@ -5,11 +5,12 @@
 void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
-
 	Reset();
 }
 
 void Game::Update() {
+	playerStats.Update();
+
 	switch (gameState) {
 	case GameState::Playing:
 		UpdatePlaying();
