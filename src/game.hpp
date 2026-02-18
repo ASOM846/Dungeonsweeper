@@ -2,6 +2,7 @@
 #include "entity/playerStats.hpp"
 #include "gameMode.hpp"
 #include "grid/gridManager.hpp"
+#include "inputLocker.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
 #include <iostream>
@@ -54,7 +55,5 @@ class Game {
 	TextureManager textureManager;
 	UI ui;
 
-	float lockedInputTimer;
-	float lockedInputCounter;
-	bool inputLocked;
+	InputLocker inputLocker;
 };

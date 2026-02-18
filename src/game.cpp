@@ -5,24 +5,31 @@
 void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
-
-	inputLocked = false;
-	lockedInputTimer = 0.2f;
 	Reset();
 }
 
 void Game::Update() {
-	lockedInputCounter += GetFrameTime();
+	inputLocker.Update(GetFrameTime());
+
+	if (inputLocker.IsLocked())
+		std::cout << "input still locked" << std::endl;
 
 	switch (gameState) {
 	case GameState::Playing:
-		UpdatePlaying();
+		if (!inputLocker.IsLocked())
+			UpdatePlaying();
 		break;
 	case GameState::Lose:
 		UpdateLose();
 		break;
 	default:
 		return;
+	}
+
+	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) ||
+		IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+		inputLocker.LockFor(1.4);
+		std::cout << "input locked" << std::endl;
 	}
 }
 
