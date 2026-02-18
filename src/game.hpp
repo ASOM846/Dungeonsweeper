@@ -54,6 +54,4 @@ class Game {
 	GridManager gridManager;
 	TextureManager textureManager;
 	UI ui;
-
-	InputLocker inputLocker;
 };

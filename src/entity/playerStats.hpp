@@ -1,4 +1,6 @@
 #pragma once
+#include "../inputLocker.hpp"
+#include <raylib.h>
 
 struct PlayerStats {
 	int score = 0;
@@ -18,6 +20,8 @@ struct PlayerStats {
 	bool shoudlNewLevelStart = false;
 	int evolutionLevel = 0;
 
+	bool isInputLocked = false;
+
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }
 	bool IsFullHp() const { return hp == maxHp && hpHalf == drawHalfHp; }
@@ -25,4 +29,8 @@ struct PlayerStats {
 		hp = maxHp;
 		hpHalf = drawHalfHp;
 	}
+
+	void Update() { inputLocker.Update(GetFrameTime()); }
+
+	InputLocker inputLocker;
 };

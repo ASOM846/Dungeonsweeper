@@ -9,27 +9,17 @@ void Game::Init() {
 }
 
 void Game::Update() {
-	inputLocker.Update(GetFrameTime());
-
-	if (inputLocker.IsLocked())
-		std::cout << "input still locked" << std::endl;
+	playerStats.Update();
 
 	switch (gameState) {
 	case GameState::Playing:
-		if (!inputLocker.IsLocked())
-			UpdatePlaying();
+		UpdatePlaying();
 		break;
 	case GameState::Lose:
 		UpdateLose();
 		break;
 	default:
 		return;
-	}
-
-	if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) ||
-		IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-		inputLocker.LockFor(1.4);
-		std::cout << "input locked" << std::endl;
 	}
 }
 
