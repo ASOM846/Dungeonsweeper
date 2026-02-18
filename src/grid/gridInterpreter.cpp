@@ -17,8 +17,10 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 		if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT) &&
 			!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
 			mouseInputArmed = true;
+			// Continue to process input in the same frame after arming
+		} else {
+			return;
 		}
-		return;
 	}
 
 	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
