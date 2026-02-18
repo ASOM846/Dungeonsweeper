@@ -23,6 +23,7 @@ class GridInterpreter {
 	~GridInterpreter() = default;
 
 	void Update(Grid &grid, PlayerStats &playerStats, UI &ui);
+	void ResetInput();
 
   private:
 	void OnHidenClick(int x, int y, Grid &grid, PlayerStats &playerStats);
@@ -38,4 +39,5 @@ class GridInterpreter {
 	void RecalculateHints(Grid &grid);
 
 	UI *ui = nullptr;
+	bool mouseInputArmed = false;
 };

@@ -2,11 +2,24 @@
 #include "../entity/playerStats.hpp"
 #include "gridGenerator.hpp"
 
+void GridInterpreter::ResetInput() {
+	mouseInputArmed = false;
+}
+
 void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	if (this->ui == nullptr)
 		this->ui = &ui;
 
 	RecalculateHints(grid);
+
+	// Arm mouse input only after both buttons are released
+	if (!mouseInputArmed) {
+		if (!IsMouseButtonDown(MOUSE_BUTTON_LEFT) &&
+			!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+			mouseInputArmed = true;
+		}
+		return;
+	}
 
 	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
 		!IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {

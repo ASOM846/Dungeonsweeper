@@ -2,6 +2,7 @@
 
 void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode) {
 	gridGenerator.Init(grid, playerStats, gameMode);
+	gridInterpreter.ResetInput();
 }
 
 void GridManager::Update(PlayerStats &playerStats, UI &ui) {
