@@ -14,15 +14,17 @@ inline Vector2 GetOffset(Grid &grid) {
 	const int mapWidth = static_cast<int>(grid.cells[0].size()) * tileSize;
 	const int mapHeight = static_cast<int>(grid.cells.size()) * tileSize;
 
-	result.x = (GetScreenWidth() - mapWidth - UI::UI_BAR_WIDTH) / 2;
-	result.y = (GetScreenHeight() - mapHeight) / 2;
+	result.x =
+		static_cast<float>(GetScreenWidth() - mapWidth - UI::UI_BAR_WIDTH) / 2;
+	result.y = static_cast<float>(GetScreenHeight() - mapHeight) / 2;
 
 	return result;
 }
 
-inline int GetNeighboursSum(int x, int y,
-							std::vector<std::vector<Grid::Cell>> &cells,
-							Grid &grid) {
+inline int GetNeighboursSum(int x, int y, Grid &grid) {
+
+	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
+
 	int sum = 0;
 	int bX = x;
 	int bY = y;
@@ -56,9 +58,9 @@ inline int GetNeighboursSum(int x, int y,
 	return sum;
 }
 
-inline void UncoverNeighouring0(
-	int x, int y,
-	std::array<std::array<Grid::Cell, Grid::WIDTH>, Grid::HEIGHT> &cells) {
+inline void UncoverNeighouring0(int x, int y, Grid &grid) {
+
+	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
 
 	int bX = x;
 	int bY = y;
@@ -73,7 +75,8 @@ inline void UncoverNeighouring0(
 				continue;
 			}
 
-			if (bX < 0 || bY < 0 || bX >= Grid::WIDTH || bY >= Grid::HEIGHT) {
+			if (bX < 0 || bY < 0 || bX >= grid.GetWidth() ||
+				bY >= grid.GetHeight()) {
 				bY++;
 				continue;
 			}
@@ -81,8 +84,8 @@ inline void UncoverNeighouring0(
 			if (cells[bY][bX].state != Grid::CellState::Revealed) {
 				cells[bY][bX].state = Grid::CellState::Revealed;
 
-				if (gUtils::GetNeighboursSum(bX, bY, cells) == 0) {
-					UncoverNeighouring0(bX, bY, cells);
+				if (gUtils::GetNeighboursSum(bX, bY, grid) == 0) {
+					UncoverNeighouring0(bX, bY, grid);
 				}
 			}
 			bY++;

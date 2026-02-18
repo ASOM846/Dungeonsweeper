@@ -19,8 +19,8 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	int x = static_cast<int>((mousePos.x - offset.x) / size);
 	int y = static_cast<int>((mousePos.y - offset.y) / size);
 
-	if (x < 0 || y < 0 || x >= static_cast<int>(Grid::WIDTH) ||
-		y >= static_cast<int>(Grid::HEIGHT)) {
+	if (x < 0 || y < 0 || x >= static_cast<int>(grid.GetWidth()) ||
+		y >= static_cast<int>(grid.GetHeight())) {
 		return;
 	}
 
@@ -53,8 +53,8 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 	}
 
 	if (playerStats.hp < 0) {
-		for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-			for (size_t x = 0; x < Grid::WIDTH; ++x) {
+		for (size_t y = 0; y < grid.GetHeight(); ++y) {
+			for (size_t x = 0; x < grid.GetWidth(); ++x) {
 				if (grid.cells[y][x].state != CellState::Hinting)
 					grid.cells[y][x].state = CellState::Revealed;
 			}
@@ -192,7 +192,7 @@ void GridInterpreter::RecalculateHints(Grid &grid) {}
 
 void GridInterpreter::OnStartingClick(int x, int y, Grid &grid) {
 	grid.cells[y][x].val = 0;
-	UncoverStartingCellNeighbors(x, y, grid.cells);
+	UncoverStartingCellNeighbors(x, y, grid);
 	grid.cells[y][x].state = CellState::Hinting;
 }
 
@@ -204,14 +204,16 @@ void GridInterpreter::OnHealthClick(int x, int y, Grid &grid, int &hp,
 	hp = maxHp;
 }
 
-void GridInterpreter::UncoverStartingCellNeighbors(
-	int x, int y,
-	std::array<std::array<Grid::Cell, Grid::WIDTH>, Grid::HEIGHT> &cells) {
+void GridInterpreter::UncoverStartingCellNeighbors(int x, int y, Grid &grid) {
+
+	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
+
 	auto revealIfValid = [&](int rx, int ry) {
-		if (rx < 0 || ry < 0 || rx >= static_cast<int>(Grid::WIDTH) ||
-			ry >= static_cast<int>(Grid::HEIGHT)) {
+		if (rx < 0 || ry < 0 || rx >= static_cast<int>(grid.GetWidth()) ||
+			ry >= static_cast<int>(grid.GetHeight())) {
 			return;
 		}
+
 		auto &cell = cells[ry][rx];
 		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
 			cell.state = CellState::Hinting;

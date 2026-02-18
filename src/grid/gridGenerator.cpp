@@ -4,8 +4,8 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 						 GameMode gameMode) {
 	(void)gameMode;
 	// Base fill
-	for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-		for (size_t x = 0; x < Grid::WIDTH; ++x) {
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
 			auto &c = grid.cells[y][x];
 			c.hint = 0;
 			c.defeted = false;
@@ -69,8 +69,8 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 										 int count = 1) {
 	for (int i = 0; i < count; ++i) {
 		for (int attempts = 0; attempts < 500; ++attempts) {
-			const int x = GetRandomValue(0, Grid::WIDTH - 1);
-			const int y = GetRandomValue(0, Grid::HEIGHT - 1);
+			const int x = GetRandomValue(0, grid.GetWidth() - 1);
+			const int y = GetRandomValue(0, grid.GetHeight() - 1);
 
 			if (grid.cells[y][x].specialFunction !=
 				Grid::SpecialFunction::None) {
@@ -107,8 +107,8 @@ void GridGenerator::InitOgre(Grid &grid) {
 	};
 
 	for (int attempts = 0; attempts < 500; ++attempts) {
-		const int x = GetRandomValue(1, Grid::WIDTH - 2);
-		const int y = GetRandomValue(1, Grid::HEIGHT - 2);
+		const int x = GetRandomValue(1, grid.GetWidth() - 2);
+		const int y = GetRandomValue(1, grid.GetHeight() - 2);
 
 		auto isFree = [&](int cx, int cy) {
 			return grid.cells[cy][cx].specialFunction ==

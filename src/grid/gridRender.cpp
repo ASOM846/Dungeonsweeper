@@ -29,8 +29,8 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 	float scale =
 		size / static_cast<float>(textureManager->get(TextureId::Floor1).width);
 
-	for (size_t x = 0; x < Grid::WIDTH; ++x) {
-		for (size_t y = 0; y < Grid::HEIGHT; ++y) {
+	for (size_t x = 0; x < grid.GetWidth(); ++x) {
+		for (size_t y = 0; y < grid.GetHeight(); ++y) {
 			TextureId floorTextureId =
 				GetFloorTextureId(grid.cells[y][x].textureNumber);
 
@@ -192,7 +192,7 @@ void GridRender::HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
 						  grid.cells[y][x].rotation * 90.0f, scale,
 						  {100, 100, 100, 255});
 	int hint = gUtils::GetNeighboursSum(static_cast<int>(x),
-										static_cast<int>(y), grid.cells);
+										static_cast<int>(y), grid);
 	if (hint != 0) {
 		std::string text2 = std::to_string(hint);
 		DrawText(text2.c_str(), static_cast<int>(x * size + offset.x + 8),

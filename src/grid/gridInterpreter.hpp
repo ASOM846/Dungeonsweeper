@@ -34,9 +34,7 @@ class GridInterpreter {
 
 	void OnHealthClick(int x, int y, Grid &grid, int &hp, int &maxHp);
 
-	void UncoverStartingCellNeighbors(
-		int x, int y,
-		std::array<std::array<Grid::Cell, Grid::WIDTH>, Grid::HEIGHT> &cells);
+	void UncoverStartingCellNeighbors(int x, int y, Grid &grid);
 	void RecalculateHints(Grid &grid);
 
 	UI *ui = nullptr;
