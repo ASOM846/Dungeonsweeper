@@ -169,6 +169,8 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 
 	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
 		cell.LowerGrid = new Grid(5, 5, &grid);
+		GridGenerator generator;
+		generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
 		grid = *cell.LowerGrid;
 	}
 

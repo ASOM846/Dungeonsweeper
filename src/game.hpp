@@ -1,6 +1,6 @@
 #pragma once
-#include "gameMode.hpp"
 #include "entity/playerStats.hpp"
+#include "gameMode.hpp"
 #include "grid/gridManager.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
@@ -53,4 +53,8 @@ class Game {
 	GridManager gridManager;
 	TextureManager textureManager;
 	UI ui;
+
+	float lockedInputTimer;
+	float lockedInputCounter;
+	bool inputLocked;
 };

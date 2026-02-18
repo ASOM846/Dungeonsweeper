@@ -6,10 +6,14 @@ void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
 
+	inputLocked = false;
+	lockedInputTimer = 0.2f;
 	Reset();
 }
 
 void Game::Update() {
+	lockedInputCounter += GetFrameTime();
+
 	switch (gameState) {
 	case GameState::Playing:
 		UpdatePlaying();
