@@ -39,5 +39,5 @@ class GridInterpreter {
 	void RecalculateHints(Grid &grid);
 
 	UI *ui = nullptr;
-	bool mouseInputArmed = false;
+	bool mouseInputArmed = true;
 };
