@@ -23,6 +23,8 @@ class GridInterpreter {
 	~GridInterpreter() = default;
 
 	void Update(Grid &grid, PlayerStats &playerStats, UI &ui);
+	// Resets input arming state to prevent accidental clicks during grid transitions.
+	// Called by GridManager::InitGrid() when initializing a new grid.
 	void ResetInput();
 
   private:
@@ -39,5 +41,8 @@ class GridInterpreter {
 	void RecalculateHints(Grid &grid);
 
 	UI *ui = nullptr;
+	// Mouse input arming state to prevent accidental clicks during grid transitions.
+	// Initialized to true to allow interaction with the initial grid without requiring
+	// a button release. Reset to false by ResetInput() on grid initialization.
 	bool mouseInputArmed = true;
 };
