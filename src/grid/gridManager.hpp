@@ -20,7 +20,7 @@ class GridManager {
 				const PlayerStats &playerStats, GameMode gameMode);
 
   private:
-	Grid grid = Grid(13, 10);
+	Grid *currentGrid;
 
 	GridRender gridRender;
 	GridInterpreter gridInterpreter;

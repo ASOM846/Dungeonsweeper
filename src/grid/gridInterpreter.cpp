@@ -72,7 +72,8 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
 		cell.specialFunction == SpecialFunction::ChestKey ||
 		cell.specialFunction == SpecialFunction::SwordRed ||
 		cell.specialFunction == SpecialFunction::SwordGreen ||
-		cell.specialFunction == SpecialFunction::SwordGold) {
+		cell.specialFunction == SpecialFunction::SwordGold ||
+		cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -164,6 +165,11 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 		playerStats.hasGoldSword = true;
 		playerStats.currentPointsToEvo += 3;
 		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
+		cell.LowerGrid = new Grid(5, 5, &grid);
+		grid = *cell.LowerGrid;
 	}
 
 	if (cell.val <= 0) {

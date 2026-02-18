@@ -51,17 +51,19 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Chest,
 						 Grid::NUMBER_OF_CHESTS);
 
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::MiniDungeonEntry, 1);
+
 	if (gameMode == GameMode::Classic) {
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1);
 	} else {
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1);
 	}
 
-	// for (size_t y = 0; y < Grid::HEIGHT; ++y) {
-	// 	for (size_t x = 0; x < Grid::WIDTH; ++x) {
-	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
-	// 	}
-	// }
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
 void GridGenerator::PlaceSpecialFunction(Grid &grid,

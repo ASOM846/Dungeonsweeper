@@ -157,6 +157,12 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
+	if (current.specialFunction == Grid::SpecialFunction::MiniDungeonEntry) {
+		DrawRectangle(x * size + offset.x, y * size + offset.y, Grid::CELL_SIZE,
+					  Grid::CELL_SIZE, GREEN);
+		return;
+	}
+
 	if (grid.cells[y][x].val > 0) {
 		std::string text = std::to_string(grid.cells[y][x].val);
 		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},

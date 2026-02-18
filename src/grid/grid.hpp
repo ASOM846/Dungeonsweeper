@@ -25,6 +25,7 @@ struct Grid {
 	enum class SpecialFunction {
 		None,
 		Starting,
+		MiniDungeonEntry,
 		Wizzard,
 		SwordRed,
 		SwordGreen,
@@ -48,13 +49,18 @@ struct Grid {
 		bool flagged = false;
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
+		Grid *LowerGrid = nullptr;
 	};
 
 	std::vector<std::vector<Cell>> cells;
 
-	Grid(int w, int h) : width(w), height(h), cells(h, std::vector<Cell>(w)) {}
+	Grid(int w, int h, Grid *grid)
+		: width(w), height(h), UpperGrid(grid), cells(h, std::vector<Cell>(w)) {
+	}
 
   private:
-	int width = 13;
-	int height = 10;
+	int width;
+	int height;
+
+	Grid *UpperGrid = nullptr;
 };
