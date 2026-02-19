@@ -19,6 +19,7 @@ class GridManager {
 	void Update(PlayerStats &playerStats, UI &ui, InputManager &inputManager);
 	void Render(const TextureManager *textureManager,
 				const PlayerStats &playerStats, GameMode gameMode);
+	void Clear(Grid *grid);
 
   private:
 	Grid *currentGrid;

@@ -59,6 +59,8 @@ struct Grid {
 		: width(w), height(h), UpperGrid(grid), cells(h, std::vector<Cell>(w)) {
 	}
 
+	Cell &GetCell(Vector2 position) { return cells[position.y][position.x]; }
+
 	Grid *UpperGrid = nullptr;
 
   private:
