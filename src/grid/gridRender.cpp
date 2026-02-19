@@ -1,4 +1,5 @@
 #include "gridRender.hpp"
+#include <raylib.h>
 
 namespace {
 inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
@@ -158,8 +159,7 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	}
 
 	if (current.specialFunction == Grid::SpecialFunction::MiniDungeonEntry) {
-		DrawRectangle(x * size + offset.x, y * size + offset.y, Grid::CELL_SIZE,
-					  Grid::CELL_SIZE, GREEN);
+		RenderTexture(x, y, TextureId::Hole, offset);
 		return;
 	}
 
