@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <raylib.h>
 
 class InputManager {
@@ -24,7 +23,7 @@ class InputManager {
 		}
 	}
 
-	void LockFor(float seconds) {
+	void LockFor(float seconds = 0.1) {
 		isLocked = true;
 		timeToBeLocked = seconds;
 	}

@@ -1,6 +1,7 @@
 #include "gridInterpreter.hpp"
 #include "../entity/playerStats.hpp"
 #include "gridGenerator.hpp"
+#include <raylib.h>
 
 void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 							 InputManager &inputManager) {
@@ -28,8 +29,8 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 		return;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-		inputManager.LockFor(5);
+	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && !inputManager.IsLocked()) {
+		inputManager.LockFor();
 
 		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
 
@@ -41,17 +42,14 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 		grid.cells[y][x].flagged = !grid.cells[y][x].flagged;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		inputManager.LockFor(5);
-
-		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
-
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {
+		inputManager.LockFor();
 		switch (grid.cells[y][x].state) {
 		case CellState::Hidden:
-			OnHidenClick(x, y, grid, playerStats);
+			OnHidenClick(x, y, grid, playerStats, inputManager);
 			break;
 		case CellState::Revealed:
-			OnRevealedClick(x, y, grid, playerStats);
+			OnRevealedClick(x, y, grid, playerStats, inputManager);
 			break;
 		case CellState::pointsNotTaken:
 			OnPointsNotTakenClick(x, y, grid, playerStats.currentPointsToEvo);
@@ -75,7 +73,8 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 }
 
 void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
-								   PlayerStats &playerStats) {
+								   PlayerStats &playerStats,
+								   InputManager &inputManager) {
 	auto &cell = grid.cells[y][x];
 	if (cell.specialFunction == SpecialFunction::Ladder ||
 		cell.specialFunction == SpecialFunction::Mana ||
@@ -90,11 +89,12 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
 		return;
 	}
 
-	OnRevealedClick(x, y, grid, playerStats);
+	OnRevealedClick(x, y, grid, playerStats, inputManager);
 }
 
 void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
-									  PlayerStats &playerStats) {
+									  PlayerStats &playerStats,
+									  InputManager &inputManager) {
 	auto &cell = grid.cells[y][x];
 
 	if (cell.specialFunction == SpecialFunction::Starting) {
@@ -184,6 +184,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 		GridGenerator generator;
 		generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
 		grid = *cell.LowerGrid;
+		return;
 	}
 
 	if (cell.val <= 0) {

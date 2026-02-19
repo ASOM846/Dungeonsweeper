@@ -26,8 +26,10 @@ class GridInterpreter {
 				InputManager &inputManager);
 
   private:
-	void OnHidenClick(int x, int y, Grid &grid, PlayerStats &playerStats);
-	void OnRevealedClick(int x, int y, Grid &grid, PlayerStats &playerStats);
+	void OnHidenClick(int x, int y, Grid &grid, PlayerStats &playerStats,
+					  InputManager &inputManager);
+	void OnRevealedClick(int x, int y, Grid &grid, PlayerStats &playerStats,
+						 InputManager &inputManager);
 	void OnPointsNotTakenClick(int x, int y, Grid &grid, int &pointsToEvo);
 	void OnHintingClick(int x, int y, Grid &grid);
 	void OnStartingClick(int x, int y, Grid &grid);
