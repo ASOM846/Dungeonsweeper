@@ -3,7 +3,7 @@
 #include "gridGenerator.hpp"
 #include <raylib.h>
 
-void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
+void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 							 InputManager &inputManager) {
 	if (inputManager.IsLocked())
 		return;
@@ -11,7 +11,7 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 	if (this->ui == nullptr)
 		this->ui = &ui;
 
-	RecalculateHints(grid);
+	RecalculateHints(*grid);
 
 	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
 		!IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
@@ -19,13 +19,13 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 	}
 
 	Vector2 mousePos = GetMousePosition();
-	Vector2 offset = gUtils::GetOffset(grid);
+	Vector2 offset = gUtils::GetOffset(*grid);
 	int size = Grid::CELL_SIZE;
 	int x = static_cast<int>((mousePos.x - offset.x) / size);
 	int y = static_cast<int>((mousePos.y - offset.y) / size);
 
-	if (x < 0 || y < 0 || x >= static_cast<int>(grid.GetWidth()) ||
-		y >= static_cast<int>(grid.GetHeight())) {
+	if (x < 0 || y < 0 || x >= static_cast<int>(grid->GetWidth()) ||
+		y >= static_cast<int>(grid->GetHeight())) {
 		return;
 	}
 
@@ -34,28 +34,28 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 
 		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
 
-		if (grid.cells[y][x].state == CellState::Revealed ||
-			grid.cells[y][x].state == CellState::pointsNotTaken) {
+		if (grid->cells[y][x].state == CellState::Revealed ||
+			grid->cells[y][x].state == CellState::pointsNotTaken) {
 			return;
 		}
 
-		grid.cells[y][x].flagged = !grid.cells[y][x].flagged;
+		grid->cells[y][x].flagged = !grid->cells[y][x].flagged;
 	}
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
-		switch (grid.cells[y][x].state) {
+		switch (grid->cells[y][x].state) {
 		case CellState::Hidden:
-			OnHidenClick(x, y, grid, playerStats, inputManager);
+			OnHidenClick(x, y, grid, playerStats, inputManager, ui);
 			break;
 		case CellState::Revealed:
-			OnRevealedClick(x, y, grid, playerStats, inputManager);
+			OnRevealedClick(x, y, grid, playerStats, ui);
 			break;
 		case CellState::pointsNotTaken:
-			OnPointsNotTakenClick(x, y, grid, playerStats.currentPointsToEvo);
+			OnPointsNotTakenClick(x, y, *grid, playerStats.currentPointsToEvo);
 			break;
 		case CellState::Hinting:
-			OnHintingClick(x, y, grid);
+			OnHintingClick(x, y, *grid);
 			break;
 		default:
 			break;
@@ -63,19 +63,19 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
 	}
 
 	if (playerStats.hp < 0) {
-		for (size_t y = 0; y < grid.GetHeight(); ++y) {
-			for (size_t x = 0; x < grid.GetWidth(); ++x) {
-				if (grid.cells[y][x].state != CellState::Hinting)
-					grid.cells[y][x].state = CellState::Revealed;
+		for (size_t y = 0; y < grid->GetHeight(); ++y) {
+			for (size_t x = 0; x < grid->GetWidth(); ++x) {
+				if (grid->cells[y][x].state != CellState::Hinting)
+					grid->cells[y][x].state = CellState::Revealed;
 			}
 		}
 	}
 }
 
-void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
+void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 								   PlayerStats &playerStats,
-								   InputManager &inputManager) {
-	auto &cell = grid.cells[y][x];
+								   InputManager &inputManager, UI &ui) {
+	auto &cell = grid->cells[y][x];
 	if (cell.specialFunction == SpecialFunction::Ladder ||
 		cell.specialFunction == SpecialFunction::Mana ||
 		cell.specialFunction == SpecialFunction::Heal ||
@@ -89,17 +89,16 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid &grid,
 		return;
 	}
 
-	OnRevealedClick(x, y, grid, playerStats, inputManager);
+	OnRevealedClick(x, y, grid, playerStats, ui);
 }
 
-void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
-									  PlayerStats &playerStats,
-									  InputManager &inputManager) {
-	auto &cell = grid.cells[y][x];
+void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
+									  PlayerStats &playerStats, UI &ui) {
+	auto &cell = grid->cells[y][x];
 
 	if (cell.specialFunction == SpecialFunction::Starting) {
 		cell.defeted = true;
-		OnStartingClick(x, y, grid);
+		OnStartingClick(x, y, *grid);
 		return;
 	}
 
@@ -117,7 +116,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 		cell.state = CellState::Hinting;
 		cell.specialFunction = SpecialFunction::None;
 		cell.val = 0;
-		GridGenerator::PlaceSpecialFunction(grid, SpecialFunction::Necromancer,
+		GridGenerator::PlaceSpecialFunction(*grid, SpecialFunction::Necromancer,
 											1);
 		return;
 	}
@@ -131,7 +130,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 
 	if (cell.specialFunction == SpecialFunction::Chest) {
 		if (playerStats.keys <= 0) {
-			ui->TriggerMessageBox("You need a key to open this chest!");
+			ui.TriggerMessageBox("You need a key to open this chest!");
 			cell.state = CellState::Revealed;
 			return;
 		}
@@ -143,8 +142,36 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 		return;
 	}
 
+	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
+		if (cell.LowerGrid == nullptr) {
+			cell.LowerGrid = new Grid(6, 6, *&grid);
+			GridGenerator generator;
+			generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
+		}
+
+		if (!playerStats.hasGoldSword || !playerStats.hasGreenSword ||
+			!playerStats.hasRedSword) {
+			ui.TriggerMessageBox(
+				"You shall not enter the Hole before picking up every sword");
+			return;
+		} else {
+			grid = cell.LowerGrid;
+			return;
+		}
+		return;
+	}
+
+	if (cell.specialFunction == SpecialFunction::GoUpGrid) {
+		if (grid->UpperGrid != nullptr) {
+			DrawText("GRIDSWAPPED_________________", 10, 10, 40, GREEN);
+			grid = grid->UpperGrid;
+		}
+		return;
+	}
+
 	cell.defeted = true;
 	cell.state = CellState::Hinting;
+
 	if (cell.specialFunction == SpecialFunction::Heal) {
 		playerStats.HealToFull();
 		return;
@@ -176,14 +203,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid &grid,
 	if (cell.specialFunction == SpecialFunction::SwordGold) {
 		playerStats.hasGoldSword = true;
 		playerStats.currentPointsToEvo += 3;
-		return;
-	}
-
-	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
-		cell.LowerGrid = new Grid(13, 10, &grid);
-		GridGenerator generator;
-		generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
-		grid = *cell.LowerGrid;
 		return;
 	}
 

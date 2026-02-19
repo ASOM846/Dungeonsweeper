@@ -37,6 +37,7 @@ struct Grid {
 		Heal,
 		Mana,
 		Ladder,
+		GoUpGrid,
 		Necromancer,
 	};
 
@@ -58,9 +59,9 @@ struct Grid {
 		: width(w), height(h), UpperGrid(grid), cells(h, std::vector<Cell>(w)) {
 	}
 
+	Grid *UpperGrid = nullptr;
+
   private:
 	int width;
 	int height;
-
-	Grid *UpperGrid = nullptr;
 };

@@ -125,6 +125,14 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
+	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::GoUpGrid) {
+		RenderTexture(x, y, TextureId::Ladder, offset);
+		DrawRectangleLinesEx({x * size + offset.x, y * size + offset.y,
+							  static_cast<float>(size),
+							  static_cast<float>(size)},
+							 10.0f, GREEN);
+	}
+
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Wizzard) {
 		RenderTexture(x, y, TextureId::BlueWizzard, offset);
 	}

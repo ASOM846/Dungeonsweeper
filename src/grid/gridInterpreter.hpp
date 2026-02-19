@@ -22,14 +22,14 @@ class GridInterpreter {
 	GridInterpreter() = default;
 	~GridInterpreter() = default;
 
-	void Update(Grid &grid, PlayerStats &playerStats, UI &ui,
+	void Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 				InputManager &inputManager);
 
   private:
-	void OnHidenClick(int x, int y, Grid &grid, PlayerStats &playerStats,
-					  InputManager &inputManager);
-	void OnRevealedClick(int x, int y, Grid &grid, PlayerStats &playerStats,
-						 InputManager &inputManager);
+	void OnHidenClick(int x, int y, Grid *&grid, PlayerStats &playerStats,
+					  InputManager &inputManager, UI &ui);
+	void OnRevealedClick(int x, int y, Grid *&grid, PlayerStats &playerStats,
+						 UI &ui);
 	void OnPointsNotTakenClick(int x, int y, Grid &grid, int &pointsToEvo);
 	void OnHintingClick(int x, int y, Grid &grid);
 	void OnStartingClick(int x, int y, Grid &grid);

@@ -7,7 +7,7 @@ void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode) {
 
 void GridManager::Update(PlayerStats &playerStats, UI &ui,
 						 InputManager &inputManager) {
-	gridInterpreter.Update(*currentGrid, playerStats, ui, inputManager);
+	gridInterpreter.Update(currentGrid, playerStats, ui, inputManager);
 }
 
 void GridManager::Render(const TextureManager *textureManager,

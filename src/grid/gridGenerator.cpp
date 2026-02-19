@@ -59,6 +59,10 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1);
 	}
 
+	if (grid.UpperGrid != nullptr) {
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1);
+	}
+
 	for (size_t y = 0; y < grid.GetHeight(); ++y) {
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {
 			grid.cells[y][x].state = Grid::CellState::Revealed;
@@ -81,6 +85,10 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 
 			grid.cells[y][x].specialFunction = funct;
 			grid.cells[y][x].val = 0;
+
+			if (funct == Grid::SpecialFunction::GoUpGrid) {
+				grid.cells[y][x].state = Grid::CellState::Revealed;
+			}
 
 			if (funct == Grid::SpecialFunction::Necromancer) {
 				grid.cells[y][x].val = 6;
