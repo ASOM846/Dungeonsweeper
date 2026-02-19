@@ -1,5 +1,4 @@
 #pragma once
-#include "../inputLocker.hpp"
 #include <raylib.h>
 
 struct PlayerStats {
@@ -29,8 +28,4 @@ struct PlayerStats {
 		hp = maxHp;
 		hpHalf = drawHalfHp;
 	}
-
-	void Update() { inputLocker.Update(GetFrameTime()); }
-
-	InputLocker inputLocker;
 };

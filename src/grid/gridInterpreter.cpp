@@ -1,9 +1,12 @@
 #include "gridInterpreter.hpp"
 #include "../entity/playerStats.hpp"
 #include "gridGenerator.hpp"
-#include <iostream>
 
-void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
+void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui,
+							 InputManager &inputManager) {
+	if (inputManager.IsLocked())
+		return;
+
 	if (this->ui == nullptr)
 		this->ui = &ui;
 
@@ -25,10 +28,10 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 		return;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) &&
-		!playerStats.inputLocker.IsLocked()) {
-		playerStats.inputLocker.LockFor(1);
-		std::cout << "INPUT LOKCEDDDDDDDDDDDDDD" << std::endl;
+	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+		inputManager.LockFor(5);
+
+		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
 
 		if (grid.cells[y][x].state == CellState::Revealed ||
 			grid.cells[y][x].state == CellState::pointsNotTaken) {
@@ -38,11 +41,10 @@ void GridInterpreter::Update(Grid &grid, PlayerStats &playerStats, UI &ui) {
 		grid.cells[y][x].flagged = !grid.cells[y][x].flagged;
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-		!playerStats.inputLocker.IsLocked()) {
+	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+		inputManager.LockFor(5);
 
-		playerStats.inputLocker.LockFor(1);
-		std::cout << "INPUT LOKCEDDDDDDDDDDDDDD" << std::endl;
+		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
 
 		switch (grid.cells[y][x].state) {
 		case CellState::Hidden:

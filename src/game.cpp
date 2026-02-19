@@ -9,7 +9,11 @@ void Game::Init() {
 }
 
 void Game::Update() {
-	playerStats.Update();
+	inputManager.Update(GetFrameTime());
+
+	if (IsKeyDown(KEY_L)) {
+		inputManager.LockFor(5);
+	}
 
 	switch (gameState) {
 	case GameState::Playing:
@@ -57,7 +61,7 @@ void Game::UpdatePlaying() {
 	}
 
 	evolutionSystem.Update(playerStats);
-	gridManager.Update(playerStats, ui);
+	gridManager.Update(playerStats, ui, inputManager);
 
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");

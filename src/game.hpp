@@ -2,7 +2,7 @@
 #include "entity/playerStats.hpp"
 #include "gameMode.hpp"
 #include "grid/gridManager.hpp"
-#include "inputLocker.hpp"
+#include "inputManager.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
 #include <iostream>
@@ -49,6 +49,7 @@ class Game {
 	GameState gameState;
 	GameMode gameMode = GameMode::Classic;
 
+	InputManager inputManager;
 	PlayerStats playerStats;
 	EvolutionSystem evolutionSystem;
 	GridManager gridManager;

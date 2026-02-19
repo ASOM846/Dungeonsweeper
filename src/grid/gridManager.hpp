@@ -2,6 +2,7 @@
 
 #include "../entity/playerStats.hpp"
 #include "../gameMode.hpp"
+#include "../inputManager.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridGenerator.hpp"
@@ -15,7 +16,7 @@ class GridManager {
 	~GridManager() = default;
 
 	void InitGrid(PlayerStats &playerStats, GameMode gameMode);
-	void Update(PlayerStats &playerStats, UI &ui);
+	void Update(PlayerStats &playerStats, UI &ui, InputManager &inputManager);
 	void Render(const TextureManager *textureManager,
 				const PlayerStats &playerStats, GameMode gameMode);
 

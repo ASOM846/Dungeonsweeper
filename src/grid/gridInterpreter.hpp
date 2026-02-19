@@ -1,13 +1,13 @@
 #pragma once
 
-#include <array>
-#include <cstddef>
-#include <raylib.h>
-
 #include "../entity/playerStats.hpp"
+#include "../inputManager.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridUtils.hpp"
+#include <array>
+#include <cstddef>
+#include <raylib.h>
 
 class Grid;
 
@@ -22,7 +22,8 @@ class GridInterpreter {
 	GridInterpreter() = default;
 	~GridInterpreter() = default;
 
-	void Update(Grid &grid, PlayerStats &playerStats, UI &ui);
+	void Update(Grid &grid, PlayerStats &playerStats, UI &ui,
+				InputManager &inputManager);
 
   private:
 	void OnHidenClick(int x, int y, Grid &grid, PlayerStats &playerStats);
