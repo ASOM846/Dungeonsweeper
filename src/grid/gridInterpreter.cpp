@@ -13,11 +13,6 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 
 	RecalculateHints(*grid);
 
-	if (!IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
-		!IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-		return;
-	}
-
 	Vector2 mousePos = GetMousePosition();
 	Vector2 offset = gUtils::GetOffset(*grid);
 	int size = Grid::CELL_SIZE;
@@ -31,9 +26,6 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
-
-		DrawText("INPUT LOCKED FROM INTERPRETRER", 100, 100, 30, GREEN);
-
 		if (grid->cells[y][x].state == CellState::Revealed ||
 			grid->cells[y][x].state == CellState::pointsNotTaken) {
 			return;
@@ -96,6 +88,10 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
+	// if (cell.itemType != Item::ItemType::None) {
+	// 	void OnShopCellClick() return;
+	// }
+
 	if (cell.specialFunction == SpecialFunction::Starting) {
 		cell.defeted = true;
 		OnStartingClick(x, y, *grid);
@@ -137,16 +133,17 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 		cell.defeted = true;
 		playerStats.keys--;
-		playerStats.currentPointsToEvo += 15;
+		playerStats.currentPointsToEvo += 3;
+		playerStats.coins += GetRandomValue(20, 60);
 		cell.state = CellState::Hinting;
 		return;
 	}
 
 	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
 		if (cell.LowerGrid == nullptr) {
-			cell.LowerGrid = new Grid(6, 6, *&grid);
+			cell.LowerGrid = new Grid(7, 5, *&grid);
 			GridGenerator generator;
-			generator.Init(*cell.LowerGrid, playerStats, GameMode::Classic);
+			generator.InitShirene(*cell.LowerGrid);
 		}
 
 		if (!playerStats.hasGoldSword || !playerStats.hasGreenSword ||

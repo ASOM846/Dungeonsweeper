@@ -1,9 +1,12 @@
 #include "windowManager.hpp"
+#include <raylib.h>
 void WindowManager::Init() {
-	InitWindow(1280, 720, "My Application");
+	InitWindow(1920, 1080, "Dungeonsweeper");
 	SetTargetFPS(60);
-	SetWindowState(FLAG_WINDOW_RESIZABLE);
+
+	// SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowState(FLAG_VSYNC_HINT);
+	SetWindowState(FLAG_FULLSCREEN_MODE);
 
 	currentMode = AppMode::Menu;
 

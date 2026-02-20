@@ -86,10 +86,10 @@ void Game::RenderPlaying() {
 void Game::UpdateLose() {
 	if (IsKeyDown(KEY_R)) {
 		gameState = GameState::ShoudlReturnToMenu;
+		gridManager.Clear();
 	}
 }
 
 void Game::RenderLose() {
 	RenderPlaying();
-	std::cout << "LOSE" << std::endl;
 }

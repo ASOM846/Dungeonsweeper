@@ -85,7 +85,7 @@ void DrawWrappedText(const Font &font, const std::string &text,
 }
 
 void DrawTriColorTriangleIndicator(Rectangle bounds, bool redOn, bool greenOn,
-							   bool goldOn) {
+								   bool goldOn) {
 	if (bounds.width <= 1.0f || bounds.height <= 1.0f) {
 		return;
 	}
@@ -302,18 +302,44 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 				 Color{200, 170, 140, 255});
 	}
 
-	// Tri-color triangle indicator (colors depend only on bools)
-	{
-		const float triPadTop = 18.0f;
-		const float triW = std::min(120.0f, static_cast<float>(cardW) - 20.0f);
-		const float triH = triW * 0.8660254f;
-		const float triX = static_cast<float>(cardX) +
-						   (static_cast<float>(cardW) - triW) * 0.5f;
-		const float triY = static_cast<float>(evoY + evoH) + triPadTop;
-		DrawTriColorTriangleIndicator(
-			Rectangle{triX, triY, triW, triH}, playerStats.hasRedSword,
-			playerStats.hasGreenSword, playerStats.hasGoldSword);
-	}
+	const float triPadTop = 18.0f;
+	const float triW = std::min(120.0f, static_cast<float>(cardW) - 20.0f);
+	const float triH = triW * 0.8660254f;
+	const float triX =
+		static_cast<float>(cardX) + (static_cast<float>(cardW) - triW) * 0.5f;
+	const float triY = static_cast<float>(evoY + evoH) + triPadTop;
+	DrawTriColorTriangleIndicator(
+		Rectangle{triX, triY, triW, triH}, playerStats.hasRedSword,
+		playerStats.hasGreenSword, playerStats.hasGoldSword);
+
+	// Coins card
+	const int coinsCardH = 60;
+	const int coinsCardY = static_cast<int>(evoY + evoH + triH + 48);
+	DrawRectangleRounded(
+		Rectangle{static_cast<float>(cardX), static_cast<float>(coinsCardY),
+				  static_cast<float>(cardW), static_cast<float>(coinsCardH)},
+		0.2f, 8, Color{34, 30, 26, 255});
+	DrawRectangleLinesEx(
+		Rectangle{static_cast<float>(cardX), static_cast<float>(coinsCardY),
+				  static_cast<float>(cardW), static_cast<float>(coinsCardH)},
+		2.0f, Color{90, 72, 54, 255});
+
+	// Coin icon and count
+	const Texture2D &coinTex = textureManager->get(TextureId::Coin);
+	const float coinScale = 1.8f;
+	const int coinIconSize = static_cast<int>(coinTex.width * coinScale);
+	const int coinIconX = cardX + 18;
+	const int coinIconY = coinsCardY + (coinsCardH - coinIconSize) / 2;
+	DrawTextureEx(
+		coinTex,
+		Vector2{static_cast<float>(coinIconX), static_cast<float>(coinIconY)},
+		0.0f, coinScale, WHITE);
+
+	const int coinFontSize = 28;
+	const int coinTextX = coinIconX + coinIconSize + 18;
+	const int coinTextY = coinsCardY + (coinsCardH - coinFontSize) / 2;
+	DrawText(TextFormat("%d", playerStats.coins), coinTextX, coinTextY,
+			 coinFontSize, Color{230, 210, 80, 255});
 
 	// Message box overlay (draw last so it stays on top)
 	RenderMessageBox();

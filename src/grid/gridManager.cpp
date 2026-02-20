@@ -18,6 +18,11 @@ void GridManager::Render(const TextureManager *textureManager,
 void GridManager::Clear(Grid *grid) {
 	if (!grid)
 		return;
+
+	while (currentGrid->UpperGrid != nullptr) {
+		currentGrid = currentGrid->UpperGrid;
+	}
+
 	for (int x = 0; x < grid->GetWidth(); ++x) {
 		for (int y = 0; y < grid->GetHeight(); ++y) {
 			Vector2 pos = {static_cast<float>(x), static_cast<float>(y)};
@@ -29,4 +34,8 @@ void GridManager::Clear(Grid *grid) {
 		}
 	}
 	delete grid;
+}
+
+void GridManager::Clear() {
+	Clear(currentGrid);
 }

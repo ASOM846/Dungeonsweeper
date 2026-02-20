@@ -11,9 +11,11 @@ struct PlayerStats {
 	int currentPointsToEvo = 0;
 	int keys = 0;
 
-	bool hasRedSword = false;
-	bool hasGreenSword = false;
-	bool hasGoldSword = false;
+	int coins = 0;
+
+	bool hasRedSword = 1;
+	bool hasGreenSword = 1;
+	bool hasGoldSword = 1;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;

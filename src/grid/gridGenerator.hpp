@@ -65,7 +65,10 @@ class GridGenerator {
 	void Update(Grid &grid, int &hp, int &maxHp, int &pointsToEvo);
 	void Render(const TextureManager *textureManager, Grid &grid);
 
+	void InitShirene(Grid &grid);
+
   private:
+	Grid::GridType GetGridTypeForGameMode(const GameMode &gm, const Grid &grid);
 	static void PlaceSpecialFunction(Grid &grid, Grid::SpecialFunction funct,
 									 int count);
 	void InitOgre(Grid &grid);

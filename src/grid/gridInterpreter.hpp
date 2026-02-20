@@ -5,7 +5,6 @@
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridUtils.hpp"
-#include <array>
 #include <cstddef>
 #include <raylib.h>
 
@@ -31,6 +30,8 @@ class GridInterpreter {
 	void OnRevealedClick(int x, int y, Grid *&grid, PlayerStats &playerStats,
 						 UI &ui);
 	void OnPointsNotTakenClick(int x, int y, Grid &grid, int &pointsToEvo);
+	void OnShopCellClick(int x, int y, Grid &grid, int &playerStats);
+
 	void OnHintingClick(int x, int y, Grid &grid);
 	void OnStartingClick(int x, int y, Grid &grid);
 	void OnNecromancerClick(int x, int y, Grid &grid, PlayerStats &playerStats);

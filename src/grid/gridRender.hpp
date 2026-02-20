@@ -1,6 +1,7 @@
 #pragma once
 #include "../entity/playerStats.hpp"
 #include "../gameMode.hpp"
+#include "../graphics/shopPopup.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
 #include "gridUtils.hpp"
@@ -24,6 +25,7 @@ class GridRender {
 	TextureId GetFloorTextureId(int type);
 	void HidenCellRender();
 	void ReveledCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void ShopCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void PointsNotTakenCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
 						   float scale);

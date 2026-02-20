@@ -1,8 +1,13 @@
 #include "gridGenerator.hpp"
+#include "../entity/item.hpp"
+#include "../gameMode.hpp"
+#include "grid.hpp"
+#include <raylib.h>
 
 void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 						 GameMode gameMode) {
 	(void)gameMode;
+
 	// Base fill
 	for (size_t y = 0; y < grid.GetHeight(); ++y) {
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {
@@ -67,6 +72,41 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {
 			grid.cells[y][x].state = Grid::CellState::Revealed;
 		}
+	}
+}
+
+void GridGenerator::InitShirene(Grid &grid) {
+	Vector2 pos = {static_cast<float>(grid.GetWidth() / 2),
+				   static_cast<float>(grid.GetHeight() / 2)};
+
+	int x = static_cast<int>(pos.x);
+	int y = static_cast<int>(pos.y);
+
+	grid.cells[y][x].specialFunction = Grid::SpecialFunction::ItemCell;
+	grid.cells[y][x].itemType = ItemType::HpUp;
+	grid.cells[y][x].itemPrice = GetRandomValue(2, 4);
+
+	grid.cells[y][x - 2].specialFunction = Grid::SpecialFunction::ItemCell;
+	grid.cells[y][x - 2].itemType = ItemType::EvolutionUp;
+
+	grid.cells[0][0].specialFunction = Grid::SpecialFunction::GoUpGrid;
+
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
+}
+
+Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
+													 const Grid &grid) {
+	switch (gm) {
+	case GameMode::Classic:
+		return Grid::GridType::Classic;
+	case GameMode::Endless:
+		return Grid::GridType::Endless;
+	default:
+		return Grid::GridType::Classic;
 	}
 }
 
