@@ -77,15 +77,26 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 	int x = static_cast<int>((mousePos.x - offset.x) / size);
 	int y = static_cast<int>((mousePos.y - offset.y) / size);
 
-	ShopPopupInfo info;
-	info.description = "test";
-	info.icon = textureManager->get(TextureId::Coin);
-	info.name = "nigger";
-	info.price = 120;
-	info.valid = true;
+	if (x < 0 || x >= grid.GetWidth() || y < 0 || y >= grid.GetHeight() ||
+		grid.cells[y][x].state == Grid::CellState::Hidden)
+		return;
 
-	DrawShopPopup(info, GetMousePosition(),
-				  textureManager->get(TextureId::Coin));
+	if (grid.cells[y][x].specialFunction != Grid::SpecialFunction::None ||
+		grid.cells[y][x].val > 0) {
+		ShopPopupInfo info;
+		info.description = "info";
+		info.icon = textureManager->get(TextureId::Coin);
+		info.name = "nigger";
+		if (grid.cells[y][x].val > 0)
+			;
+		info.price = grid.cells[y][x].val;
+		if (grid.cells[y][x].itemPrice > 0)
+			info.price = grid.cells[y][x].val;
+		info.valid = true;
+
+		DrawShopPopup(info, GetMousePosition(),
+					  textureManager->get(TextureId::Coin));
+	}
 }
 
 TextureId GridRender::GetFloorTextureId(int type) {
