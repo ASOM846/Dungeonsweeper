@@ -33,5 +33,7 @@ class GridRender {
 	void RenderTexture(int x, int y, const TextureId &texId,
 					   const Vector2 offset, float rotation = 0.0f);
 
+	ShopPopupInfo GetPopupInfo(const Grid::Cell &cell);
+
 	const TextureManager *textureManager = nullptr;
 };

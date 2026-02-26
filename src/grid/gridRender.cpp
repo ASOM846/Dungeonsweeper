@@ -83,19 +83,10 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 
 	if (grid.cells[y][x].specialFunction != Grid::SpecialFunction::None ||
 		grid.cells[y][x].val > 0) {
-		ShopPopupInfo info;
-		info.description = "info";
-		info.icon = textureManager->get(TextureId::Coin);
-		info.name = "nigger";
-		if (grid.cells[y][x].val > 0)
-			;
-		info.price = grid.cells[y][x].val;
-		if (grid.cells[y][x].itemPrice > 0)
-			info.price = grid.cells[y][x].val;
-		info.valid = true;
+		Grid::Cell *current = &grid.cells[y][x];
+		ShopPopupInfo info = GetPopupInfo(*current);
 
-		DrawShopPopup(info, GetMousePosition(),
-					  textureManager->get(TextureId::Coin));
+		DrawShopPopup(info, GetMousePosition());
 	}
 }
 
@@ -126,8 +117,6 @@ TextureId GridRender::GetFloorTextureId(int type) {
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
 	Grid::Cell &current = grid.cells[y][x];
-
-	ShopPopupInfo popupInfo;
 
 	if (current.specialFunction == Grid::SpecialFunction::ItemCell) {
 		ShopCellRender(x, y, grid, gUtils::GetOffset(grid));
@@ -392,4 +381,26 @@ void GridRender::DrawEnemy(TextureManager const *textureManager,
 						  position.y + (Grid::CELL_SIZE - scaledH) * 0.5f};
 
 	DrawTextureEx(tex, drawPos, 0.0f, scale, WHITE);
+}
+
+ShopPopupInfo GridRender::GetPopupInfo(const Grid::Cell &cell) {
+	ShopPopupInfo info;
+
+	if (cell.val > 0) {
+		info.name = "Enemy";
+		info.icon = textureManager->get(TextureId::SwordGold);
+		info.price = cell.val;
+	} else if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
+		info.name = "item";
+		info.icon = textureManager->get(TextureId::Coin);
+		info.price = cell.itemPrice;
+	} else {
+		info.name = "other";
+		info.icon = textureManager->get(TextureId::Skull);
+		info.price = 2137;
+	}
+
+	info.valid = true;
+
+	return info;
 }
