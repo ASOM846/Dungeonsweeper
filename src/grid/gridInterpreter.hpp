@@ -30,7 +30,7 @@ class GridInterpreter {
 	void OnRevealedClick(int x, int y, Grid *&grid, PlayerStats &playerStats,
 						 UI &ui);
 	void OnPointsNotTakenClick(int x, int y, Grid &grid, int &pointsToEvo);
-	void OnShopCellClick(int x, int y, Grid &grid, int &playerStats);
+	void OnShopCellClick(int x, int y, Grid &grid, PlayerStats &playerStats);
 
 	void OnHintingClick(int x, int y, Grid &grid);
 	void OnStartingClick(int x, int y, Grid &grid);

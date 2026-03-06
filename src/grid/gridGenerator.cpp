@@ -68,11 +68,11 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1);
 	}
 
-	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
-	// 	for (size_t x = 0; x < grid.GetWidth(); ++x) {
-	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
-	// 	}
-	// }
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
 void GridGenerator::InitShirene(Grid &grid) {
@@ -88,8 +88,12 @@ void GridGenerator::InitShirene(Grid &grid) {
 
 	grid.cells[y][x - 2].specialFunction = Grid::SpecialFunction::ItemCell;
 	grid.cells[y][x - 2].itemType = ItemType::EvolutionUp;
+	grid.cells[y][x - 2].itemPrice = GetRandomValue(2, 6);
 
-	grid.cells[0][0].specialFunction = Grid::SpecialFunction::GoUpGrid;
+	grid.cells[y][x + 2].specialFunction = Grid::SpecialFunction::ItemCell;
+	grid.cells[y][x + 2].itemType = ItemType::HpUp;
+
+	grid.cells[y + 2][x].specialFunction = Grid::SpecialFunction::GoUpGrid;
 
 	for (size_t y = 0; y < grid.GetHeight(); ++y) {
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {

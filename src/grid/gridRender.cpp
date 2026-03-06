@@ -205,57 +205,26 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 void GridRender::ShopCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
-	Grid::Cell &current = grid.cells[y][x];
+	Grid::Cell &cell = grid.cells[y][x];
 
-	if (current.itemType == ItemType::HpUp) {
-		// Card background (rounded, dark, gold border)
-		Rectangle cardRect{x * size + offset.x + size * 0.08f,
-						   y * size + offset.y + size * 0.08f, size * 0.84f,
-						   size * 0.84f};
-		DrawRectangleRounded(cardRect, 0.22f, 6, Color{34, 30, 26, 255});
-		DrawRectangleLinesEx(cardRect, 2.0f, Color{210, 175, 70, 255});
+	TextureId texId;
 
-		// Draw item texture centered
-		const Texture2D &tex = textureManager->get(TextureId::HeartFull);
-		float scale = (size * 0.48f) / tex.width;
-		float cx = cardRect.x + (cardRect.width - tex.width * scale) * 0.5f;
-		float cy = cardRect.y +
-				   (cardRect.height - tex.height * scale - size * 0.18f) * 0.5f;
-		DrawTextureEx(tex, Vector2{cx, cy}, 0.0f, scale, WHITE);
-
-		// Price bar at bottom
-		// Price bar at bottom
-		float priceBarH = size * 0.22f;
-		Rectangle priceBar{cardRect.x, cardRect.y + cardRect.height - priceBarH,
-						   cardRect.width, priceBarH};
-		DrawRectangleRounded(priceBar, 0.18f, 4, Color{210, 175, 70, 230});
-		DrawRectangleLinesEx(priceBar, 1.5f, Color{120, 96, 72, 255});
-
-		// Price text and coin icon
-		std::string priceText = std::to_string(current.itemPrice);
-		int fontSize = static_cast<int>(priceBarH * 0.95f); // much larger
-		int textW = MeasureText(priceText.c_str(), fontSize);
-
-		// Coin icon
-		const Texture2D &coinTex = textureManager->get(TextureId::Coin);
-		float coinScale = priceBarH * 0.7f / coinTex.height;
-		float coinW = coinTex.width * coinScale;
-		float coinH = coinTex.height * coinScale;
-
-		// Center both as a group
-		float totalW = coinW + 6 + textW;
-		float startX = priceBar.x + (priceBar.width - totalW) * 0.5f;
-		float coinY = priceBar.y + (priceBar.height - coinH) * 0.5f;
-		DrawTextureEx(coinTex, Vector2{startX, coinY}, 0.0f, coinScale, WHITE);
-
-		// Draw price text next to coin
-		DrawText(
-			priceText.c_str(), static_cast<int>(startX + coinW + 6),
-			static_cast<int>(priceBar.y + (priceBar.height - fontSize) * 0.5f),
-			fontSize, Color{34, 30, 26, 255}); // Price text centered
-
-		return;
+	switch (cell.itemType) {
+	case ItemType::HpUp:
+		texId = TextureId::HeartFull;
+		break;
+	case ItemType::EvolutionUp:
+		texId = TextureId::Coin;
+		break;
+	default:
+		texId = TextureId::Skull;
+		break;
 	}
+
+	std::string text = std::to_string(grid.cells[y][x].itemPrice);
+	RenderTexture(x, y, texId, offset, 0);
+	DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
+			 static_cast<int>(y * size + offset.y + 8), 20, YELLOW);
 }
 
 void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
@@ -388,16 +357,14 @@ ShopPopupInfo GridRender::GetPopupInfo(const Grid::Cell &cell) {
 
 	if (cell.val > 0) {
 		info.name = "Enemy";
-		info.icon = textureManager->get(TextureId::SwordGold);
-		info.price = cell.val;
+		info.val = 20;
+		info.description = "enemy test enemy test";
 	} else if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
 		info.name = "item";
-		info.icon = textureManager->get(TextureId::Coin);
-		info.price = cell.itemPrice;
+		info.val = cell.itemPrice;
 	} else {
 		info.name = "other";
-		info.icon = textureManager->get(TextureId::Skull);
-		info.price = 2137;
+		info.val = 2137;
 	}
 
 	info.valid = true;

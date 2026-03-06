@@ -1,5 +1,6 @@
 #include "gridInterpreter.hpp"
 #include "../entity/playerStats.hpp"
+#include "grid.hpp"
 #include "gridGenerator.hpp"
 #include <raylib.h>
 
@@ -88,9 +89,9 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
-	// if (cell.itemType != Item::ItemType::None) {
-	// 	void OnShopCellClick() return;
-	// }
+	if (cell.itemType != ItemType::None) {
+		OnShopCellClick(x, y, *grid, playerStats);
+	}
 
 	if (cell.specialFunction == SpecialFunction::Starting) {
 		cell.defeted = true;
@@ -223,6 +224,32 @@ void GridInterpreter::OnHintingClick(int x, int y, Grid &grid) {
 	(void)x;
 	(void)y;
 	(void)grid;
+}
+
+void GridInterpreter::OnShopCellClick(int x, int y, Grid &grid,
+									  PlayerStats &playerStats) {
+
+	auto &cell = grid.cells[y][x];
+
+	if (playerStats.coins >= cell.itemPrice)
+		playerStats.coins -= cell.itemPrice;
+	else
+		return;
+
+	switch (cell.itemType) {
+	case ItemType::None:
+		return;
+	case ItemType::HpUp:
+		playerStats.HealToFull();
+		return;
+	case ItemType::EvolutionUp:
+		playerStats.currentPointsToEvo += 15;
+		return;
+	}
+
+	cell.itemType = ItemType::None;
+	cell.defeted = true;
+	cell.state = Grid::CellState::Hinting;
 }
 
 void GridInterpreter::RecalculateHints(Grid &grid) {}
