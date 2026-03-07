@@ -209,11 +209,11 @@ void GridRender::ShopCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 	TextureId texId;
 
-	switch (cell.itemType) {
-	case ItemType::HpUp:
+	switch (cell.item.type) {
+	case Item::ItemType::HpUp:
 		texId = TextureId::HeartFull;
 		break;
-	case ItemType::EvolutionUp:
+	case Item::ItemType::EvolutionUp:
 		texId = TextureId::Coin;
 		break;
 	default:
@@ -221,7 +221,7 @@ void GridRender::ShopCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		break;
 	}
 
-	std::string text = std::to_string(grid.cells[y][x].itemPrice);
+	std::string text = std::to_string(grid.cells[y][x].item.price);
 	RenderTexture(x, y, texId, offset, 0);
 	DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
 			 static_cast<int>(y * size + offset.y + 8), 20, YELLOW);
@@ -361,7 +361,7 @@ ShopPopupInfo GridRender::GetPopupInfo(const Grid::Cell &cell) {
 		info.description = "enemy test enemy test";
 	} else if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
 		info.name = "item";
-		info.val = cell.itemPrice;
+		info.val = cell.item.price;
 	} else {
 		info.name = "other";
 		info.val = 2137;

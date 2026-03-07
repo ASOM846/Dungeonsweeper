@@ -82,16 +82,14 @@ void GridGenerator::InitShirene(Grid &grid) {
 	int x = static_cast<int>(pos.x);
 	int y = static_cast<int>(pos.y);
 
+	grid.cells[y][x].item = Item(Item::ItemType::HpUp, 4, 10);
 	grid.cells[y][x].specialFunction = Grid::SpecialFunction::ItemCell;
-	grid.cells[y][x].itemType = ItemType::HpUp;
-	grid.cells[y][x].itemPrice = GetRandomValue(2, 4);
 
+	grid.cells[y][x - 2].item = Item(Item::ItemType::EvolutionUp, 10, 12);
 	grid.cells[y][x - 2].specialFunction = Grid::SpecialFunction::ItemCell;
-	grid.cells[y][x - 2].itemType = ItemType::EvolutionUp;
-	grid.cells[y][x - 2].itemPrice = GetRandomValue(2, 6);
 
+	grid.cells[y][x + 2].item = Item(Item::ItemType::Uncover2x2, 7, 0);
 	grid.cells[y][x + 2].specialFunction = Grid::SpecialFunction::ItemCell;
-	grid.cells[y][x + 2].itemType = ItemType::HpUp;
 
 	grid.cells[y + 2][x].specialFunction = Grid::SpecialFunction::GoUpGrid;
 

@@ -60,8 +60,13 @@ void Game::UpdatePlaying() {
 		return;
 	}
 
+	ui.UpdateInventoryClick(playerStats);
+
 	evolutionSystem.Update(playerStats);
 	gridManager.Update(playerStats, ui, inputManager);
+
+	if (IsKeyPressed(KEY_Y))
+		playerStats.inventory.push_back(Item(Item::ItemType::HpUp));
 
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");

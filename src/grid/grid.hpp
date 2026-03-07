@@ -53,8 +53,7 @@ struct Grid {
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;
-		ItemType itemType = ItemType::None;
-		int itemPrice = 0;
+		Item item;
 	};
 
 	enum class GridType {

@@ -89,8 +89,9 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
-	if (cell.itemType != ItemType::None) {
+	if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
 		OnShopCellClick(x, y, *grid, playerStats);
+		return;
 	}
 
 	if (cell.specialFunction == SpecialFunction::Starting) {
@@ -231,23 +232,14 @@ void GridInterpreter::OnShopCellClick(int x, int y, Grid &grid,
 
 	auto &cell = grid.cells[y][x];
 
-	if (playerStats.coins >= cell.itemPrice)
-		playerStats.coins -= cell.itemPrice;
+	if (playerStats.coins >= cell.item.price)
+		playerStats.coins -= cell.item.price;
 	else
 		return;
 
-	switch (cell.itemType) {
-	case ItemType::None:
-		return;
-	case ItemType::HpUp:
-		playerStats.HealToFull();
-		return;
-	case ItemType::EvolutionUp:
-		playerStats.currentPointsToEvo += 15;
-		return;
-	}
+	playerStats.inventory.push_back(cell.item);
 
-	cell.itemType = ItemType::None;
+	cell.item.type = Item::ItemType::None;
 	cell.defeted = true;
 	cell.state = Grid::CellState::Hinting;
 }

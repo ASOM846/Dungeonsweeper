@@ -1,5 +1,7 @@
 #pragma once
+#include "item.hpp"
 #include <raylib.h>
+#include <vector>
 
 struct PlayerStats {
 	int score = 0;
@@ -22,6 +24,10 @@ struct PlayerStats {
 	int evolutionLevel = 0;
 
 	bool isInputLocked = false;
+
+	// inventory
+	int inventorySize = 3;
+	std::vector<Item> inventory;
 
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }
