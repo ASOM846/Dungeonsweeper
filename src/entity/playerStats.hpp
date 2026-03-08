@@ -15,9 +15,9 @@ struct PlayerStats {
 
 	int coins = 0;
 
-	bool hasRedSword = 1;
-	bool hasGreenSword = 1;
-	bool hasGoldSword = 1;
+	bool hasRedSword = 0;
+	bool hasGreenSword = 0;
+	bool hasGoldSword = 0;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;

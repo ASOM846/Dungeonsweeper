@@ -11,7 +11,7 @@ struct ShopPopupInfo {
 	bool valid = false;
 };
 
-void DrawShopPopup(const ShopPopupInfo &info, Vector2 cursor) {
+inline void DrawShopPopup(const ShopPopupInfo &info, Vector2 cursor) {
 	if (!info.valid)
 		return;
 
