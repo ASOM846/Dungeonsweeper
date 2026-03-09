@@ -3,7 +3,7 @@ set -e
 
 source "$HOME/emsdk/emsdk_env.sh"
 
-emcc -o game.html \
+emcc -o index.html \
   $(find src -type f -name "*.cpp") \
   -Isrc \
   -I"$HOME/libs/raylib/src" \
