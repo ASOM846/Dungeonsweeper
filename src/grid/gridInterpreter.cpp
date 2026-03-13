@@ -1,4 +1,5 @@
 #include "gridInterpreter.hpp"
+#include "../entity/passiveItem.hpp"
 #include "../entity/playerStats.hpp"
 #include "grid.hpp"
 #include "gridGenerator.hpp"
@@ -39,9 +40,8 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
-		if (playerStats.selectedItem) {
-			ApplyItem(x, y, *grid, playerStats);
-		}
+
+		playerStats.curretTurn++;
 
 		switch (grid->cells[y][x].state) {
 		case CellState::Hidden:
@@ -243,7 +243,7 @@ void GridInterpreter::OnShopCellClick(int x, int y, Grid &grid,
 	else
 		return;
 
-	playerStats.inventory.push_back(cell.item);
+	playerStats.passiveItems.push_back(std::make_unique<Regen>());
 
 	cell.item.type = Item::ItemType::None;
 	cell.defeted = true;

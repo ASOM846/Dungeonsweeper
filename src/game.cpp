@@ -1,5 +1,7 @@
 #include "game.hpp"
+#include "entity/passiveItem.hpp"
 #include "graphics/ui.hpp"
+#include <memory>
 #include <raylib.h>
 
 void Game::Init() {
@@ -60,17 +62,11 @@ void Game::UpdatePlaying() {
 		return;
 	}
 
-	ui.UpdateInventoryClick(playerStats);
-
 	evolutionSystem.Update(playerStats);
 	gridManager.Update(playerStats, ui, inputManager);
 
 	if (IsKeyPressed(KEY_Y))
-		playerStats.inventory.push_back(Item(Item::ItemType::HpUp));
-
-	if (IsKeyPressed(KEY_U))
-		playerStats.inventory.push_back(
-			Item(Item::ItemType::Uncover2x2, 0, 0, true));
+		playerStats.passiveItems.push_back(std::make_unique<Regen>());
 
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
@@ -82,9 +78,12 @@ void Game::UpdatePlaying() {
 		gridManager.InitGrid(playerStats, gameMode);
 	}
 
-	std::cout << "HP: " << playerStats.GetHp() << "/" << playerStats.GetMaxHp()
-			  << " | Evo: " << playerStats.currentPointsToEvo << "/"
-			  << playerStats.pointsToEvo << std::endl;
+	std::cout << "clicks:     " << playerStats.curretTurn << std::endl;
+
+	// std::cout << "HP: " << playerStats.GetHp() << "/" <<
+	// playerStats.GetMaxHp()
+	// 		  << " | Evo: " << playerStats.currentPointsToEvo << "/"
+	// 		  << playerStats.pointsToEvo << std::endl;
 }
 
 void Game::RenderPlaying() {

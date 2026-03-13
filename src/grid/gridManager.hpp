@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../entity/passiveItem.hpp"
 #include "../entity/playerStats.hpp"
 #include "../gameMode.hpp"
 #include "../inputManager.hpp"

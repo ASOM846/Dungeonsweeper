@@ -1,8 +1,11 @@
 #pragma once
 #include "../grid/grid.hpp"
-#include "item.hpp"
+#include <memory.h>
+#include <memory>
 #include <raylib.h>
 #include <vector>
+
+class PassiveItem;
 
 struct PlayerStats {
 	int score = 0;
@@ -16,6 +19,8 @@ struct PlayerStats {
 
 	int coins = 0;
 
+	int curretTurn = 0;
+
 	bool hasRedSword = true;
 	bool hasGreenSword = 1;
 	bool hasGoldSword = 1;
@@ -26,9 +31,9 @@ struct PlayerStats {
 
 	bool isInputLocked = false;
 
-	// inventory
+	// passiveInventory
 	int inventorySize = 3;
-	std::vector<Item> inventory;
+	std::vector<std::unique_ptr<PassiveItem>> passiveItems;
 
 	Item *selectedItem;
 
@@ -37,6 +42,13 @@ struct PlayerStats {
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }
 	bool IsFullHp() const { return hp == maxHp && hpHalf == drawHalfHp; }
+
+	void Heal(int val_) {
+		hp += val_;
+		if (hp > maxHp)
+			hp = maxHp;
+	}
+
 	void HealToFull() {
 		hp = maxHp;
 		hpHalf = drawHalfHp;

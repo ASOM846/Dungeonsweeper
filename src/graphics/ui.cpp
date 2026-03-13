@@ -1,4 +1,5 @@
 #include "ui.hpp"
+#include "../entity/passiveItem.hpp"
 #include "../game.hpp"
 #include "button.hpp"
 #include <algorithm>
@@ -121,71 +122,6 @@ void DrawTriColorTriangleIndicator(Rectangle bounds, bool redOn, bool greenOn,
 }
 } // namespace
 
-void UI::UpdateInventoryClick(PlayerStats &playerStats) {
-	// Inventory grid layout (match RenderUi)
-	const int screenW = GetScreenWidth();
-	const int barWidth = UI_BAR_WIDTH;
-	const int cardW = barWidth - 28;
-	const int cardX = screenW - barWidth + 14;
-
-	const int headerH = 90;
-	const int avatarSize = 96;
-	const int avatarPad = 12;
-	const int avatarCardH = avatarSize + avatarPad * 2 + 24;
-	const int cardH = 140;
-	const int evoY = headerH + avatarCardH + cardH + 32;
-	const int evoH = 50;
-	const float triW = std::min(120.0f, static_cast<float>(cardW) - 20.0f);
-	const float triH = triW * 0.8660254f;
-	const int coinsCardH = 60;
-	const int coinsCardY = static_cast<int>(evoY + evoH + triH + 48);
-	const int invCardY = coinsCardY + coinsCardH + 16;
-	const int invCardH = 190;
-
-	const int gridCols = 3;
-	const int gridRows = 3;
-	const int totalSlots = gridCols * gridRows;
-	const float slotSize = 42.0f;
-	const float slotGap = 8.0f;
-	const float gridW = gridCols * slotSize + (gridCols - 1) * slotGap;
-	const float gridY =
-		invCardY + 40.0f +
-		(invCardH - 40.0f - gridRows * slotSize - (gridRows - 1) * slotGap) *
-			0.5f;
-	const float gridX = cardX + (cardW - gridW) * 0.5f;
-
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		Vector2 mouse = GetMousePosition();
-		for (int i = 0; i < totalSlots; ++i) {
-			int col = i % gridCols;
-			int row = i / gridCols;
-			float x = gridX + col * (slotSize + slotGap);
-			float y = gridY + row * (slotSize + slotGap);
-			Rectangle slotRect{x, y, slotSize, slotSize};
-			if (CheckCollisionPointRec(mouse, slotRect) &&
-				i < playerStats.inventorySize &&
-				!playerStats.inventory.empty()) {
-
-				if (playerStats.inventory[i].selectable) {
-					if (&playerStats.inventory[i] == playerStats.selectedItem) {
-						playerStats.selectedItem = nullptr;
-					} else
-						playerStats.selectedItem = &playerStats.inventory[i];
-				}
-
-				DrawText("INVENTORY CLICKED", 10, 10, 30, RED);
-
-				if (playerStats.inventory[i].type == Item::ItemType::HpUp)
-					playerStats.HealToFull();
-
-				if (!playerStats.inventory[i].selectable)
-					playerStats.inventory.erase(playerStats.inventory.begin() +
-												i);
-			}
-		}
-	}
-}
-
 void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
@@ -199,6 +135,7 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 			"right click to flag/unflag a cell. Reach the ladder to go to the "
 			"next level. Good luck!");
 	}
+
 	// Panel background
 	DrawRectangleGradientV(static_cast<int>(position.x), 0, barWidth, barHeight,
 						   Color{28, 24, 20, 255}, Color{18, 16, 14, 255});
@@ -423,7 +360,7 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 			 Color{200, 170, 140, 255});
 
 	const int gridCols = 3;
-	const int gridRows = 3;
+	const int gridRows = 1;
 	const int totalSlots = gridCols * gridRows;
 
 	const float slotSize = 42.0f;
@@ -435,29 +372,19 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 	const float gridY = static_cast<float>(invCardY) + 40.0f +
 						(static_cast<float>(invCardH) - 40.0f - gridH) * 0.5f;
 
-	auto itemColor = [](Item::ItemType t) -> Color {
+	auto itemColor = [](PassiveItem::PassiveType t) -> Color {
 		switch (t) {
-		case Item::ItemType::HpUp:
+		case PassiveItem::PassiveType::Regen:
 			return Color{210, 70, 70, 255};
-		case Item::ItemType::EvolutionUp:
-			return Color{90, 180, 120, 255};
-		case Item::ItemType::Uncover2x2:
-			return Color{80, 140, 220, 255};
-		case Item::ItemType::None:
 		default:
 			return Color{120, 120, 120, 255};
 		}
 	};
 
-	auto itemLabel = [](Item::ItemType t) -> const char * {
+	auto itemLabel = [](PassiveItem::PassiveType t) -> const char * {
 		switch (t) {
-		case Item::ItemType::HpUp:
-			return "HP";
-		case Item::ItemType::EvolutionUp:
-			return "EV";
-		case Item::ItemType::Uncover2x2:
-			return "2x2";
-		case Item::ItemType::None:
+		case PassiveItem::PassiveType::Regen:
+			return "REGEN";
 		default:
 			return "";
 		}
@@ -473,16 +400,6 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 		const bool unlocked = i < playerStats.inventorySize;
 		bool selected = false;
 
-		if (i < playerStats.inventory.size()) {
-			if (&playerStats.inventory[i] == playerStats.selectedItem) {
-				selected = true;
-			}
-		}
-
-		const bool hasItem =
-			unlocked && i < static_cast<int>(playerStats.inventory.size()) &&
-			playerStats.inventory[i].type != Item::ItemType::None;
-
 		// Slot background
 		DrawRectangleRounded(slotRect, 0.2f, 6,
 							 unlocked ? Color{28, 24, 20, 255}
@@ -491,27 +408,16 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 							 unlocked ? Color{110, 90, 70, 255}
 									  : Color{90, 90, 90, 180});
 
-		if (hasItem) {
-			const Item &it = playerStats.inventory[i];
-			const Color c = itemColor(it.type);
-
-			// Item "icon" as colored circle + short label
-			const float cx = x + slotSize * 0.5f;
-			const float cy = y + slotSize * 0.5f - 4.0f;
-			DrawCircleV(Vector2{cx, cy}, slotSize * 0.22f, c);
-
-			const char *lbl = itemLabel(it.type);
-			const int fs = 12;
-			const int tw = MeasureText(lbl, fs);
-			DrawText(lbl, static_cast<int>(cx - tw * 0.5f),
-					 static_cast<int>(y + slotSize - 14), fs,
-					 Color{235, 220, 200, 255});
-
-			if (selected) {
-				DrawRectangleLinesEx(
-					slotRect, 3.0f,
-					Color{255, 215, 0, 255}); // Gold border for selected
-			}
+		// Tymczasowe rysowanie pasywki w slocie
+		if (unlocked && i < static_cast<int>(playerStats.passiveItems.size()) &&
+			playerStats.passiveItems[i]) {
+			DrawRectangle(static_cast<int>(x) + 6, static_cast<int>(y) + 6,
+						  static_cast<int>(slotSize) - 12,
+						  static_cast<int>(slotSize) - 12,
+						  Color{80, 120, 180, 255});
+			DrawText("PASYW", static_cast<int>(x) + 10,
+					 static_cast<int>(y) + static_cast<int>(slotSize) / 2 - 8,
+					 14, WHITE);
 		}
 	}
 	// Message box overlay (draw last so it stays on top)
