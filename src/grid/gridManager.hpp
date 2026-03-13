@@ -17,8 +17,8 @@ class GridManager {
 
 	void InitGrid(PlayerStats &playerStats, GameMode gameMode);
 	void Update(PlayerStats &playerStats, UI &ui, InputManager &inputManager);
-	void Render(const TextureManager *textureManager,
-				const PlayerStats &playerStats, GameMode gameMode);
+	void Render(const TextureManager *textureManager, PlayerStats &playerStats,
+				GameMode gameMode);
 	void Clear(Grid *grid);
 	void Clear();
 

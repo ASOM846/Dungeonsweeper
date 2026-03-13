@@ -68,6 +68,9 @@ void Game::UpdatePlaying() {
 	if (IsKeyPressed(KEY_Y))
 		playerStats.inventory.push_back(Item(Item::ItemType::HpUp));
 
+	if (IsKeyPressed(KEY_U))
+		playerStats.inventory.push_back(Item(Item::ItemType::Uncover2x2));
+
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
 		gameState = GameState::Lose;

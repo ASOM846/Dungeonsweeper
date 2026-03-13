@@ -41,5 +41,8 @@ class GridInterpreter {
 	void UncoverStartingCellNeighbors(int x, int y, Grid &grid);
 	void RecalculateHints(Grid &grid);
 
+	void ApplyItem(int x, int y, Grid &grid, PlayerStats &playerStats);
+	void Apply2x2(int x, int y, Grid &grid);
+
 	UI *ui = nullptr;
 };

@@ -1,4 +1,5 @@
 #pragma once
+#include "../grid/grid.hpp"
 #include "item.hpp"
 #include <raylib.h>
 #include <vector>
@@ -15,9 +16,9 @@ struct PlayerStats {
 
 	int coins = 0;
 
-	bool hasRedSword = 0;
-	bool hasGreenSword = 0;
-	bool hasGoldSword = 0;
+	bool hasRedSword = true;
+	bool hasGreenSword = 1;
+	bool hasGoldSword = 1;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
@@ -28,6 +29,10 @@ struct PlayerStats {
 	// inventory
 	int inventorySize = 3;
 	std::vector<Item> inventory;
+
+	Item *selectedItem;
+
+	Grid::Cell *selectedCell;
 
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }

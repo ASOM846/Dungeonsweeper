@@ -15,7 +15,7 @@ class GridRender {
 	void setPtr(const TextureManager &tm) { textureManager = &tm; }
 
 	void RenderGrid(TextureManager const *textureManager, Grid &grid,
-					GameMode gameMode);
+					GameMode gameMode, PlayerStats &playerStats);
 	void DrawEnemy(
 		TextureManager const *textureManager, const Vector2 position,
 		const int type,

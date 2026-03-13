@@ -25,6 +25,8 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 		return;
 	}
 
+	playerStats.selectedCell = &grid->cells[y][x];
+
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
 		if (grid->cells[y][x].state == CellState::Revealed ||
@@ -37,6 +39,10 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
+		if (playerStats.selectedItem) {
+			ApplyItem(x, y, *grid, playerStats);
+		}
+
 		switch (grid->cells[y][x].state) {
 		case CellState::Hidden:
 			OnHidenClick(x, y, grid, playerStats, inputManager, ui);
@@ -291,4 +297,38 @@ void GridInterpreter::UncoverStartingCellNeighbors(int x, int y, Grid &grid) {
 	revealIfValid(x, y + 2);
 	revealIfValid(x - 2, y);
 	revealIfValid(x + 2, y);
+}
+
+void GridInterpreter::ApplyItem(int x, int y, Grid &grid,
+								PlayerStats &playerStats) {
+	if (!playerStats.selectedItem)
+		return;
+	switch (playerStats.selectedItem->type) {
+	case Item::ItemType::Uncover2x2:
+		Apply2x2(x, y, grid);
+		break;
+	}
+}
+
+void GridInterpreter::Apply2x2(int x, int y, Grid &grid) {
+	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
+	auto revealIfValid = [&](int rx, int ry) {
+		if (rx < 0 || ry < 0 || rx >= static_cast<int>(grid.GetWidth()) ||
+			ry >= static_cast<int>(grid.GetHeight())) {
+			return;
+		}
+
+		auto &cell = cells[ry][rx];
+		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
+			cell.state = CellState::Hinting;
+		} else {
+			cell.state = CellState::Revealed;
+		}
+	};
+
+	for (int dx = 0; dx < 2; ++dx) {
+		for (int dy = 0; dy < 2; ++dy) {
+			revealIfValid(x + dx, y + dy);
+		}
+	}
 }

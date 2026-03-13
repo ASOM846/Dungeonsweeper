@@ -2,6 +2,7 @@
 #include "../game.hpp"
 #include "button.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <raylib.h>
 
 namespace {
@@ -164,12 +165,22 @@ void UI::UpdateInventoryClick(PlayerStats &playerStats) {
 			if (CheckCollisionPointRec(mouse, slotRect) &&
 				i < playerStats.inventorySize &&
 				!playerStats.inventory.empty()) {
+
+				if (playerStats.inventory[i].selectable) {
+					if (&playerStats.inventory[i] == playerStats.selectedItem) {
+						playerStats.selectedItem = nullptr;
+					} else
+						playerStats.selectedItem = &playerStats.inventory[i];
+				}
+
 				DrawText("INVENTORY CLICKED", 10, 10, 30, RED);
 
 				if (playerStats.inventory[i].type == Item::ItemType::HpUp)
 					playerStats.HealToFull();
 
-				playerStats.inventory.erase(playerStats.inventory.begin() + i);
+				if (!playerStats.inventory[i].selectable)
+					playerStats.inventory.erase(playerStats.inventory.begin() +
+												i);
 			}
 		}
 	}
@@ -460,6 +471,14 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 		Rectangle slotRect{x, y, slotSize, slotSize};
 
 		const bool unlocked = i < playerStats.inventorySize;
+		bool selected = false;
+
+		if (i < playerStats.inventory.size()) {
+			if (&playerStats.inventory[i] == playerStats.selectedItem) {
+				selected = true;
+			}
+		}
+
 		const bool hasItem =
 			unlocked && i < static_cast<int>(playerStats.inventory.size()) &&
 			playerStats.inventory[i].type != Item::ItemType::None;
@@ -487,6 +506,12 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 			DrawText(lbl, static_cast<int>(cx - tw * 0.5f),
 					 static_cast<int>(y + slotSize - 14), fs,
 					 Color{235, 220, 200, 255});
+
+			if (selected) {
+				DrawRectangleLinesEx(
+					slotRect, 3.0f,
+					Color{255, 215, 0, 255}); // Gold border for selected
+			}
 		}
 	}
 	// Message box overlay (draw last so it stays on top)

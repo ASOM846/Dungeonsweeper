@@ -11,8 +11,8 @@ void GridManager::Update(PlayerStats &playerStats, UI &ui,
 }
 
 void GridManager::Render(const TextureManager *textureManager,
-						 const PlayerStats &playerStats, GameMode gameMode) {
-	gridRender.RenderGrid(textureManager, *currentGrid, gameMode);
+						 PlayerStats &playerStats, GameMode gameMode) {
+	gridRender.RenderGrid(textureManager, *currentGrid, gameMode, playerStats);
 }
 
 void GridManager::Clear(Grid *grid) {

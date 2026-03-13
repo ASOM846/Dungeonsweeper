@@ -1,4 +1,5 @@
 #include "gridRender.hpp"
+#include "../entity/playerStats.hpp"
 #include "../graphics/shopPopup.hpp"
 #include "gridUtils.hpp"
 #include <raylib.h>
@@ -21,7 +22,7 @@ inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
 } // namespace
 
 void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
-							GameMode gameMode) {
+							GameMode gameMode, PlayerStats &playerStats) {
 	this->textureManager = textureManager;
 	if (!this->textureManager) {
 		return;
@@ -70,6 +71,16 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 			}
 			DrawRectangleLines(x * size + offset.x, y * size + offset.y, size,
 							   size, BLACK);
+
+			if (&grid.cells[y][x] == playerStats.selectedCell &&
+				playerStats.selectedItem != nullptr) {
+				Rectangle linesRec;
+				linesRec.x = x * size + offset.x;
+				linesRec.y = y * size + offset.y;
+				linesRec.width = linesRec.height = size;
+
+				DrawRectangleLinesEx(linesRec, 5, GOLD);
+			}
 		}
 	}
 
@@ -81,13 +92,13 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 		grid.cells[y][x].state == Grid::CellState::Hidden)
 		return;
 
-	if (grid.cells[y][x].specialFunction != Grid::SpecialFunction::None ||
-		grid.cells[y][x].val > 0) {
-		Grid::Cell *current = &grid.cells[y][x];
-		ShopPopupInfo info = GetPopupInfo(*current);
-
-		DrawShopPopup(info, GetMousePosition());
-	}
+	// if (grid.cells[y][x].specialFunction != Grid::SpecialFunction::None ||
+	// 	grid.cells[y][x].val > 0) {
+	// 	Grid::Cell *current = &grid.cells[y][x];
+	// 	ShopPopupInfo info = GetPopupInfo(*current);
+	//
+	// 	DrawShopPopup(info, GetMousePosition());
+	// }
 }
 
 TextureId GridRender::GetFloorTextureId(int type) {
