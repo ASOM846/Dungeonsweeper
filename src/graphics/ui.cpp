@@ -345,7 +345,6 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 	DrawText(TextFormat("%d", playerStats.coins), coinTextX, coinTextY,
 			 coinFontSize, Color{230, 210, 80, 255});
 
-	// Inventory card (3x3 grid)
 	const int invCardY = coinsCardY + coinsCardH + 16;
 	const int invCardH = 190;
 	DrawRectangleRounded(
@@ -356,69 +355,115 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 		Rectangle{static_cast<float>(cardX), static_cast<float>(invCardY),
 				  static_cast<float>(cardW), static_cast<float>(invCardH)},
 		2.0f, Color{90, 72, 54, 255});
-	DrawText("Inventory", cardX + 12, invCardY + 10, 18,
+	DrawText("Passives", cardX + 12, invCardY + 10, 18,
 			 Color{200, 170, 140, 255});
 
-	const int gridCols = 3;
-	const int gridRows = 1;
-	const int totalSlots = gridCols * gridRows;
-
-	const float slotSize = 42.0f;
-	const float slotGap = 8.0f;
-	const float gridW = gridCols * slotSize + (gridCols - 1) * slotGap;
-	const float gridH = gridRows * slotSize + (gridRows - 1) * slotGap;
-	const float gridX =
-		static_cast<float>(cardX) + (static_cast<float>(cardW) - gridW) * 0.5f;
-	const float gridY = static_cast<float>(invCardY) + 40.0f +
-						(static_cast<float>(invCardH) - 40.0f - gridH) * 0.5f;
-
-	auto itemColor = [](PassiveItem::PassiveType t) -> Color {
-		switch (t) {
-		case PassiveItem::PassiveType::Regen:
-			return Color{210, 70, 70, 255};
-		default:
-			return Color{120, 120, 120, 255};
-		}
-	};
+	const int totalSlots = 3;
+	const float rowGap = 8.0f;
+	const float contentTop = 38.0f;
+	const float contentBottomPad = 12.0f;
+	const float rowH = (static_cast<float>(invCardH) - contentTop -
+						contentBottomPad - rowGap * (totalSlots - 1)) /
+					   static_cast<float>(totalSlots);
 
 	auto itemLabel = [](PassiveItem::PassiveType t) -> const char * {
 		switch (t) {
 		case PassiveItem::PassiveType::Regen:
-			return "REGEN";
+			return "+2 HP";
+		case PassiveItem::PassiveType::PointsToEvo:
+			return "+1 EVO";
 		default:
 			return "";
 		}
 	};
 
+	auto itemColor = [](PassiveItem::PassiveType t) -> Color {
+		switch (t) {
+		case PassiveItem::PassiveType::Regen:
+			return Color{185, 70, 70, 255};
+		case PassiveItem::PassiveType::PointsToEvo:
+			return Color{90, 170, 110, 255};
+		default:
+			return Color{100, 100, 100, 255};
+		}
+	};
+
 	for (int i = 0; i < totalSlots; ++i) {
-		const int col = i % gridCols;
-		const int row = i / gridCols;
-		const float x = gridX + col * (slotSize + slotGap);
-		const float y = gridY + row * (slotSize + slotGap);
-		Rectangle slotRect{x, y, slotSize, slotSize};
+		const float rowX = static_cast<float>(cardX) + 10.0f;
+		const float rowY =
+			static_cast<float>(invCardY) + contentTop + i * (rowH + rowGap);
+		const float rowW = static_cast<float>(cardW) - 20.0f;
+		Rectangle rowRect{rowX, rowY, rowW, rowH};
 
 		const bool unlocked = i < playerStats.inventorySize;
-		bool selected = false;
+		const bool hasItem =
+			unlocked && i < static_cast<int>(playerStats.passiveItems.size()) &&
+			playerStats.passiveItems[i];
 
-		// Slot background
-		DrawRectangleRounded(slotRect, 0.2f, 6,
+		DrawRectangleRounded(rowRect, 0.15f, 6,
 							 unlocked ? Color{28, 24, 20, 255}
 									  : Color{55, 55, 55, 180});
-		DrawRectangleLinesEx(slotRect, 2.0f,
+		DrawRectangleLinesEx(rowRect, 2.0f,
 							 unlocked ? Color{110, 90, 70, 255}
 									  : Color{90, 90, 90, 180});
 
-		// Tymczasowe rysowanie pasywki w slocie
-		if (unlocked && i < static_cast<int>(playerStats.passiveItems.size()) &&
-			playerStats.passiveItems[i]) {
-			DrawRectangle(static_cast<int>(x) + 6, static_cast<int>(y) + 6,
-						  static_cast<int>(slotSize) - 12,
-						  static_cast<int>(slotSize) - 12,
-						  Color{80, 120, 180, 255});
-			DrawText("PASYW", static_cast<int>(x) + 10,
-					 static_cast<int>(y) + static_cast<int>(slotSize) / 2 - 8,
-					 14, WHITE);
+		const float pad = 6.0f;
+		const float iconSize = rowH - pad * 2.0f;
+		Rectangle iconRect{rowX + pad, rowY + pad, iconSize, iconSize};
+
+		DrawRectangleRounded(iconRect, 0.2f, 4, Color{22, 20, 18, 255});
+		DrawRectangleLinesEx(iconRect, 1.0f, Color{120, 96, 72, 255});
+
+		if (!hasItem) {
+			if (unlocked) {
+				DrawText("-", static_cast<int>(rowX + iconSize + 18),
+						 static_cast<int>(rowY + 8), 16,
+						 Color{140, 130, 120, 255});
+			}
+			continue;
 		}
+
+		auto *item = playerStats.passiveItems[i].get();
+		const Color accent = itemColor(item->GetType());
+
+		DrawRectangle(static_cast<int>(iconRect.x) + 4,
+					  static_cast<int>(iconRect.y) + 4,
+					  static_cast<int>(iconRect.width) - 8,
+					  static_cast<int>(iconRect.height) - 8, accent);
+
+		const float textX = iconRect.x + iconRect.width + 10.0f;
+		const int effectFont = 16;
+		DrawText(itemLabel(item->GetType()), static_cast<int>(textX),
+				 static_cast<int>(rowY + 4), effectFont,
+				 Color{220, 200, 170, 255});
+
+		const int turnsNeed = std::max(1, item->turnsToActivate);
+		const int turnsNow =
+			std::max(0, std::min(item->turnsCounter, turnsNeed));
+		const float prog =
+			static_cast<float>(turnsNow) / static_cast<float>(turnsNeed);
+
+		const float progX = textX;
+		const float progY = rowY + rowH - 12.0f;
+		const float progW = rowX + rowW - progX - 8.0f;
+		const float progH = 8.0f;
+
+		DrawRectangle(static_cast<int>(progX), static_cast<int>(progY),
+					  static_cast<int>(progW), static_cast<int>(progH),
+					  Color{22, 20, 18, 255});
+		DrawRectangle(static_cast<int>(progX), static_cast<int>(progY),
+					  static_cast<int>(progW * prog), static_cast<int>(progH),
+					  accent);
+		DrawRectangleLines(static_cast<int>(progX), static_cast<int>(progY),
+						   static_cast<int>(progW), static_cast<int>(progH),
+						   Color{100, 88, 70, 255});
+
+		const char *ratio = TextFormat("%d/%d", turnsNow, turnsNeed);
+		const int ratioFont = 12;
+		const int ratioW = MeasureText(ratio, ratioFont);
+		DrawText(ratio, static_cast<int>(progX + progW - ratioW),
+				 static_cast<int>(progY - 14), ratioFont,
+				 Color{180, 160, 135, 255});
 	}
 	// Message box overlay (draw last so it stays on top)
 	RenderMessageBox();

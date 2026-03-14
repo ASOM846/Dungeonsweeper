@@ -5,7 +5,8 @@
 class PassiveItem {
   public: // lub protected:
 	enum class PassiveType {
-		Regen
+		Regen,
+		PointsToEvo,
 	};
 
 	enum SpawnRate {
@@ -41,12 +42,27 @@ class Regen : public PassiveItem {
 	}
 };
 
+class PointsToEvo : public PassiveItem {
+  public:
+	PointsToEvo() {
+		Rate = Common;
+		turnsToActivate = 5;
+		turnsCounter = 0;
+	}
+
+	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
+	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
+		playerStats.currentPointsToEvo++;
+	}
+};
+
 class PassiveItemManager {
   public:
 	void Update(Grid &grid, PlayerStats &playerStats) {
 		for (auto &itemPtr : playerStats.passiveItems) {
 			if (itemPtr) {
-				itemPtr->turnsCounter++;
+				if (playerStats.wasGridClicked)
+					itemPtr->turnsCounter++;
 				if (itemPtr->turnsCounter >= itemPtr->turnsToActivate) {
 					itemPtr->ApplyEffect(grid, playerStats);
 					itemPtr->turnsCounter = 0;

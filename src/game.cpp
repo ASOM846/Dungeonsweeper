@@ -68,6 +68,9 @@ void Game::UpdatePlaying() {
 	if (IsKeyPressed(KEY_Y))
 		playerStats.passiveItems.push_back(std::make_unique<Regen>());
 
+	if (IsKeyPressed(KEY_U))
+		playerStats.passiveItems.push_back(std::make_unique<PointsToEvo>());
+
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
 		gameState = GameState::Lose;
@@ -84,6 +87,8 @@ void Game::UpdatePlaying() {
 	// playerStats.GetMaxHp()
 	// 		  << " | Evo: " << playerStats.currentPointsToEvo << "/"
 	// 		  << playerStats.pointsToEvo << std::endl;
+	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
+	playerStats.EveryFrameReset();
 }
 
 void Game::RenderPlaying() {

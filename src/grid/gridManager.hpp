@@ -22,6 +22,7 @@ class GridManager {
 				GameMode gameMode);
 	void Clear(Grid *grid);
 	void Clear();
+	Grid &GetGrid() { return *currentGrid; }
 
   private:
 	Grid *currentGrid;

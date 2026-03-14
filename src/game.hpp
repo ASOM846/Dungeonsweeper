@@ -1,4 +1,5 @@
 #pragma once
+#include "entity/passiveItem.hpp"
 #include "entity/playerStats.hpp"
 #include "gameMode.hpp"
 #include "grid/gridManager.hpp"
@@ -51,6 +52,7 @@ class Game {
 
 	InputManager inputManager;
 	PlayerStats playerStats;
+	PassiveItemManager passiveItemManager;
 	EvolutionSystem evolutionSystem;
 	GridManager gridManager;
 	TextureManager textureManager;

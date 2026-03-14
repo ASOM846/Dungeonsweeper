@@ -41,7 +41,10 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
 
-		playerStats.curretTurn++;
+		if (grid->cells[y][x].state != CellState::Hinting) {
+			playerStats.curretTurn++;
+			playerStats.wasGridClicked = true;
+		}
 
 		switch (grid->cells[y][x].state) {
 		case CellState::Hidden:

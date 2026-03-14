@@ -20,6 +20,7 @@ struct PlayerStats {
 	int coins = 0;
 
 	int curretTurn = 0;
+	bool wasGridClicked = 0;
 
 	bool hasRedSword = true;
 	bool hasGreenSword = 1;
@@ -34,6 +35,8 @@ struct PlayerStats {
 	// passiveInventory
 	int inventorySize = 3;
 	std::vector<std::unique_ptr<PassiveItem>> passiveItems;
+
+	bool PushBackPassiveItems(std::unique_ptr<PassiveItem> item);
 
 	Item *selectedItem;
 
@@ -53,4 +56,6 @@ struct PlayerStats {
 		hp = maxHp;
 		hpHalf = drawHalfHp;
 	}
+
+	void EveryFrameReset() { wasGridClicked = false; }
 };
