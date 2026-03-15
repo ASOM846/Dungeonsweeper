@@ -42,7 +42,7 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 		inputManager.LockFor();
 
 		if (grid->cells[y][x].state != CellState::Hinting) {
-			playerStats.curretTurn++;
+			playerStats.currentTurn++;
 			playerStats.wasGridClicked = true;
 		}
 
@@ -166,7 +166,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 	if (cell.specialFunction == SpecialFunction::GoUpGrid) {
 		if (grid->UpperGrid != nullptr) {
-			DrawText("GRIDSWAPPED_________________", 10, 10, 40, GREEN);
 			grid = grid->UpperGrid;
 		}
 		return;
@@ -187,7 +186,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 	if (cell.specialFunction == SpecialFunction::Ladder) {
 		playerStats.currentLevel++;
-		playerStats.shoudlNewLevelStart = true;
+		playerStats.shouldNewLevelStart = true;
 		return;
 	}
 

@@ -86,17 +86,11 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (playerStats.shoudlNewLevelStart) {
-		playerStats.shoudlNewLevelStart = false;
+	if (playerStats.shouldNewLevelStart) {
+		playerStats.shouldNewLevelStart = false;
 		gridManager.InitGrid(playerStats, gameMode);
 	}
 
-	std::cout << "clicks:     " << playerStats.curretTurn << std::endl;
-
-	// std::cout << "HP: " << playerStats.GetHp() << "/" <<
-	// playerStats.GetMaxHp()
-	// 		  << " | Evo: " << playerStats.currentPointsToEvo << "/"
-	// 		  << playerStats.pointsToEvo << std::endl;
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();
 }
@@ -111,7 +105,7 @@ void Game::RenderPlaying() {
 
 void Game::UpdateLose() {
 	if (IsKeyDown(KEY_R)) {
-		gameState = GameState::ShoudlReturnToMenu;
+		gameState = GameState::ShouldReturnToMenu;
 		gridManager.Clear();
 	}
 }

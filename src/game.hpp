@@ -7,7 +7,6 @@
 #include "systems/ItemChooser.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
-#include <iostream>
 #include <raylib.h>
 
 class UI;
@@ -15,7 +14,7 @@ class UI;
 enum class GameState {
 	Playing,
 	Lose,
-	ShoudlReturnToMenu,
+	ShouldReturnToMenu,
 };
 
 class Game {
@@ -33,7 +32,7 @@ class Game {
 	void InitEndlessGame();
 
 	bool ShouldReturnToMenu() const {
-		return gameState == GameState::ShoudlReturnToMenu;
+		return gameState == GameState::ShouldReturnToMenu;
 	}
 	TextureManager &GetTextureManager() { return textureManager; }
 

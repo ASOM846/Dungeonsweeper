@@ -28,7 +28,7 @@ void WindowManager::Update() {
 	switch (currentMode) {
 	case AppMode::Menu:
 		menu.Update();
-		if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
+		if (menu.GetCurrentState() == MenuState::ClassicGameShouldStart) {
 			game.InitClassicGame();
 			SwitchMode(AppMode::Game);
 		}
@@ -51,7 +51,6 @@ void WindowManager::Render() {
 	ClearBackground(BLACK);
 
 	switch (currentMode) {
-		void Run();
 	case AppMode::Menu:
 		menu.Render(game.GetTextureManager());
 		break;

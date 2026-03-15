@@ -1,6 +1,5 @@
 #pragma once
 #include "../grid/grid.hpp"
-#include <memory.h>
 #include <memory>
 #include <raylib.h>
 #include <vector>
@@ -20,7 +19,7 @@ struct PlayerStats {
 	int coins = 0;
 
 	int evolutions = 0;
-	int curretTurn = 0;
+	int currentTurn = 0;
 	bool wasGridClicked = 0;
 
 	bool hasRedSword = true;
@@ -28,7 +27,7 @@ struct PlayerStats {
 	bool hasGoldSword = 1;
 
 	int currentLevel = 1;
-	bool shoudlNewLevelStart = false;
+	bool shouldNewLevelStart = false;
 	int evolutionLevel = 0;
 
 	bool isInputLocked = false;

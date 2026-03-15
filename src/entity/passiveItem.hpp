@@ -71,8 +71,8 @@ class UncoverRandomRare : public PassiveItem {
 		int attempts = 500;
 
 		for (int i = 0; i < attempts; ++i) {
-			int x = GetRandomValue(0, grid.GetWidth());
-			int y = GetRandomValue(0, grid.GetHeight());
+			int x = GetRandomValue(0, grid.GetWidth() - 1);
+			int y = GetRandomValue(0, grid.GetHeight() - 1);
 
 			if (grid.cells[y][x].state == Grid::CellState::Hidden) {
 				grid.cells[y][x].state = Grid::CellState::Revealed;

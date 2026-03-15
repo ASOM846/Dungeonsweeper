@@ -63,7 +63,7 @@ void Menu::Update() {
 	settingsButton.Update();
 
 	if (classicGameButton.IsClicked()) {
-		currentState = MenuState::ClassicGameShoudlStart;
+		currentState = MenuState::ClassicGameShouldStart;
 		IsStartGame = true;
 	}
 	if (endlessGameButton.IsClicked()) {

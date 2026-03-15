@@ -9,7 +9,7 @@ enum class MenuState {
 	MainMenu,
 	Settings,
 	Modes,
-	ClassicGameShoudlStart,
+	ClassicGameShouldStart,
 	EndlessGameShouldStart,
 };
 

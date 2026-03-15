@@ -14,9 +14,7 @@ void EvolutionSystem::Update(PlayerStats &player) {
 	player.maxHp = 5 + (player.evolutionLevel / 2);
 	player.drawHalfHp = (player.evolutionLevel % 2) == 1;
 
-	if (player.evolutionLevel == 0) {
-		player.pointsToEvo = 4;
-	} else if (player.evolutionLevel == 1) {
+	if (player.evolutionLevel == 1) {
 		player.pointsToEvo = 5;
 	} else {
 		player.pointsToEvo = 2 * player.evolutionLevel + 3;
