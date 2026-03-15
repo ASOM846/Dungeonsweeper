@@ -1,0 +1,34 @@
+#pragma once
+
+#include "../entity/passiveItem.hpp"
+#include "../entity/playerStats.hpp"
+#include <memory>
+#include <vector>
+
+class ItemChooser {
+  public:
+	ItemChooser();
+	~ItemChooser();
+
+	void Init();
+	void Update(PlayerStats &playerStats);
+	void Render(PlayerStats &playerStats);
+
+  private:
+	using ItemFactory = std::unique_ptr<PassiveItem> (*)();
+
+	static std::unique_ptr<PassiveItem> CreateRegen();
+	static std::unique_ptr<PassiveItem> CreatePointsToEvo();
+	static std::unique_ptr<PassiveItem> CreateUncoverRandomRare();
+
+	int SpawnRateToWeight(PassiveItem::SpawnRate rate) const;
+	void BuildWeightedPool();
+	void RollChoices();
+
+  private:
+	const int numberOfChooses{3};
+
+	std::vector<ItemFactory> allFactories;
+	std::vector<ItemFactory> weightedPool;
+	std::vector<std::unique_ptr<PassiveItem>> availableItems;
+};

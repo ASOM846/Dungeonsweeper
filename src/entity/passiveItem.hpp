@@ -1,12 +1,14 @@
 #pragma once
 #include "../grid/grid.hpp"
 #include "playerStats.hpp"
+#include <raylib.h>
 
 class PassiveItem {
   public: // lub protected:
 	enum class PassiveType {
 		Regen,
 		PointsToEvo,
+		UncoverRandom,
 	};
 
 	enum SpawnRate {
@@ -31,7 +33,7 @@ class PassiveItem {
 class Regen : public PassiveItem {
   public:
 	Regen() {
-		Rate = Common;
+		Rate = Medium;
 		turnsToActivate = 5;
 		turnsCounter = 0;
 	}
@@ -45,7 +47,7 @@ class Regen : public PassiveItem {
 class PointsToEvo : public PassiveItem {
   public:
 	PointsToEvo() {
-		Rate = Common;
+		Rate = Medium;
 		turnsToActivate = 5;
 		turnsCounter = 0;
 	}
@@ -53,6 +55,30 @@ class PointsToEvo : public PassiveItem {
 	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
 		playerStats.currentPointsToEvo++;
+	}
+};
+
+class UncoverRandomRare : public PassiveItem {
+  public:
+	UncoverRandomRare() {
+		Rate = Rare;
+		turnsToActivate = 8;
+		turnsCounter = 0;
+	}
+
+	PassiveType GetType() const override { return PassiveType::UncoverRandom; }
+	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
+		int attempts = 500;
+
+		for (int i = 0; i < attempts; ++i) {
+			int x = GetRandomValue(0, grid.GetWidth());
+			int y = GetRandomValue(0, grid.GetHeight());
+
+			if (grid.cells[y][x].state == Grid::CellState::Hidden) {
+				grid.cells[y][x].state = Grid::CellState::Revealed;
+				break;
+			}
+		}
 	}
 };
 

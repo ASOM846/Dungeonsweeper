@@ -4,6 +4,7 @@
 #include "gameMode.hpp"
 #include "grid/gridManager.hpp"
 #include "inputManager.hpp"
+#include "systems/ItemChooser.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
 #include <iostream>
@@ -50,6 +51,7 @@ class Game {
 	GameState gameState;
 	GameMode gameMode = GameMode::Classic;
 
+	ItemChooser itemChooser;
 	InputManager inputManager;
 	PlayerStats playerStats;
 	PassiveItemManager passiveItemManager;

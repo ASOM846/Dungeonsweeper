@@ -98,11 +98,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
-	if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
-		OnShopCellClick(x, y, *grid, playerStats);
-		return;
-	}
-
 	if (cell.specialFunction == SpecialFunction::Starting) {
 		cell.defeted = true;
 		OnStartingClick(x, y, *grid);
@@ -234,23 +229,6 @@ void GridInterpreter::OnHintingClick(int x, int y, Grid &grid) {
 	(void)x;
 	(void)y;
 	(void)grid;
-}
-
-void GridInterpreter::OnShopCellClick(int x, int y, Grid &grid,
-									  PlayerStats &playerStats) {
-
-	auto &cell = grid.cells[y][x];
-
-	if (playerStats.coins >= cell.item.price)
-		playerStats.coins -= cell.item.price;
-	else
-		return;
-
-	playerStats.passiveItems.push_back(std::make_unique<Regen>());
-
-	cell.item.type = Item::ItemType::None;
-	cell.defeted = true;
-	cell.state = Grid::CellState::Hinting;
 }
 
 void GridInterpreter::RecalculateHints(Grid &grid) {}

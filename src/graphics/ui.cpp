@@ -372,6 +372,8 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 			return "+2 HP";
 		case PassiveItem::PassiveType::PointsToEvo:
 			return "+1 EVO";
+		case PassiveItem::PassiveType::UncoverRandom:
+			return "uncover random cell";
 		default:
 			return "";
 		}
@@ -383,6 +385,8 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 			return Color{185, 70, 70, 255};
 		case PassiveItem::PassiveType::PointsToEvo:
 			return Color{90, 170, 110, 255};
+		case PassiveItem::PassiveType::UncoverRandom:
+			return GOLD;
 		default:
 			return Color{100, 100, 100, 255};
 		}

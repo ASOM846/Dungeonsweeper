@@ -21,7 +21,13 @@ Copy assets folder to your build directory and run
 ## To-Do
 
 - [ ] Different characaters (meta progress)
-- [ ] PopupInfo
+- [x] PopupInfo
 - [ ] Pick up items
-- [ ] Item shop and money
 - [ ] Quests
+- [ ] Popup selection menu
+
+- [ ] Optimze code
+
+## Bugs
+
+- [ ] Clicks are counted when changing grids

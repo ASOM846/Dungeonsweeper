@@ -19,6 +19,7 @@ struct PlayerStats {
 
 	int coins = 0;
 
+	int evolutions = 0;
 	int curretTurn = 0;
 	bool wasGridClicked = 0;
 
@@ -37,6 +38,8 @@ struct PlayerStats {
 	std::vector<std::unique_ptr<PassiveItem>> passiveItems;
 
 	bool PushBackPassiveItems(std::unique_ptr<PassiveItem> item);
+
+	bool isChoosePending = false;
 
 	Item *selectedItem;
 

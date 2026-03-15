@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include <vector>
 
+class PassiveItem;
+
 struct Grid {
   public:
 	int GetWidth() { return width; }
@@ -53,7 +55,7 @@ struct Grid {
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;
-		Item item;
+		PassiveItem *passiveItem;
 	};
 
 	enum class GridType {

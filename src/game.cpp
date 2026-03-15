@@ -7,19 +7,22 @@
 void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
+	itemChooser.Init();
 	Reset();
 }
 
 void Game::Update() {
 	inputManager.Update(GetFrameTime());
-
 	if (IsKeyDown(KEY_L)) {
 		inputManager.LockFor(5);
 	}
-
 	switch (gameState) {
 	case GameState::Playing:
-		UpdatePlaying();
+		if (playerStats.isChoosePending) {
+			itemChooser.Update(playerStats);
+		} else {
+			UpdatePlaying();
+		}
 		break;
 	case GameState::Lose:
 		UpdateLose();
@@ -71,6 +74,13 @@ void Game::UpdatePlaying() {
 	if (IsKeyPressed(KEY_U))
 		playerStats.passiveItems.push_back(std::make_unique<PointsToEvo>());
 
+	if (IsKeyPressed(KEY_I))
+		playerStats.isChoosePending = true;
+
+	if (IsKeyPressed(KEY_O))
+		playerStats.passiveItems.push_back(
+			std::make_unique<UncoverRandomRare>());
+
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
 		gameState = GameState::Lose;
@@ -94,6 +104,9 @@ void Game::UpdatePlaying() {
 void Game::RenderPlaying() {
 	gridManager.Render(&textureManager, playerStats, gameMode);
 	ui.RenderUi(playerStats, gameState);
+	if (playerStats.isChoosePending) {
+		itemChooser.Render(playerStats);
+	}
 }
 
 void Game::UpdateLose() {

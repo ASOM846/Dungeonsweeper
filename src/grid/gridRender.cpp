@@ -129,11 +129,6 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	int size = Grid::CELL_SIZE;
 	Grid::Cell &current = grid.cells[y][x];
 
-	if (current.specialFunction == Grid::SpecialFunction::ItemCell) {
-		ShopCellRender(x, y, grid, gUtils::GetOffset(grid));
-		return;
-	}
-
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Heal) {
 		RenderTexture(x, y, TextureId::HeartFull, offset);
 		return;
@@ -212,30 +207,6 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
 				 static_cast<int>(y * size + offset.y + 8), 20, RED);
 	}
-}
-
-void GridRender::ShopCellRender(int x, int y, Grid &grid, Vector2 offset) {
-	int size = Grid::CELL_SIZE;
-	Grid::Cell &cell = grid.cells[y][x];
-
-	TextureId texId;
-
-	switch (cell.item.type) {
-	case Item::ItemType::HpUp:
-		texId = TextureId::HeartFull;
-		break;
-	case Item::ItemType::EvolutionUp:
-		texId = TextureId::Coin;
-		break;
-	default:
-		texId = TextureId::Skull;
-		break;
-	}
-
-	std::string text = std::to_string(grid.cells[y][x].item.price);
-	RenderTexture(x, y, texId, offset, 0);
-	DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
-			 static_cast<int>(y * size + offset.y + 8), 20, YELLOW);
 }
 
 void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
@@ -361,24 +332,4 @@ void GridRender::DrawEnemy(TextureManager const *textureManager,
 						  position.y + (Grid::CELL_SIZE - scaledH) * 0.5f};
 
 	DrawTextureEx(tex, drawPos, 0.0f, scale, WHITE);
-}
-
-ShopPopupInfo GridRender::GetPopupInfo(const Grid::Cell &cell) {
-	ShopPopupInfo info;
-
-	if (cell.val > 0) {
-		info.name = "Enemy";
-		info.val = 20;
-		info.description = "enemy test enemy test";
-	} else if (cell.specialFunction == Grid::SpecialFunction::ItemCell) {
-		info.name = "item";
-		info.val = cell.item.price;
-	} else {
-		info.name = "other";
-		info.val = 2137;
-	}
-
-	info.valid = true;
-
-	return info;
 }

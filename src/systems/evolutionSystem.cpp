@@ -22,5 +22,10 @@ void EvolutionSystem::Update(PlayerStats &player) {
 		player.pointsToEvo = 2 * player.evolutionLevel + 3;
 	}
 
+	player.evolutions++;
+
+	if (player.evolutions % 3 == 0)
+		player.isChoosePending = true;
+
 	player.HealToFull();
 }
