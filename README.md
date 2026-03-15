@@ -20,13 +20,20 @@ Copy assets folder to your build directory and run
 
 ## To-Do
 
-- [ ] Different characaters (meta progress)
-- [x] PopupInfo
-- [ ] Pick up items
-- [ ] Quests
-- [ ] Popup selection menu
+### To be included in next version
 
-- [ ] Optimze code
+- [ ] Working classic mode with score
+- [ ] Popup flag menu
+- [ ] Working passive abilities
+- [ ] Optimize code
+- [ ] Fix web build
+
+### To be included in future builds
+
+- [ ] Different bosses/modes
+- [ ] Quests
+- [ ] Switch from manual to unique pointers
+- [ ] Change hardcoded values to const
 
 ## Bugs
 
