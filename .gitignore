@@ -34,3 +34,6 @@ Thumbs.db
 # Cache
 .cache/
 
+# IDE compile database (symlink to local build path)
+compile_commands.json
+

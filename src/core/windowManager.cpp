@@ -1,5 +1,13 @@
 #include "windowManager.hpp"
 #include <raylib.h>
+
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+static void WebMainLoop(void *arg) {
+	static_cast<WindowManager *>(arg)->UpdateAndRender();
+}
+#endif
+
 void WindowManager::Init() {
 	// InitWindow(1920, 1080, "Dungeonsweeper");
 	InitWindow(1080, 720, "Dungeonsweeper");
@@ -16,12 +24,22 @@ void WindowManager::Init() {
 }
 
 void WindowManager::Run() {
+#if defined(PLATFORM_WEB)
+	// On web, emscripten_set_main_loop_arg takes over the event loop.
+	// The browser manages resource cleanup; CloseWindow() is not called here.
+	emscripten_set_main_loop_arg(WebMainLoop, this, 0, 1);
+#else
 	while (!WindowShouldClose()) {
-		Update();
-		Render();
+		UpdateAndRender();
 	}
 
 	CloseWindow();
+#endif
+}
+
+void WindowManager::UpdateAndRender() {
+	Update();
+	Render();
 }
 
 void WindowManager::Update() {
@@ -51,7 +69,6 @@ void WindowManager::Render() {
 	ClearBackground(BLACK);
 
 	switch (currentMode) {
-		void Run();
 	case AppMode::Menu:
 		menu.Render(game.GetTextureManager());
 		break;
