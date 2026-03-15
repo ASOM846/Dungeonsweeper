@@ -1,4 +1,4 @@
-# Simple workflow for deploying static content to GitHub Pages
+# Workflow for building the C++ game for web and deploying to GitHub Pages
 name: Deploy static content to Pages
 
 on:
@@ -22,22 +22,57 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Emscripten
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git ~/emsdk
+          ~/emsdk/emsdk install latest
+          ~/emsdk/emsdk activate latest
+
+      - name: Build Raylib for Web
+        run: |
+          source ~/emsdk/emsdk_env.sh
+          cd external/raylib/src
+          make PLATFORM=PLATFORM_WEB -j$(nproc)
+
+      - name: Build Game for Web
+        run: |
+          source ~/emsdk/emsdk_env.sh
+          test -d assets || (echo "ERROR: assets directory not found"; exit 1)
+          mkdir -p dist
+          emcc -o dist/index.html \
+            $(find src -type f -name "*.cpp") \
+            -Isrc \
+            -Iexternal/raylib/src \
+            external/raylib/src/libraylib.a \
+            -Os -Wall \
+            -DPLATFORM_WEB \
+            -sUSE_GLFW=3 \
+            -sASYNCIFY \
+            --preload-file assets
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    needs: build
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
