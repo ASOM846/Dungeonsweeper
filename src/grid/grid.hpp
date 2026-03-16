@@ -1,9 +1,6 @@
 #pragma once
-#include "../entity/item.hpp"
 #include <raylib.h>
 #include <vector>
-
-class PassiveItem;
 
 struct Grid {
   public:
@@ -53,7 +50,6 @@ struct Grid {
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;
-		PassiveItem *passiveItem;
 	};
 
 	enum class GridType {
