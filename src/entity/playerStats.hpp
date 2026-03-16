@@ -41,10 +41,6 @@ struct PlayerStats {
 
 	bool isChoosePending = false;
 
-	Item *selectedItem;
-
-	Grid::Cell *selectedCell;
-
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }
 	bool IsFullHp() const { return hp == maxHp && hpHalf == drawHalfHp; }

@@ -1,5 +1,4 @@
 #include "gridInterpreter.hpp"
-#include "../entity/passiveItem.hpp"
 #include "../entity/playerStats.hpp"
 #include "grid.hpp"
 #include "gridGenerator.hpp"
@@ -18,15 +17,14 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 	Vector2 mousePos = GetMousePosition();
 	Vector2 offset = gUtils::GetOffset(*grid);
 	int size = Grid::CELL_SIZE;
-	int x = static_cast<int>((mousePos.x - offset.x) / size);
-	int y = static_cast<int>((mousePos.y - offset.y) / size);
+
+	int x{static_cast<int>((mousePos.x - offset.x) / static_cast<float>(size))};
+	int y{static_cast<int>((mousePos.y - offset.y) / static_cast<float>(size))};
 
 	if (x < 0 || y < 0 || x >= static_cast<int>(grid->GetWidth()) ||
 		y >= static_cast<int>(grid->GetHeight())) {
 		return;
 	}
-
-	playerStats.selectedCell = &grid->cells[y][x];
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && !inputManager.IsLocked()) {
 		inputManager.LockFor();
@@ -278,38 +276,4 @@ void GridInterpreter::UncoverStartingCellNeighbors(int x, int y, Grid &grid) {
 	revealIfValid(x, y + 2);
 	revealIfValid(x - 2, y);
 	revealIfValid(x + 2, y);
-}
-
-void GridInterpreter::ApplyItem(int x, int y, Grid &grid,
-								PlayerStats &playerStats) {
-	if (!playerStats.selectedItem)
-		return;
-	switch (playerStats.selectedItem->type) {
-	case Item::ItemType::Uncover2x2:
-		Apply2x2(x, y, grid);
-		break;
-	}
-}
-
-void GridInterpreter::Apply2x2(int x, int y, Grid &grid) {
-	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
-	auto revealIfValid = [&](int rx, int ry) {
-		if (rx < 0 || ry < 0 || rx >= static_cast<int>(grid.GetWidth()) ||
-			ry >= static_cast<int>(grid.GetHeight())) {
-			return;
-		}
-
-		auto &cell = cells[ry][rx];
-		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
-			cell.state = CellState::Hinting;
-		} else {
-			cell.state = CellState::Revealed;
-		}
-	};
-
-	for (int dx = 0; dx < 2; ++dx) {
-		for (int dy = 0; dy < 2; ++dy) {
-			revealIfValid(x + dx, y + dy);
-		}
-	}
 }
