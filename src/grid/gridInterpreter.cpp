@@ -80,10 +80,7 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 		cell.specialFunction == SpecialFunction::Mana ||
 		cell.specialFunction == SpecialFunction::Heal ||
 		cell.specialFunction == SpecialFunction::Chest ||
-		cell.specialFunction == SpecialFunction::ChestKey ||
-		cell.specialFunction == SpecialFunction::SwordRed ||
-		cell.specialFunction == SpecialFunction::SwordGreen ||
-		cell.specialFunction == SpecialFunction::SwordGold) {
+		cell.specialFunction == SpecialFunction::ChestKey) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -166,24 +163,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 	if (cell.specialFunction == SpecialFunction::Ladder) {
 		playerStats.currentLevel++;
 		playerStats.shoudlNewLevelStart = true;
-		return;
-	}
-
-	if (cell.specialFunction == SpecialFunction::SwordRed) {
-		playerStats.hasRedSword = true;
-		playerStats.currentPointsToEvo += 3;
-		return;
-	}
-
-	if (cell.specialFunction == SpecialFunction::SwordGreen) {
-		playerStats.hasGreenSword = true;
-		playerStats.currentPointsToEvo += 3;
-		return;
-	}
-
-	if (cell.specialFunction == SpecialFunction::SwordGold) {
-		playerStats.hasGoldSword = true;
-		playerStats.currentPointsToEvo += 3;
 		return;
 	}
 

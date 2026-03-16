@@ -23,10 +23,6 @@ struct PlayerStats {
 	int curretTurn = 0;
 	bool wasGridClicked = 0;
 
-	bool hasRedSword = true;
-	bool hasGreenSword = 1;
-	bool hasGoldSword = 1;
-
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
 	int evolutionLevel = 0;

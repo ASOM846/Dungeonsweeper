@@ -28,4 +28,7 @@ class WindowManager {
 	Menu menu;
 
 	AppMode currentMode;
+
+	int width;
+	int height;
 };

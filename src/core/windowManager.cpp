@@ -2,7 +2,9 @@
 #include <raylib.h>
 void WindowManager::Init() {
 	// InitWindow(1920, 1080, "Dungeonsweeper");
-	InitWindow(1080, 720, "Dungeonsweeper");
+
+	width = 1280;
+	InitWindow(width, width / 16 * 10, "Dungeonsweeper");
 	SetTargetFPS(60);
 
 	SetWindowState(FLAG_WINDOW_RESIZABLE);

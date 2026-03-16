@@ -306,19 +306,10 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 				 Color{200, 170, 140, 255});
 	}
 
-	const float triPadTop = 18.0f;
-	const float triW = std::min(120.0f, static_cast<float>(cardW) - 20.0f);
-	const float triH = triW * 0.8660254f;
-	const float triX =
-		static_cast<float>(cardX) + (static_cast<float>(cardW) - triW) * 0.5f;
-	const float triY = static_cast<float>(evoY + evoH) + triPadTop;
-	DrawTriColorTriangleIndicator(
-		Rectangle{triX, triY, triW, triH}, playerStats.hasRedSword,
-		playerStats.hasGreenSword, playerStats.hasGoldSword);
-
 	// Coins card
+	const int sectionGap = 16;
 	const int coinsCardH = 60;
-	const int coinsCardY = static_cast<int>(evoY + evoH + triH + 48);
+	const int coinsCardY = evoY + evoH + sectionGap;
 	DrawRectangleRounded(
 		Rectangle{static_cast<float>(cardX), static_cast<float>(coinsCardY),
 				  static_cast<float>(cardW), static_cast<float>(coinsCardH)},
@@ -345,7 +336,7 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 	DrawText(TextFormat("%d", playerStats.coins), coinTextX, coinTextY,
 			 coinFontSize, Color{230, 210, 80, 255});
 
-	const int invCardY = coinsCardY + coinsCardH + 16;
+	const int invCardY = coinsCardY + coinsCardH + sectionGap;
 	const int invCardH = 190;
 	DrawRectangleRounded(
 		Rectangle{static_cast<float>(cardX), static_cast<float>(invCardY),

@@ -161,21 +161,6 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		return;
 	}
 
-	if (current.specialFunction == Grid::SpecialFunction::SwordRed) {
-		RenderTexture(x, y, TextureId::SwordRed, offset, 45.0f);
-		return;
-	}
-
-	if (current.specialFunction == Grid::SpecialFunction::SwordGreen) {
-		RenderTexture(x, y, TextureId::SwordGreen, offset, 45.0f);
-		return;
-	}
-
-	if (current.specialFunction == Grid::SpecialFunction::SwordGold) {
-		RenderTexture(x, y, TextureId::SwordGold, offset, 45.0f);
-		return;
-	}
-
 	if (grid.cells[y][x].val > 0) {
 		std::string text = std::to_string(grid.cells[y][x].val);
 		DrawEnemy(textureManager, {x * size + offset.x, y * size + offset.y},
