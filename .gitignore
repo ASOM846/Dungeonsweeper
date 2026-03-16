@@ -35,5 +35,4 @@ Thumbs.db
 .cache/
 
 #compile commands
-.compile_commands.json
-
+**/compile_commands.json
