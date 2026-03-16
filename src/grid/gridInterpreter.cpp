@@ -83,8 +83,7 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 		cell.specialFunction == SpecialFunction::ChestKey ||
 		cell.specialFunction == SpecialFunction::SwordRed ||
 		cell.specialFunction == SpecialFunction::SwordGreen ||
-		cell.specialFunction == SpecialFunction::SwordGold ||
-		cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
+		cell.specialFunction == SpecialFunction::SwordGold) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -140,25 +139,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		playerStats.currentPointsToEvo += 3;
 		playerStats.coins += GetRandomValue(20, 60);
 		cell.state = CellState::Hinting;
-		return;
-	}
-
-	if (cell.specialFunction == SpecialFunction::MiniDungeonEntry) {
-		if (cell.LowerGrid == nullptr) {
-			cell.LowerGrid = new Grid(7, 5, *&grid);
-			GridGenerator generator;
-			generator.InitShirene(*cell.LowerGrid);
-		}
-
-		if (!playerStats.hasGoldSword || !playerStats.hasGreenSword ||
-			!playerStats.hasRedSword) {
-			ui.TriggerMessageBox(
-				"You shall not enter the Hole before picking up every sword");
-			return;
-		} else {
-			grid = cell.LowerGrid;
-			return;
-		}
 		return;
 	}
 

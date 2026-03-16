@@ -56,8 +56,6 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Chest,
 						 Grid::NUMBER_OF_CHESTS);
 
-	PlaceSpecialFunction(grid, Grid::SpecialFunction::MiniDungeonEntry, 1);
-
 	if (gameMode == GameMode::Classic) {
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1);
 	} else {
@@ -73,22 +71,6 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
 	// 	}
 	// }
-}
-
-void GridGenerator::InitShirene(Grid &grid) {
-	Vector2 pos = {static_cast<float>(grid.GetWidth() / 2),
-				   static_cast<float>(grid.GetHeight() / 2)};
-
-	int x = static_cast<int>(pos.x);
-	int y = static_cast<int>(pos.y);
-
-	grid.cells[y + 2][x].specialFunction = Grid::SpecialFunction::GoUpGrid;
-
-	for (size_t y = 0; y < grid.GetHeight(); ++y) {
-		for (size_t x = 0; x < grid.GetWidth(); ++x) {
-			grid.cells[y][x].state = Grid::CellState::Revealed;
-		}
-	}
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
@@ -108,8 +90,11 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 										 int count = 1) {
 	for (int i = 0; i < count; ++i) {
 		for (int attempts = 0; attempts < 500; ++attempts) {
-			const int x = GetRandomValue(0, grid.GetWidth() - 1);
-			const int y = GetRandomValue(0, grid.GetHeight() - 1);
+
+			const size_t x =
+				static_cast<size_t>(GetRandomValue(0, grid.GetWidth() - 1));
+			const size_t y =
+				static_cast<size_t>(GetRandomValue(0, grid.GetHeight() - 1));
 
 			if (grid.cells[y][x].specialFunction !=
 				Grid::SpecialFunction::None) {
@@ -150,10 +135,12 @@ void GridGenerator::InitOgre(Grid &grid) {
 	};
 
 	for (int attempts = 0; attempts < 500; ++attempts) {
-		const int x = GetRandomValue(1, grid.GetWidth() - 2);
-		const int y = GetRandomValue(1, grid.GetHeight() - 2);
+		const size_t x =
+			static_cast<size_t>(GetRandomValue(1, grid.GetWidth() - 2));
+		const size_t y =
+			static_cast<size_t>(GetRandomValue(1, grid.GetHeight() - 2));
 
-		auto isFree = [&](int cx, int cy) {
+		auto isFree = [&](size_t cx, size_t cy) {
 			return grid.cells[cy][cx].specialFunction ==
 				   Grid::SpecialFunction::None;
 		};

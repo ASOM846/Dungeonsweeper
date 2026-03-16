@@ -1,15 +1,12 @@
 #pragma once
-
-#include <array>
-#include <cstddef>
-#include <raylib.h>
-#include <string>
-#include <utility>
-
+#include "../entity/playerStats.hpp"
 #include "../gameMode.hpp"
 #include "../textureManager.hpp"
 #include "grid.hpp"
-#include "gridUtils.hpp"
+#include <array>
+#include <cstddef>
+#include <raylib.h>
+#include <utility>
 
 namespace {
 constexpr std::array<std::pair<int, int>, 12> kMonsterW{{{1, 11},
@@ -64,8 +61,6 @@ class GridGenerator {
 
 	void Update(Grid &grid, int &hp, int &maxHp, int &pointsToEvo);
 	void Render(const TextureManager *textureManager, Grid &grid);
-
-	void InitShirene(Grid &grid);
 
   private:
 	Grid::GridType GetGridTypeForGameMode(const GameMode &gm, const Grid &grid);

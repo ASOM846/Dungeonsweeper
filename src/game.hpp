@@ -2,6 +2,7 @@
 #include "entity/passiveItem.hpp"
 #include "entity/playerStats.hpp"
 #include "gameMode.hpp"
+#include "graphics/popup.hpp"
 #include "grid/gridManager.hpp"
 #include "inputManager.hpp"
 #include "systems/ItemChooser.hpp"
@@ -35,6 +36,7 @@ class Game {
 	bool ShouldReturnToMenu() const {
 		return gameState == GameState::ShoudlReturnToMenu;
 	}
+
 	TextureManager &GetTextureManager() { return textureManager; }
 
   private:
@@ -51,6 +53,7 @@ class Game {
 	GameState gameState;
 	GameMode gameMode = GameMode::Classic;
 
+	Popup popup;
 	ItemChooser itemChooser;
 	InputManager inputManager;
 	PlayerStats playerStats;

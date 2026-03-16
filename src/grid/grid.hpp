@@ -7,8 +7,8 @@ class PassiveItem;
 
 struct Grid {
   public:
-	int GetWidth() { return width; }
-	int GetHeight() { return height; }
+	size_t GetWidth() { return width; }
+	size_t GetHeight() { return height; }
 
 	static constexpr int CELL_SIZE = 66;
 
@@ -28,7 +28,6 @@ struct Grid {
 	enum class SpecialFunction {
 		None,
 		Starting,
-		MiniDungeonEntry,
 		Wizzard,
 		SwordRed,
 		SwordGreen,
@@ -42,7 +41,6 @@ struct Grid {
 		Ladder,
 		GoUpGrid,
 		Necromancer,
-		ItemCell,
 	};
 
 	struct Cell {
@@ -69,17 +67,20 @@ struct Grid {
 
 	GridType GetType() { return type; }
 	void SetType(const GridType gt) { type = gt; }
-	Grid(int w, int h, Grid *grid, GridType gridType = GridType::Classic)
-		: width(w), height(h), UpperGrid(grid), type(gridType),
-		  cells(h, std::vector<Cell>(w)) {}
+	Grid(size_t w, size_t h, Grid *grid, GridType gridType = GridType::Classic)
+		: cells(h, std::vector<Cell>(w)), UpperGrid(grid), type(gridType),
+		  width(w), height(h) {}
 
-	Cell &GetCell(Vector2 position) { return cells[position.y][position.x]; }
+	Cell &GetCell(Vector2 position) {
+		return cells[static_cast<size_t>(position.y)]
+					[static_cast<size_t>(position.x)];
+	}
 
 	Grid *UpperGrid = nullptr;
 
   private:
 	GridType type;
 
-	int width;
-	int height;
+	size_t width;
+	size_t height;
 };

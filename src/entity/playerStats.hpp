@@ -40,6 +40,7 @@ struct PlayerStats {
 	bool PushBackPassiveItems(std::unique_ptr<PassiveItem> item);
 
 	bool isChoosePending = false;
+	bool isSelectionPopup = false;
 
 	float GetHp() const { return hp + (hpHalf ? 0.5f : 0.0f); }
 	float GetMaxHp() const { return maxHp + (drawHalfHp ? 0.5f : 0.0f); }

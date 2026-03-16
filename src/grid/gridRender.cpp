@@ -1,6 +1,5 @@
 #include "gridRender.hpp"
 #include "../entity/playerStats.hpp"
-#include "../graphics/shopPopup.hpp"
 #include "gridUtils.hpp"
 #include <raylib.h>
 
@@ -174,11 +173,6 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 	if (current.specialFunction == Grid::SpecialFunction::SwordGold) {
 		RenderTexture(x, y, TextureId::SwordGold, offset, 45.0f);
-		return;
-	}
-
-	if (current.specialFunction == Grid::SpecialFunction::MiniDungeonEntry) {
-		RenderTexture(x, y, TextureId::Hole, offset);
 		return;
 	}
 

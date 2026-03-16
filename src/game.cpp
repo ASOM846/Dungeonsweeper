@@ -13,9 +13,6 @@ void Game::Init() {
 
 void Game::Update() {
 	inputManager.Update(GetFrameTime());
-	if (IsKeyDown(KEY_L)) {
-		inputManager.LockFor(5);
-	}
 	switch (gameState) {
 	case GameState::Playing:
 		if (playerStats.isChoosePending) {
@@ -67,6 +64,7 @@ void Game::UpdatePlaying() {
 
 	evolutionSystem.Update(playerStats);
 	gridManager.Update(playerStats, ui, inputManager);
+	popup.Update(gridManager.GetGrid(), playerStats);
 
 	if (IsKeyPressed(KEY_Y))
 		playerStats.passiveItems.push_back(std::make_unique<Regen>());
@@ -76,6 +74,12 @@ void Game::UpdatePlaying() {
 
 	if (IsKeyPressed(KEY_I))
 		playerStats.isChoosePending = true;
+
+	if (IsKeyPressed(KEY_L))
+		playerStats.isSelectionPopup = true;
+
+	if (IsKeyPressed(KEY_K))
+		playerStats.isSelectionPopup = false;
 
 	if (IsKeyPressed(KEY_O))
 		playerStats.passiveItems.push_back(
@@ -104,9 +108,12 @@ void Game::UpdatePlaying() {
 void Game::RenderPlaying() {
 	gridManager.Render(&textureManager, playerStats, gameMode);
 	ui.RenderUi(playerStats, gameState);
+
 	if (playerStats.isChoosePending) {
 		itemChooser.Render(playerStats);
 	}
+
+	popup.Render(playerStats);
 }
 
 void Game::UpdateLose() {
