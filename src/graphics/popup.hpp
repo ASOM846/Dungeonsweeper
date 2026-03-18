@@ -1,6 +1,7 @@
 #pragma once
 #include "../entity/playerStats.hpp"
 #include "../grid/grid.hpp"
+#include "../grid/gridUtils.hpp"
 #include <iostream>
 #include <raylib.h>
 #include <string>
@@ -13,12 +14,19 @@ class Popup {
 	void Update(Grid &grid, PlayerStats &playerStats) {
 		(void)grid;
 
-		if (!playerStats.isSelectionPopup) {
+		if (!playerStats.isSelectionPopup) { ///////wymaga optymalizacji, niech
+											 /// update selected cell sie nie
+											 /// wywoluje gdy nie ma focusu
+											 ///(!playerStats.isSelectionPopup)
 			position = GetMousePosition();
+			UpdateSelectedCell(position, gUtils::GetOffset(grid),
+							   grid.CELL_SIZE);
 			return;
 		}
 
 		int counter = 1;
+		const Vector2 gridOffset = gUtils::GetOffset(grid);
+		const Vector2 mousePos = GetMousePosition();
 
 		for (int y = 0; y < collumns; ++y) {
 			for (int x = 0; x < rows; ++x) {
@@ -34,8 +42,8 @@ class Popup {
 					static_cast<float>(size),
 				};
 
-				if (CheckCollisionPointRec(GetMousePosition(), rec))
-					std::cout << "CLICKED:::      " << counter << std::endl;
+				if (CheckCollisionPointRec(mousePos, rec))
+					grid.cells[cellY][cellX].flagVal = counter;
 				else
 					playerStats.isSelectionPopup = false;
 
@@ -69,9 +77,17 @@ class Popup {
 		}
 	}
 
+	void UpdateSelectedCell(Vector2 mousePos, Vector2 gridOffset,
+							int CellSize) {
+		cellX = static_cast<int>((mousePos.x - gridOffset.x)) / CellSize;
+		cellY = static_cast<int>((mousePos.y - gridOffset.y)) / CellSize;
+	}
+
   private:
 	Vector2 position;
-	Grid::Cell *selectedCell = nullptr;
+
+	int cellX;
+	int cellY;
 
 	const short size = 40;
 
