@@ -24,7 +24,13 @@ class Popup {
 			return;
 		}
 
-		int counter = 1;
+		if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)) {
+			position = GetMousePosition();
+			UpdateSelectedCell(position, gUtils::GetOffset(grid),
+							   grid.CELL_SIZE);
+		}
+
+		int counter = 0;
 		const Vector2 gridOffset = gUtils::GetOffset(grid);
 		const Vector2 mousePos = GetMousePosition();
 
@@ -56,7 +62,7 @@ class Popup {
 		if (!playerStats.isSelectionPopup)
 			return;
 
-		int counter = 1;
+		int counter = 0;
 
 		for (int y = 0; y < collumns; ++y) {
 			for (int x = 0; x < rows; ++x) {
