@@ -147,7 +147,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		return;
 	}
 
-	cell.defeted = true;
+	// cell.defeted = true;
 	cell.state = CellState::Hinting;
 
 	if (cell.specialFunction == SpecialFunction::Heal) {
@@ -173,6 +173,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 	playerStats.hp -= cell.val;
 	cell.state = CellState::pointsNotTaken;
+	cell.defeted = false;
 }
 
 void GridInterpreter::OnPointsNotTakenClick(int x, int y, Grid &grid,
