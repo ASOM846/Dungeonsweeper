@@ -23,7 +23,7 @@ class InputManager {
 		}
 	}
 
-	void LockFor(float seconds = 0.1) {
+	void LockFor(float seconds = static_cast<float>(0.1)) {
 		isLocked = true;
 		timeToBeLocked = seconds;
 	}
