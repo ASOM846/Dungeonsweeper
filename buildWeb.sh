@@ -4,7 +4,6 @@ set -e
 source "$HOME/emsdk/emsdk_env.sh"
 
 emcc -o index.html \
-  -o3 \
   $(find src -type f -name "*.cpp") \
   -Isrc \
   -I"$HOME/libs/raylib/src" \
