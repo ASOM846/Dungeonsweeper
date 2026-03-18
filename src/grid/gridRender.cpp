@@ -42,11 +42,11 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 								  grid.cells[y][x].rotation * 90.0f, scale,
 								  WHITE);
 
-			if (grid.cells[y][x].flagged) {
-				DrawTextureExCentered(
-					textureManager->get(TextureId::Skull),
-					{x * size + offset.x, y * size + offset.y}, 0.0f, scale,
-					WHITE);
+			if (grid.cells[y][x].flagVal > 0) {
+				DrawText(std::to_string(grid.cells[y][x].flagVal).c_str(),
+						 x * size + offset.x + size / 2 - size / 4,
+						 y * size + offset.y + size / 2 - size / 4,
+						 size / 2 + size / 4, RED);
 			}
 
 			switch (grid.cells[y][x].state) {

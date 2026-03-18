@@ -43,7 +43,7 @@ struct Grid {
 		int hint = 0;
 		int val = 0;
 		bool defeted = false;
-		bool flagged = false;
+		int flagVal = 0;
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;

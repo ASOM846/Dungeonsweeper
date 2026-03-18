@@ -17,7 +17,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 			c.specialFunction = Grid::SpecialFunction::None;
 			c.textureNumber = GetFlorTextureNumber();
 			c.rotation = GetRandomValue(0, 3);
-			c.flagged = false;
+			c.flagVal = 0;
 
 			int seed = GetRandomValue(1, 20);
 			if (seed <= 15) {
@@ -70,6 +70,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
 													 const Grid &grid) {
+	(void)grid;
 	switch (gm) {
 	case GameMode::Classic:
 		return Grid::GridType::Classic;

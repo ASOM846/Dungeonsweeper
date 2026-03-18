@@ -33,7 +33,7 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 			return;
 		}
 
-		grid->cells[y][x].flagged = !grid->cells[y][x].flagged;
+		playerStats.isSelectionPopup = true;
 	}
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !inputManager.IsLocked()) {

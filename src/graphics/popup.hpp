@@ -71,6 +71,7 @@ class Popup {
 
   private:
 	Vector2 position;
+	Grid::Cell *selectedCell = nullptr;
 
 	const short size = 40;
 
