@@ -63,7 +63,9 @@ void Game::UpdatePlaying() {
 	}
 
 	evolutionSystem.Update(playerStats);
-	gridManager.Update(playerStats, ui, inputManager);
+	if (!playerStats.isSelectionPopup)
+		gridManager.Update(playerStats, ui, inputManager);
+
 	popup.Update(gridManager.GetGrid(), playerStats);
 
 	if (IsKeyPressed(KEY_Y))
@@ -95,7 +97,7 @@ void Game::UpdatePlaying() {
 		gridManager.InitGrid(playerStats, gameMode);
 	}
 
-	std::cout << "clicks:     " << playerStats.curretTurn << std::endl;
+	// std::cout << "clicks:     " << playerStats.curretTurn << std::endl;
 
 	// std::cout << "HP: " << playerStats.GetHp() << "/" <<
 	// playerStats.GetMaxHp()
