@@ -1,8 +1,15 @@
 #include "gridManager.hpp"
+#include "../gameMode.hpp"
 
-void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode) {
+void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode,
+						   Difficulty difficulty) {
+	(void)gameMode;
+
 	currentGrid = new Grid(13, 10, nullptr);
-	gridGenerator.Init(*currentGrid, playerStats, gameMode);
+
+	GridConfig config = GetGridConfig(difficulty);
+
+	gridGenerator.Init(*currentGrid, playerStats, gameMode, config);
 }
 
 void GridManager::Update(PlayerStats &playerStats, UI &ui,

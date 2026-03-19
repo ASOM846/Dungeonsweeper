@@ -27,6 +27,8 @@ class Game {
 	void Init();
 	void Reset();
 
+	void RunGame(Difficulty diff);
+
 	void Update();
 	void Render();
 
@@ -52,6 +54,7 @@ class Game {
   private:
 	GameState gameState;
 	GameMode gameMode = GameMode::Classic;
+	Difficulty currentDiff;
 
 	Popup popup;
 	ItemChooser itemChooser;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../gameMode.hpp"
 #include "../grid/grid.hpp"
 #include "../textureManager.hpp"
 #include "button.hpp"
@@ -26,13 +27,19 @@ class Menu {
 
 	MenuState GetCurrentState() const { return currentState; }
 
+	Difficulty GetSelectedDifficulty() const { return selectedDifficulty; }
+
   private:
 	void UpdateButtonsPosition();
 	void RenderBackground(const TextureManager &TextureManager) const;
 
   private:
-	NewButton classicGameButton;
+	NewButton easyGameButton;
+	NewButton mediumGameButton;
+	NewButton hardGameButton;
 	NewButton settingsButton;
+
+	Difficulty selectedDifficulty;
 
 	bool IsStartGame;
 

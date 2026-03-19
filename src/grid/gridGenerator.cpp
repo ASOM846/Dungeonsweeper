@@ -4,7 +4,7 @@
 #include <raylib.h>
 
 void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
-						 GameMode gameMode) {
+						 GameMode gameMode, GridConfig config) {
 	(void)gameMode;
 
 	// Base fill
@@ -37,19 +37,19 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	InitOgre(grid);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Necromancer,
-						 Grid::NUMBER_OF_NECROMANCERS);
+						 config.numberOfNecromancers);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Heal,
-						 Grid::NUMBER_OF_HEARTS);
+						 config.numberOfHearts);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Mana,
-						 Grid::NUMBER_OF_MANA);
+						 config.numberOfMana);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::ChestKey,
-						 Grid::NUMBER_OF_KEYS);
+						 config.numberOfKeys);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Chest,
-						 Grid::NUMBER_OF_CHESTS);
+						 config.numberOfChests);
 
 	if (gameMode == GameMode::Classic) {
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1);

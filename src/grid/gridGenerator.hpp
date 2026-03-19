@@ -57,7 +57,8 @@ class GridGenerator {
 	using Cell = Grid::Cell;
 	using SpecialFunction = Grid::SpecialFunction;
 
-	void Init(Grid &grid, PlayerStats &playerStats, GameMode gameMode);
+	void Init(Grid &grid, PlayerStats &playerStats, GameMode gameMode,
+			  GridConfig config);
 
 	void Update(Grid &grid, int &hp, int &maxHp, int &pointsToEvo);
 	void Render(const TextureManager *textureManager, Grid &grid);

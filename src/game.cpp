@@ -1,7 +1,7 @@
 #include "game.hpp"
 #include "entity/passiveItem.hpp"
+#include "gameMode.hpp"
 #include "graphics/ui.hpp"
-#include <memory>
 #include <raylib.h>
 
 void Game::Init() {
@@ -54,7 +54,11 @@ void Game::Reset() {
 	playerStats = PlayerStats();
 	ui.CloseMessageBox();
 	gameState = GameState::Playing;
-	gridManager.InitGrid(playerStats, gameMode);
+}
+
+void Game::RunGame(Difficulty diff) {
+	currentDiff = diff;
+	gridManager.InitGrid(playerStats, gameMode, diff);
 }
 
 void Game::UpdatePlaying() {
@@ -73,10 +77,10 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (playerStats.shoudlNewLevelStart) {
-		playerStats.shoudlNewLevelStart = false;
-		gridManager.InitGrid(playerStats, gameMode);
-	}
+	// if (playerStats.shoudlNewLevelStart) {
+	// 	playerStats.shoudlNewLevelStart = false;
+	// 	gridManager.InitGrid(playerStats, gameMode);
+	// }
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();

@@ -9,12 +9,6 @@ struct Grid {
 
 	static constexpr int CELL_SIZE = 66;
 
-	static constexpr int NUMBER_OF_HEARTS = 5;
-	static constexpr int NUMBER_OF_MANA = 6;
-	static constexpr int NUMBER_OF_KEYS = 2;
-	static constexpr int NUMBER_OF_CHESTS = 2;
-	static constexpr int NUMBER_OF_NECROMANCERS = 1;
-
 	enum class CellState {
 		Hidden,
 		Revealed,

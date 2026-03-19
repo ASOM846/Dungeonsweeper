@@ -16,7 +16,8 @@ class GridManager {
 	GridManager() = default;
 	~GridManager() = default;
 
-	void InitGrid(PlayerStats &playerStats, GameMode gameMode);
+	void InitGrid(PlayerStats &playerStats, GameMode gameMode,
+				  Difficulty difficulty);
 	void Update(PlayerStats &playerStats, UI &ui, InputManager &inputManager);
 	void Render(const TextureManager *textureManager, PlayerStats &playerStats,
 				GameMode gameMode);
