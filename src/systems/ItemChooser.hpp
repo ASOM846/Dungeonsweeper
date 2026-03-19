@@ -28,6 +28,9 @@ class ItemChooser {
   private:
 	const int numberOfChooses{3};
 
+	int replaceCandidate = -1;
+	bool selectingReplacement = false;
+
 	std::vector<ItemFactory> allFactories;
 	std::vector<ItemFactory> weightedPool;
 	std::vector<std::unique_ptr<PassiveItem>> availableItems;

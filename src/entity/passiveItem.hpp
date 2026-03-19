@@ -34,7 +34,7 @@ class Regen : public PassiveItem {
   public:
 	Regen() {
 		Rate = Medium;
-		turnsToActivate = 5;
+		turnsToActivate = 10;
 		turnsCounter = 0;
 	}
 
@@ -48,13 +48,13 @@ class PointsToEvo : public PassiveItem {
   public:
 	PointsToEvo() {
 		Rate = Medium;
-		turnsToActivate = 5;
+		turnsToActivate = 10;
 		turnsCounter = 0;
 	}
 
 	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
-		playerStats.currentPointsToEvo++;
+		playerStats.currentPointsToEvo += 4;
 	}
 };
 
@@ -71,8 +71,8 @@ class UncoverRandomRare : public PassiveItem {
 		int attempts = 500;
 
 		for (int i = 0; i < attempts; ++i) {
-			int x = GetRandomValue(0, grid.GetWidth());
-			int y = GetRandomValue(0, grid.GetHeight());
+			int x = GetRandomValue(0, grid.GetWidth() - 1);
+			int y = GetRandomValue(0, grid.GetHeight() - 1);
 
 			if (grid.cells[y][x].state == Grid::CellState::Hidden) {
 				grid.cells[y][x].state = Grid::CellState::Revealed;

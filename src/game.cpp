@@ -68,25 +68,6 @@ void Game::UpdatePlaying() {
 
 	popup.Update(gridManager.GetGrid(), playerStats);
 
-	if (IsKeyPressed(KEY_Y))
-		playerStats.passiveItems.push_back(std::make_unique<Regen>());
-
-	if (IsKeyPressed(KEY_U))
-		playerStats.passiveItems.push_back(std::make_unique<PointsToEvo>());
-
-	if (IsKeyPressed(KEY_I))
-		playerStats.isChoosePending = true;
-
-	if (IsKeyPressed(KEY_L))
-		playerStats.isSelectionPopup = true;
-
-	if (IsKeyPressed(KEY_K))
-		playerStats.isSelectionPopup = false;
-
-	if (IsKeyPressed(KEY_O))
-		playerStats.passiveItems.push_back(
-			std::make_unique<UncoverRandomRare>());
-
 	if (playerStats.hp < 0) {
 		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
 		gameState = GameState::Lose;
@@ -97,12 +78,6 @@ void Game::UpdatePlaying() {
 		gridManager.InitGrid(playerStats, gameMode);
 	}
 
-	// std::cout << "clicks:     " << playerStats.curretTurn << std::endl;
-
-	// std::cout << "HP: " << playerStats.GetHp() << "/" <<
-	// playerStats.GetMaxHp()
-	// 		  << " | Evo: " << playerStats.currentPointsToEvo << "/"
-	// 		  << playerStats.pointsToEvo << std::endl;
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();
 }
