@@ -10,7 +10,6 @@ enum class MenuState {
 	Settings,
 	Modes,
 	ClassicGameShoudlStart,
-	EndlessGameShouldStart,
 };
 
 class Menu {
@@ -33,7 +32,6 @@ class Menu {
 
   private:
 	NewButton classicGameButton;
-	NewButton endlessGameButton;
 	NewButton settingsButton;
 
 	bool IsStartGame;

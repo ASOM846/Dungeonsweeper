@@ -34,10 +34,6 @@ void WindowManager::Update() {
 			game.InitClassicGame();
 			SwitchMode(AppMode::Game);
 		}
-		if (menu.GetCurrentState() == MenuState::EndlessGameShouldStart) {
-			game.InitEndlessGame();
-			SwitchMode(AppMode::Game);
-		}
 		break;
 	case AppMode::Game:
 		game.Update();

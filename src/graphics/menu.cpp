@@ -20,7 +20,7 @@ MenuLayout ComputeMainMenuLayout(int screenW, int screenH) {
 	float spacing = std::clamp(buttonH * 0.35f, 14.0f, 26.0f);
 
 	float totalH = 3.0f * buttonH + 2.0f * spacing;
-	float desiredTop = h * 0.42f;
+	float desiredTop = h * 0.45f;
 	float minTop = 160.0f;
 	float maxTop = h - totalH - 30.0f;
 	float topY = desiredTop;
@@ -43,31 +43,20 @@ void Menu::Init() {
 
 	auto layout = ComputeMainMenuLayout(GetScreenWidth(), GetScreenHeight());
 
-	classicGameButton =
-		NewButton(layout.x, layout.topY, layout.buttonW, layout.buttonH,
-				  "Classic Game");
-	endlessGameButton =
-		NewButton(layout.x, layout.topY + layout.buttonH + layout.spacing,
-				  layout.buttonW, layout.buttonH, "Endless Game");
-	settingsButton =
-		NewButton(layout.x,
-				  layout.topY + 2.0f * (layout.buttonH + layout.spacing),
-				  layout.buttonW, layout.buttonH, "Settings");
+	classicGameButton = NewButton(layout.x, layout.topY, layout.buttonW,
+								  layout.buttonH, "Classic Game");
+	settingsButton = NewButton(layout.x, layout.topY, layout.buttonW,
+							   layout.buttonH, "Settings");
 }
 
 void Menu::Update() {
 	UpdateButtonsPosition();
 
 	classicGameButton.Update();
-	endlessGameButton.Update();
 	settingsButton.Update();
 
 	if (classicGameButton.IsClicked()) {
 		currentState = MenuState::ClassicGameShoudlStart;
-		IsStartGame = true;
-	}
-	if (endlessGameButton.IsClicked()) {
-		currentState = MenuState::EndlessGameShouldStart;
 		IsStartGame = true;
 	}
 	if (settingsButton.IsClicked()) {
@@ -78,7 +67,6 @@ void Menu::Update() {
 void Menu::Render(TextureManager &textureManager) {
 	RenderBackground(textureManager);
 	classicGameButton.Draw();
-	endlessGameButton.Draw();
 	settingsButton.Draw();
 }
 
@@ -91,14 +79,11 @@ void Menu::UpdateButtonsPosition() {
 	auto layout = ComputeMainMenuLayout(GetScreenWidth(), GetScreenHeight());
 
 	classicGameButton.SetSize(layout.buttonW, layout.buttonH);
-	endlessGameButton.SetSize(layout.buttonW, layout.buttonH);
 	settingsButton.SetSize(layout.buttonW, layout.buttonH);
 
 	classicGameButton.SetPosition(layout.x, layout.topY);
-	endlessGameButton.SetPosition(layout.x,
-						  layout.topY + layout.buttonH + layout.spacing);
-	settingsButton.SetPosition(layout.x,
-						 layout.topY + 2.0f * (layout.buttonH + layout.spacing));
+	settingsButton.SetPosition(
+		layout.x, layout.topY + 1.0f * (layout.buttonH + layout.spacing));
 }
 
 void Menu::RenderBackground(const TextureManager &textureManager) const {
