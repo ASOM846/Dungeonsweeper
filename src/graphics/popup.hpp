@@ -69,14 +69,23 @@ class Popup {
 				Vector2 topLeftCorner = {position.x + x * size,
 										 position.y + y * size};
 
+				Color borderColor = Color{110, 90, 70, 255};
+				Color bgColor = Color{28, 24, 20, 255};
+				Color textColor = Color{220, 200, 170, 255};
+
+				DrawRectangle(static_cast<int>(topLeftCorner.x),
+							  static_cast<int>(topLeftCorner.y), size, size,
+							  bgColor);
+
 				DrawRectangleLines(static_cast<int>(topLeftCorner.x),
 								   static_cast<int>(topLeftCorner.y), size,
-								   size, RED);
+								   size, borderColor);
 
-				DrawText(std::to_string(counter).c_str(),
-						 topLeftCorner.x + size / 2 - size / 4,
-						 topLeftCorner.y + size / 2 - size / 4,
-						 size / 2 + size / 4, RED);
+				DrawText(
+					std::to_string(counter).c_str(),
+					static_cast<int>(topLeftCorner.x + size / 2 - size / 4),
+					static_cast<int>(topLeftCorner.y + size / 2 - size / 4),
+					size / 2 + size / 4, textColor);
 
 				++counter;
 			}

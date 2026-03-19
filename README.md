@@ -20,20 +20,33 @@ Copy assets folder to your build directory and run
 
 ## To-Do
 
-### To be included in next version
+### High priority
 
+#### Code
+
+- [x] Popup flag menu
+- [x] Fix web build
+
+#### Gameplay
+
+- [x] Working passive abilities
 - [ ] Working classic mode with score
-- [ ] Popup flag menu
-- [ ] Working passive abilities
-- [ ] Optimize code
-- [ ] Fix web build
+- [ ] Add more passive abilities
 
-### To be included in future builds
+---
+
+### Low priority
+
+#### Code
+
+- [ ] Switch from manual to unique pointers
+- [ ] Change hardcoded values to const
+- [ ] Change if statements to switch cases in grid managers
+
+#### Gameplay
 
 - [ ] Different bosses/modes
 - [ ] Quests
-- [ ] Switch from manual to unique pointers
-- [ ] Change hardcoded values to const
 
 ## Bugs
 
