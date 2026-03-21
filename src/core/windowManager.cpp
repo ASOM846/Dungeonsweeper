@@ -1,5 +1,6 @@
 #include "windowManager.hpp"
 #include <raylib.h>
+
 void WindowManager::Init() {
 	// InitWindow(1920, 1080, "Dungeonsweeper");
 

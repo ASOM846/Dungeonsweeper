@@ -41,6 +41,7 @@ struct Grid {
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;
+		short animationFrame = 0;
 	};
 
 	enum class GridType {
