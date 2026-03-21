@@ -2,9 +2,10 @@
 #include "../grid/grid.hpp"
 #include "playerStats.hpp"
 #include <raylib.h>
+#include <string>
 
 class PassiveItem {
-  public: // lub protected:
+  public:
 	enum class PassiveType {
 		Regen,
 		PointsToEvo,
@@ -21,6 +22,9 @@ class PassiveItem {
 	PassiveItem() {}
 	virtual ~PassiveItem() {}
 
+	Color color;
+	std::string desc;
+
 	PassiveType Type;
 	SpawnRate Rate;
 	int turnsToActivate;
@@ -34,14 +38,17 @@ class Regen : public PassiveItem {
   public:
 	Regen() {
 		Rate = Medium;
-		turnsToActivate = 10;
+		turnsToActivate = 8;
 		turnsCounter = 0;
+
+		color = RED;
+		desc = "+2 HP / 8";
 	}
 
 	PassiveType GetType() const override { return PassiveType::Regen; }
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
 		(void)grid;
-		playerStats.Heal(2);
+		playerStats.Heal(4);
 	}
 };
 
@@ -49,8 +56,11 @@ class PointsToEvo : public PassiveItem {
   public:
 	PointsToEvo() {
 		Rate = Medium;
-		turnsToActivate = 10;
+		turnsToActivate = 8;
 		turnsCounter = 0;
+
+		color = GOLD;
+		desc = "+4 EVO / 8";
 	}
 
 	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
@@ -66,6 +76,9 @@ class UncoverRandomRare : public PassiveItem {
 		Rate = Rare;
 		turnsToActivate = 8;
 		turnsCounter = 0;
+
+		color = BLUE;
+		desc = "uncover random / 8";
 	}
 
 	PassiveType GetType() const override { return PassiveType::UncoverRandom; }

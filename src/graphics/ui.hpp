@@ -15,7 +15,7 @@ class UI {
 	void Init(TextureManager *tm) { textureManager = tm; }
 
 	void UpdateInventoryClick(PlayerStats &playerStats);
-	void RenderUi(const PlayerStats &playerStats, const GameState &gameState);
+	void RenderUi(PlayerStats &playerStats, const GameState &gameState);
 	void RenderLose(const PlayerStats &playerStats);
 
 	void TriggerMessageBox(const char *message);

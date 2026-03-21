@@ -3,7 +3,6 @@
 #include "../game.hpp"
 #include "button.hpp"
 #include <algorithm>
-#include <cstddef>
 #include <raylib.h>
 
 namespace {
@@ -86,43 +85,8 @@ void DrawWrappedText(const Font &font, const std::string &text,
 		}
 	}
 }
-
-void DrawTriColorTriangleIndicator(Rectangle bounds, bool redOn, bool greenOn,
-								   bool goldOn) {
-	if (bounds.width <= 1.0f || bounds.height <= 1.0f) {
-		return;
-	}
-
-	// Big triangle vertices (A top, B bottom-left, C bottom-right)
-	Vector2 a{bounds.x + bounds.width * 0.5f, bounds.y};
-	Vector2 b{bounds.x, bounds.y + bounds.height};
-	Vector2 c{bounds.x + bounds.width, bounds.y + bounds.height};
-
-	// Midpoints (used to form a "triforce" layout: 3 triangles + empty center)
-	Vector2 ab{(a.x + b.x) * 0.5f, (a.y + b.y) * 0.5f};
-	Vector2 ac{(a.x + c.x) * 0.5f, (a.y + c.y) * 0.5f};
-	Vector2 bc{(b.x + c.x) * 0.5f, (b.y + c.y) * 0.5f};
-
-	const Color off = Color{50, 44, 38, 255};
-	const Color colRed = redOn ? Color{185, 70, 55, 255} : off;
-	const Color colGreen = greenOn ? Color{70, 160, 95, 255} : off;
-	const Color colGold = goldOn ? Color{210, 175, 70, 255} : off;
-	const Color line = Color{120, 96, 72, 255};
-
-	// Top = gold, bottom-left = red, bottom-right = green
-	DrawTriangle(a, ab, ac, colGold);
-	DrawTriangle(ab, b, bc, colRed);
-	DrawTriangle(ac, bc, c, colGreen);
-
-	// Outline the three sub-triangles (keeps the "hole" visible)
-	DrawTriangleLines(a, ab, ac, line);
-	DrawTriangleLines(ab, b, bc, line);
-	DrawTriangleLines(ac, bc, c, line);
-	DrawTriangleLines(a, b, c, line);
-}
 } // namespace
-
-void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
+void UI::RenderUi(PlayerStats &playerStats, const GameState &gameState) {
 	const int barWidth = UI_BAR_WIDTH;
 	const int barHeight = GetScreenHeight();
 
@@ -419,7 +383,7 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 		}
 
 		auto *item = playerStats.passiveItems[i].get();
-		const Color accent = itemColor(item->GetType());
+		const Color accent = item->color;
 
 		DrawRectangle(static_cast<int>(iconRect.x) + 4,
 					  static_cast<int>(iconRect.y) + 4,
@@ -428,7 +392,7 @@ void UI::RenderUi(const PlayerStats &playerStats, const GameState &gameState) {
 
 		const float textX = iconRect.x + iconRect.width + 10.0f;
 		const int effectFont = 16;
-		DrawText(itemLabel(item->GetType()), static_cast<int>(textX),
+		DrawText(item->desc.c_str(), static_cast<int>(textX),
 				 static_cast<int>(rowY + 4), effectFont,
 				 Color{220, 200, 170, 255});
 

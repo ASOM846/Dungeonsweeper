@@ -1,5 +1,4 @@
 #include "ItemChooser.hpp"
-#include <iostream>
 #include <memory>
 #include <raylib.h>
 
@@ -106,31 +105,9 @@ void ItemChooser::Render(PlayerStats &playerStats) {
 										   (numberOfChooses - 1) * gap)) /
 					  2;
 	const int baseY = GetScreenHeight() / 2 - cardH / 2;
-	auto itemLabel = [](PassiveItem::PassiveType t) -> const char * {
-		switch (t) {
-		case PassiveItem::PassiveType::Regen:
-			return "+2 HP";
-		case PassiveItem::PassiveType::PointsToEvo:
-			return "+1 EVO";
-		case PassiveItem::PassiveType::UncoverRandom:
-			return "uncover random cell";
-		default:
-			return "";
-		}
-	};
 
-	auto itemColor = [](PassiveItem::PassiveType t) -> Color {
-		switch (t) {
-		case PassiveItem::PassiveType::Regen:
-			return Color{185, 70, 70, 255};
-		case PassiveItem::PassiveType::PointsToEvo:
-			return Color{90, 170, 110, 255};
-		case PassiveItem::PassiveType::UncoverRandom:
-			return GREEN;
-		default:
-			return Color{100, 100, 100, 255};
-		}
-	};
+	DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(),
+				  Color{0, 0, 0, 150});
 
 	// Draw choices
 	for (int i = 0; i < numberOfChooses; ++i) {
@@ -142,8 +119,8 @@ void ItemChooser::Render(PlayerStats &playerStats) {
 		const char *label = "-";
 		if (i < (int)availableItems.size() && availableItems[i]) {
 			auto *item = availableItems[i].get();
-			accent = itemColor(item->GetType());
-			label = itemLabel(item->GetType());
+			accent = item->color;
+			label = item->desc.c_str();
 		}
 		DrawRectangleRounded(
 			Rectangle{(float)x, (float)y, (float)cardW, (float)cardH}, 0.18f, 8,
@@ -152,7 +129,8 @@ void ItemChooser::Render(PlayerStats &playerStats) {
 			Rectangle{(float)x, (float)y, (float)cardW, (float)cardH}, 2.0f,
 			border);
 		DrawRectangle(x + 14, y + 12, 40, 40, accent);
-		DrawText(TextFormat("%d", i + 1), x + 4, y + 4, 18,
+
+		DrawText(TextFormat("%d", i + 1), x + 4, y + 4, 14,
 				 Color{180, 160, 135, 255});
 		DrawText(label, x + 62, y + 22, 22, Color{220, 200, 170, 255});
 	}
@@ -170,8 +148,8 @@ void ItemChooser::Render(PlayerStats &playerStats) {
 		const char *label = "-";
 		if (playerStats.passiveItems[i]) {
 			auto *item = playerStats.passiveItems[i].get();
-			accent = itemColor(item->GetType());
-			label = itemLabel(item->GetType());
+			accent = item->color;
+			label = item->desc.c_str();
 		}
 		DrawRectangleRounded(
 			Rectangle{(float)x, (float)y, (float)cardW, (float)cardH}, 0.18f, 8,

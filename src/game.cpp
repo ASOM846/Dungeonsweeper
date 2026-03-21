@@ -77,6 +77,9 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
+	if (IsKeyPressed(KEY_C))
+		playerStats.isChoosePending = true;
+
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();
 }

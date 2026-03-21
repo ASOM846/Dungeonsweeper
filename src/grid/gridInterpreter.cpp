@@ -132,7 +132,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 		cell.defeted = true;
 		playerStats.keys--;
-		playerStats.currentPointsToEvo += 3;
+		playerStats.currentPointsToEvo += GetRandomValue(8, 14);
 		playerStats.coins += GetRandomValue(20, 60);
 		cell.state = CellState::Hinting;
 		return;
@@ -162,15 +162,14 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		break;
 	}
 
+	if (cell.val <= 0) {
+		cell.state = CellState::Hinting;
+		return;
+	}
 
-		if (cell.val <= 0) {
-			cell.state = CellState::Hinting;
-			return;
-		}
-
-		playerStats.hp -= cell.val;
-		cell.state = CellState::pointsNotTaken;
-		cell.defeted = false;
+	playerStats.hp -= cell.val;
+	cell.state = CellState::pointsNotTaken;
+	cell.defeted = false;
 }
 
 void GridInterpreter::OnPointsNotTakenClick(int x, int y, Grid &grid,

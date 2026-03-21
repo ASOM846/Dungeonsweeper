@@ -46,7 +46,7 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 				DrawText(std::to_string(grid.cells[y][x].flagVal).c_str(),
 						 x * size + offset.x + size / 2 - size / 4,
 						 y * size + offset.y + size / 2 - size / 4,
-						 size / 2 + size / 4, RED);
+						 size / 2 + size / 4, Color{220, 200, 170, 255});
 			}
 
 			switch (grid.cells[y][x].state) {
