@@ -92,13 +92,13 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
-	if (cell.specialFunction == SpecialFunction::Starting) {
+	switch (cell.specialFunction) {
+	case Grid::SpecialFunction::Starting:
 		cell.defeted = true;
 		OnStartingClick(x, y, *grid);
-		return;
-	}
+		break;
 
-	if (cell.specialFunction == SpecialFunction::Necromancer) {
+	case Grid::SpecialFunction::Necromancer: {
 		const int roll = GetRandomValue(0, 2);
 		if (roll == 0) {
 			playerStats.hp -= cell.val;
@@ -117,14 +117,13 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		return;
 	}
 
-	if (cell.specialFunction == SpecialFunction::ChestKey) {
+	case Grid::SpecialFunction::ChestKey:
 		cell.defeted = true;
 		playerStats.keys++;
 		cell.state = CellState::Hinting;
-		return;
-	}
+		break;
 
-	if (cell.specialFunction == SpecialFunction::Chest) {
+	case Grid::SpecialFunction::Chest: {
 		if (playerStats.keys <= 0) {
 			ui.TriggerMessageBox("You need a key to open this chest!");
 			cell.state = CellState::Revealed;
@@ -139,7 +138,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		return;
 	}
 
-	if (cell.specialFunction == SpecialFunction::GoUpGrid) {
+	case Grid::SpecialFunction::GoUpGrid: {
 		if (grid->UpperGrid != nullptr) {
 			DrawText("GRIDSWAPPED_________________", 10, 10, 40, GREEN);
 			grid = grid->UpperGrid;
@@ -147,33 +146,31 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		return;
 	}
 
-	// cell.defeted = true;
-	cell.state = CellState::Hinting;
+		cell.state = CellState::Hinting;
 
-	if (cell.specialFunction == SpecialFunction::Heal) {
+	case Grid::SpecialFunction::Heal:
 		playerStats.HealToFull();
-		return;
-	}
+		break;
 
-	if (cell.specialFunction == SpecialFunction::Mana) {
-		playerStats.currentPointsToEvo += 3;
-		return;
-	}
+	case Grid::SpecialFunction::Mana:
+		playerStats.currentPointsToEvo += 6;
+		break;
 
-	if (cell.specialFunction == SpecialFunction::Ladder) {
+	case Grid::SpecialFunction::Ladder:
 		playerStats.currentLevel++;
 		playerStats.shoudlNewLevelStart = true;
-		return;
+		break;
 	}
 
-	if (cell.val <= 0) {
-		cell.state = CellState::Hinting;
-		return;
-	}
 
-	playerStats.hp -= cell.val;
-	cell.state = CellState::pointsNotTaken;
-	cell.defeted = false;
+		if (cell.val <= 0) {
+			cell.state = CellState::Hinting;
+			return;
+		}
+
+		playerStats.hp -= cell.val;
+		cell.state = CellState::pointsNotTaken;
+		cell.defeted = false;
 }
 
 void GridInterpreter::OnPointsNotTakenClick(int x, int y, Grid &grid,

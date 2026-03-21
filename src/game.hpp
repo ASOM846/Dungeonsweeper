@@ -8,7 +8,6 @@
 #include "systems/ItemChooser.hpp"
 #include "systems/evolutionSystem.hpp"
 #include "textureManager.hpp"
-#include <iostream>
 #include <raylib.h>
 
 class UI;

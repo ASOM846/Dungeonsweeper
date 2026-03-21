@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../gameMode.hpp"
-#include "../grid/grid.hpp"
 #include "../textureManager.hpp"
 #include "button.hpp"
 #include <raylib.h>

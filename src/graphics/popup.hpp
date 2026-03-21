@@ -2,7 +2,6 @@
 #include "../entity/playerStats.hpp"
 #include "../grid/grid.hpp"
 #include "../grid/gridUtils.hpp"
-#include <iostream>
 #include <raylib.h>
 #include <string>
 
@@ -12,8 +11,6 @@ class Popup {
 	~Popup() = default;
 
 	void Update(Grid &grid, PlayerStats &playerStats) {
-		(void)grid;
-
 		if (!playerStats.isSelectionPopup) { ///////wymaga optymalizacji, niech
 											 /// update selected cell sie nie
 											 /// wywoluje gdy nie ma focusu
@@ -31,7 +28,6 @@ class Popup {
 		}
 
 		int counter = 0;
-		const Vector2 gridOffset = gUtils::GetOffset(grid);
 		const Vector2 mousePos = GetMousePosition();
 
 		for (int y = 0; y < collumns; ++y) {
@@ -94,15 +90,17 @@ class Popup {
 
 	void UpdateSelectedCell(Vector2 mousePos, Vector2 gridOffset,
 							int CellSize) {
-		cellX = static_cast<int>((mousePos.x - gridOffset.x)) / CellSize;
-		cellY = static_cast<int>((mousePos.y - gridOffset.y)) / CellSize;
+		cellX = static_cast<size_t>((mousePos.x - gridOffset.x)) /
+				static_cast<size_t>(CellSize);
+		cellY = static_cast<size_t>((mousePos.y - gridOffset.y)) /
+				static_cast<size_t>(CellSize);
 	}
 
   private:
 	Vector2 position;
 
-	int cellX;
-	int cellY;
+	size_t cellX;
+	size_t cellY;
 
 	const short size = 40;
 

@@ -43,6 +43,8 @@ void WindowManager::Update() {
 			SwitchMode(AppMode::Menu);
 		}
 		break;
+	case AppMode::Settings:
+		break;
 	}
 }
 
@@ -57,6 +59,8 @@ void WindowManager::Render() {
 		break;
 	case AppMode::Game:
 		game.Render();
+		break;
+	case AppMode::Settings:
 		break;
 	}
 
@@ -75,6 +79,8 @@ void WindowManager::SwitchMode(AppMode newMode) {
 	case AppMode::Game:
 		currentMode = AppMode::Game;
 		game.Reset();
+		break;
+	case AppMode::Settings:
 		break;
 	}
 }

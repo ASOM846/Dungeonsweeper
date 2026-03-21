@@ -1,5 +1,5 @@
 #include "menu.hpp"
-
+#include "../grid/grid.hpp"
 #include <algorithm>
 
 namespace {
@@ -138,7 +138,8 @@ void Menu::RenderBackground(const TextureManager &textureManager) const {
 	}
 
 	const int fontSize = 60;
-	float textLength = MeasureText("DungeonSweeper", fontSize);
+	float textLength =
+		static_cast<float>(MeasureText("DungeonSweeper", fontSize));
 	DrawText("DungeonSweeper", GetScreenWidth() / 2 - textLength / 2, 100,
 			 fontSize, Color{200, 170, 140, 255});
 }

@@ -77,11 +77,6 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	// if (playerStats.shoudlNewLevelStart) {
-	// 	playerStats.shoudlNewLevelStart = false;
-	// 	gridManager.InitGrid(playerStats, gameMode);
-	// }
-
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();
 }
