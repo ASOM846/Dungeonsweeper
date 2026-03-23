@@ -289,15 +289,15 @@ void UI::RenderUi(PlayerStats &playerStats, const GameState &gameState) {
 	const int coinIconSize = static_cast<int>(coinTex.width * coinScale);
 	const int coinIconX = cardX + 18;
 	const int coinIconY = coinsCardY + (coinsCardH - coinIconSize) / 2;
-	DrawTextureEx(
-		coinTex,
-		Vector2{static_cast<float>(coinIconX), static_cast<float>(coinIconY)},
-		0.0f, coinScale, WHITE);
+	// DrawTextureEx(
+	// 	coinTex,
+	// 	Vector2{static_cast<float>(coinIconX), static_cast<float>(coinIconY)},
+	// 	0.0f, coinScale, WHITE);
 
 	const int coinFontSize = 28;
 	const int coinTextX = coinIconX + coinIconSize + 18;
 	const int coinTextY = coinsCardY + (coinsCardH - coinFontSize) / 2;
-	DrawText(TextFormat("%d", playerStats.coins), coinTextX, coinTextY,
+	DrawText(TextFormat("%d", playerStats.score), coinTextX, coinTextY,
 			 coinFontSize, Color{230, 210, 80, 255});
 
 	const int invCardY = coinsCardY + coinsCardH + sectionGap;

@@ -92,6 +92,8 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 									  PlayerStats &playerStats, UI &ui) {
 	auto &cell = grid->cells[y][x];
 
+	playerStats.addScore(cell.val);
+
 	switch (cell.specialFunction) {
 	case Grid::SpecialFunction::Starting:
 		cell.defeted = true;

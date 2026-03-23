@@ -9,6 +9,9 @@ class PassiveItem;
 
 struct PlayerStats {
 	int score = 0;
+
+	void addScore(int val) { score += val; }
+
 	int hp = 5;
 	bool hpHalf = false;
 	int maxHp = 5;
@@ -18,6 +21,8 @@ struct PlayerStats {
 	int keys = 0;
 
 	int coins = 0;
+
+	bool gameWon = 0;
 
 	int evolutions = 0;
 	int curretTurn = 0;
