@@ -66,7 +66,7 @@ class GridGenerator {
   private:
 	Grid::GridType GetGridTypeForGameMode(const GameMode &gm, const Grid &grid);
 	static void PlaceSpecialFunction(Grid &grid, Grid::SpecialFunction funct,
-									 int count);
+									 int count, bool shouldBeInCenter);
 	void InitOgre(Grid &grid);
 	int GetFlorTextureNumber();
 	SpecialFunction GetSpecialFunction();

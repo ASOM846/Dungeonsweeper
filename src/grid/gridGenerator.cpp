@@ -32,33 +32,33 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		}
 	}
 
-	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1);
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1, 1);
 
 	InitOgre(grid);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Necromancer,
-						 config.numberOfNecromancers);
+						 config.numberOfNecromancers, 0);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Heal,
-						 config.numberOfHearts);
+						 config.numberOfHearts, 0);
 
-	PlaceSpecialFunction(grid, Grid::SpecialFunction::Mana,
-						 config.numberOfMana);
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Mana, config.numberOfMana,
+						 0);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::ChestKey,
-						 config.numberOfKeys);
+						 config.numberOfKeys, 0);
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Chest,
-						 config.numberOfChests);
+						 config.numberOfChests, 0);
 
 	if (gameMode == GameMode::Classic) {
-		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1);
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::Wizzard, 1, 0);
 	} else {
-		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1);
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::Ladder, 1, 0);
 	}
 
 	if (grid.UpperGrid != nullptr) {
-		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1);
+		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
 	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
@@ -83,14 +83,24 @@ Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
 
 void GridGenerator::PlaceSpecialFunction(Grid &grid,
 										 Grid::SpecialFunction funct,
-										 int count = 1) {
+										 int count = 1,
+										 bool shouldBeInCenter = true) {
 	for (int i = 0; i < count; ++i) {
 		for (int attempts = 0; attempts < 500; ++attempts) {
+			size_t x;
+			size_t y;
 
-			const size_t x =
-				static_cast<size_t>(GetRandomValue(0, grid.GetWidth() - 1));
-			const size_t y =
-				static_cast<size_t>(GetRandomValue(0, grid.GetHeight() - 1));
+			if (shouldBeInCenter) {
+				x = (GetRandomValue(0, grid.GetWidth() - 4));
+				y = (GetRandomValue(0, grid.GetHeight() - 4));
+
+				x += 2;
+				y += 2;
+			} else {
+				x = static_cast<size_t>(GetRandomValue(0, grid.GetWidth() - 1));
+				y = static_cast<size_t>(
+					GetRandomValue(0, grid.GetHeight() - 1));
+			}
 
 			if (grid.cells[y][x].specialFunction !=
 				Grid::SpecialFunction::None) {
@@ -117,6 +127,7 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 				}
 				grid.cells[y][x].state = Grid::CellState::Revealed;
 			}
+
 			break;
 		}
 	}
