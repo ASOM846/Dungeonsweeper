@@ -24,6 +24,7 @@ class PassiveItem {
 
 	Color color;
 	std::string desc;
+	std::string shortDesc;
 
 	PassiveType Type;
 	SpawnRate Rate;
@@ -43,6 +44,7 @@ class Regen : public PassiveItem {
 
 		color = RED;
 		desc = "+2 HP / 8";
+		shortDesc = "+2 HP";
 	}
 
 	PassiveType GetType() const override { return PassiveType::Regen; }
@@ -61,6 +63,7 @@ class PointsToEvo : public PassiveItem {
 
 		color = GOLD;
 		desc = "+4 EVO / 8";
+		shortDesc = "+4 EVO";
 	}
 
 	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
@@ -78,7 +81,8 @@ class UncoverRandomRare : public PassiveItem {
 		turnsCounter = 0;
 
 		color = BLUE;
-		desc = "uncover random / 8";
+		desc = "show random / 8";
+		shortDesc = "show random";
 	}
 
 	PassiveType GetType() const override { return PassiveType::UncoverRandom; }
