@@ -37,6 +37,9 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 
 	InitOgre(grid);
 
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::MysteryMonster,
+						 config.numberOfMysteryEnemies, 1);
+
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Necromancer,
 						 config.numberOfNecromancers, 0);
 

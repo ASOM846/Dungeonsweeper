@@ -147,7 +147,6 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 	case Grid::SpecialFunction::GoUpGrid: {
 		if (grid->UpperGrid != nullptr) {
-			DrawText("GRIDSWAPPED_________________", 10, 10, 40, GREEN);
 			grid = grid->UpperGrid;
 		}
 		return;

@@ -29,6 +29,8 @@ struct Grid {
 		Ladder,
 		GoUpGrid,
 		Necromancer,
+		MysteryCell,
+		MysteryMonster,
 	};
 
 	struct Cell {
@@ -48,7 +50,6 @@ struct Grid {
 		Classic,
 		Endless,
 		Shop,
-		Shirene,
 	};
 
 	std::vector<std::vector<Cell>> cells;
