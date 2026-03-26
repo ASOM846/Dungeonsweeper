@@ -42,14 +42,6 @@ void Game::Render() {
 	}
 }
 
-void Game::InitClassicGame() {
-	gameMode = GameMode::Classic;
-}
-
-void Game::InitEndlessGame() {
-	gameMode = GameMode::Endless;
-}
-
 void Game::Reset() {
 	playerStats = PlayerStats();
 	ui.CloseMessageBox();

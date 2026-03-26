@@ -1,5 +1,4 @@
 #pragma once
-#include "../grid/grid.hpp"
 #include <memory.h>
 #include <memory>
 #include <raylib.h>
@@ -27,6 +26,8 @@ struct PlayerStats {
 	int evolutions = 0;
 	int curretTurn = 0;
 	bool wasGridClicked = 0;
+
+	float timer = 0.0f;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;

@@ -1,5 +1,6 @@
 #include "gridGenerator.hpp"
 #include "../gameMode.hpp"
+#include "../utils/randomUtils.hpp"
 #include "grid.hpp"
 #include <raylib.h>
 
@@ -61,11 +62,11 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
-	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
-	// 	for (size_t x = 0; x < grid.GetWidth(); ++x) {
-	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
-	// 	}
-	// }
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
@@ -91,15 +92,14 @@ void GridGenerator::PlaceSpecialFunction(Grid &grid,
 			size_t y;
 
 			if (shouldBeInCenter) {
-				x = (GetRandomValue(0, grid.GetWidth() - 4));
-				y = (GetRandomValue(0, grid.GetHeight() - 4));
+				x = util::GetRandom(0, grid.GetWidth() - 4);
+				y = util::GetRandom(0, grid.GetHeight() - 4);
 
 				x += 2;
 				y += 2;
 			} else {
-				x = static_cast<size_t>(GetRandomValue(0, grid.GetWidth() - 1));
-				y = static_cast<size_t>(
-					GetRandomValue(0, grid.GetHeight() - 1));
+				x = util::GetRandom(0, grid.GetWidth() - 1);
+				y = util::GetRandom(0, grid.GetHeight() - 1);
 			}
 
 			if (grid.cells[y][x].specialFunction !=
@@ -144,6 +144,7 @@ void GridGenerator::InitOgre(Grid &grid) {
 	for (int attempts = 0; attempts < 500; ++attempts) {
 		const size_t x =
 			static_cast<size_t>(GetRandomValue(1, grid.GetWidth() - 2));
+
 		const size_t y =
 			static_cast<size_t>(GetRandomValue(1, grid.GetHeight() - 2));
 

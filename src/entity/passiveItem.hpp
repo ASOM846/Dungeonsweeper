@@ -35,6 +35,13 @@ class PassiveItem {
 	virtual void ApplyEffect(Grid &grid, PlayerStats &playerStats) = 0;
 };
 
+/*
+ pomysly na pasywki:
+co 25 tur dodaje kluczyk do skrynki
+co x tur zabiera 1 hp i dodaje punkty ewolucji
+
+*/
+
 class Regen : public PassiveItem {
   public:
 	Regen() {
@@ -91,8 +98,10 @@ class UncoverRandomRare : public PassiveItem {
 		int attempts = 500;
 
 		for (int i = 0; i < attempts; ++i) {
-			size_t x = GetRandomValue(0, grid.GetWidth() - 1);
-			size_t y = GetRandomValue(0, grid.GetHeight() - 1);
+			size_t x = static_cast<size_t>(
+				GetRandomValue(0, static_cast<int>(grid.GetWidth() - 1)));
+			size_t y = static_cast<size_t>(
+				GetRandomValue(0, static_cast<int>(grid.GetHeight() - 1)));
 
 			if (grid.cells[y][x].state == Grid::CellState::Hidden) {
 				grid.cells[y][x].state = Grid::CellState::Revealed;

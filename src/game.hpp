@@ -31,9 +31,6 @@ class Game {
 	void Update();
 	void Render();
 
-	void InitClassicGame();
-	void InitEndlessGame();
-
 	bool ShouldReturnToMenu() const {
 		return gameState == GameState::ShoudlReturnToMenu;
 	}

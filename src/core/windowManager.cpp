@@ -32,7 +32,6 @@ void WindowManager::Update() {
 	case AppMode::Menu:
 		menu.Update();
 		if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
-			game.InitClassicGame();
 			game.RunGame(menu.GetSelectedDifficulty());
 			SwitchMode(AppMode::Game);
 		}
