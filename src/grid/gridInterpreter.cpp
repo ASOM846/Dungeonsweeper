@@ -119,7 +119,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		cell.specialFunction = SpecialFunction::None;
 		cell.val = 0;
 		GridGenerator::PlaceSpecialFunction(*grid, SpecialFunction::Necromancer,
-											1);
+											1, 0);
 		return;
 	}
 
@@ -138,6 +138,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 
 		cell.defeted = true;
 		playerStats.keys--;
+		playerStats.isChoosePending = true;
 		playerStats.currentPointsToEvo += GetRandomValue(8, 14);
 		playerStats.coins += GetRandomValue(20, 60);
 		cell.state = CellState::Hinting;

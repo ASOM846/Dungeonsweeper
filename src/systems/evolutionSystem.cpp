@@ -28,7 +28,5 @@ void EvolutionSystem::Update(PlayerStats &player) {
 
 	player.evolutions++;
 
-	if (player.evolutions % 3 == 0)
-		player.isChoosePending = true;
 	player.HealToFull();
 }
