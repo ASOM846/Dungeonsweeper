@@ -62,7 +62,7 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 		}
 	}
 
-	if (playerStats.hp < 0) {
+	if (playerStats.hp < 0 || playerStats.gameWon) {
 		for (size_t y = 0; y < grid->GetHeight(); ++y) {
 			for (size_t x = 0; x < grid->GetWidth(); ++x) {
 				if (grid->cells[y][x].state != CellState::Hinting)
@@ -99,6 +99,10 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		cell.defeted = true;
 		OnStartingClick(x, y, *grid);
 		break;
+
+	case Grid::SpecialFunction::Wizzard: {
+		playerStats.gameWon = true;
+	}
 
 	case Grid::SpecialFunction::Necromancer: {
 		const int roll = GetRandomValue(0, 2);

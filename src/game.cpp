@@ -73,12 +73,20 @@ void Game::UpdatePlaying() {
 	popup.Update(gridManager.GetGrid(), playerStats);
 
 	if (playerStats.hp < 0) {
-		ui.TriggerMessageBox("You have lost! Press R to return to menu.");
+		ui.TriggerMessageBox("You have lost! \n Press R to return to menu.");
+		gameState = GameState::Lose;
+	}
+
+	if (playerStats.gameWon) {
+		ui.TriggerMessageBox("You have won! \n Press R to return to menu.");
 		gameState = GameState::Lose;
 	}
 
 	if (IsKeyPressed(KEY_C))
 		playerStats.isChoosePending = true;
+
+	if (IsKeyPressed(KEY_H))
+		playerStats.currentPointsToEvo += 50;
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.EveryFrameReset();
