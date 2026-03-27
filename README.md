@@ -17,6 +17,10 @@ You don't need to build the project to try it out! You can play the WebAssembly 
   <strong><a href="https://ASOM846.github.io/Dungeonsweeper/">Play DungeonSweeper</a></strong>
 </p>
 
+## Screenshots
+
+![screenshot 1 (gameplay)](screenshots/screenshot1.png)
+
 ## Building the project
 
 ```
