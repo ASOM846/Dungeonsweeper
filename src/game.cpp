@@ -2,6 +2,7 @@
 #include "entity/passiveItem.hpp"
 #include "gameMode.hpp"
 #include "graphics/ui.hpp"
+#include "grid/grid.hpp"
 #include <raylib.h>
 
 void Game::Init() {
@@ -74,8 +75,16 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (IsKeyPressed(KEY_C))
-		playerStats.isChoosePending = true;
+	if (IsKeyPressed(KEY_C)) {
+		for (size_t y = 0; y < gridManager.GetGrid().GetHeight(); ++y) {
+			for (size_t x = 0; x < gridManager.GetGrid().GetWidth(); ++x) {
+				if (gridManager.GetGrid().cells[y][x].specialFunction ==
+					Grid::SpecialFunction::UncoverEnemiesVal1)
+					gridManager.GetGrid().cells[y][x].state =
+						Grid::CellState::Revealed;
+			}
+		}
+	}
 
 	if (IsKeyPressed(KEY_H))
 		playerStats.currentPointsToEvo += 50;

@@ -235,25 +235,39 @@ void UI::RenderUi(PlayerStats &playerStats, const GameState &gameState) {
 		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY),
 				  static_cast<float>(cardW), static_cast<float>(evoH)},
 		0.2f, 8, Color{34, 30, 26, 255});
+
+	const Color evoColor = Color{140, 180, 120, 255};
+
+	Color borderColor;
+
+	if (playerStats.currentPointsToEvo >= playerStats.pointsToEvo)
+		borderColor = evoColor;
+	else
+		borderColor = Color{90, 72, 54, 255};
+
 	DrawRectangleLinesEx(
 		Rectangle{static_cast<float>(cardX), static_cast<float>(evoY),
 				  static_cast<float>(cardW), static_cast<float>(evoH)},
-		2.0f, Color{90, 72, 54, 255});
+		2.0f, borderColor);
 
 	const float progress =
 		(playerStats.pointsToEvo > 0)
-			? std::min(1.0f,
+			? std::min(1.0F,
 					   static_cast<float>(playerStats.currentPointsToEvo) /
 						   static_cast<float>(playerStats.pointsToEvo))
-			: 0.0f;
+			: 0.0F;
 	const int barX = cardX + 10;
 	const int barY = evoY + 22;
 	const int barW = cardW - 20;
 	const int barH = 14;
+
 	DrawRectangle(barX, barY, barW, barH, Color{22, 20, 18, 255});
+
 	DrawRectangle(barX, barY, static_cast<int>(barW * progress), barH,
-				  Color{140, 180, 120, 255});
+				  evoColor);
+
 	DrawRectangleLines(barX, barY, barW, barH, Color{100, 88, 70, 255});
+
 	if (playerStats.pointsToEvo > 0) {
 		const int labelFontSize = 16;
 		const int labelPadX = 12;

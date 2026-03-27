@@ -1,6 +1,7 @@
 #pragma once
 #include <raylib.h>
 #include <stdexcept>
+#include <string>
 #include <unordered_map>
 
 enum class TextureId {

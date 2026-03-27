@@ -80,7 +80,8 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 		cell.specialFunction == SpecialFunction::Mana ||
 		cell.specialFunction == SpecialFunction::Heal ||
 		cell.specialFunction == SpecialFunction::Chest ||
-		cell.specialFunction == SpecialFunction::ChestKey) {
+		cell.specialFunction == SpecialFunction::ChestKey ||
+		cell.specialFunction == Grid::SpecialFunction::UncoverEnemiesVal1) {
 		cell.state = CellState::Revealed;
 		return;
 	}
@@ -123,6 +124,17 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		return;
 	}
 
+	case Grid::SpecialFunction::UncoverEnemiesVal1:
+		for (size_t y = 0; y < grid->GetHeight(); ++y) {
+			for (size_t x = 0; x < grid->GetWidth(); ++x) {
+				if (grid->cells[y][x].val == 1 &&
+					grid->cells[y][x].state != Grid::CellState::Hinting &&
+					grid->cells[y][x].state != Grid::CellState::pointsNotTaken)
+					grid->cells[y][x].state = Grid::CellState::Revealed;
+			}
+		}
+		break;
+
 	case Grid::SpecialFunction::ChestKey:
 		cell.defeted = true;
 		playerStats.keys++;
@@ -159,7 +171,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 		break;
 
 	case Grid::SpecialFunction::Mana:
-		playerStats.currentPointsToEvo += 6;
+		playerStats.currentPointsToEvo += 4;
 		break;
 
 	case Grid::SpecialFunction::Ladder:

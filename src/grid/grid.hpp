@@ -31,7 +31,7 @@ struct Grid {
 		Necromancer,
 		MysteryCell,
 		MysteryMonster,
-		UncoverEnemiesVal3,
+		UncoverEnemiesVal1,
 	};
 
 	struct Cell {

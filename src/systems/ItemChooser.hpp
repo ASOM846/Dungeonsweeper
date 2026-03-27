@@ -25,7 +25,6 @@ class ItemChooser {
 	void BuildWeightedPool();
 	void RollChoices();
 
-  private:
 	const int numberOfChooses{3};
 
 	int replaceCandidate = -1;

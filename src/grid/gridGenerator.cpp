@@ -35,7 +35,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 
 	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1, true);
 
-	PlaceSpecialFunction(grid, Grid::SpecialFunction::UncoverEnemiesVal3, 1,
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::UncoverEnemiesVal1, 1,
 						 false);
 
 	InitOgre(grid);
@@ -68,11 +68,11 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
-	for (size_t y = 0; y < grid.GetHeight(); ++y) {
-		for (size_t x = 0; x < grid.GetWidth(); ++x) {
-			grid.cells[y][x].state = Grid::CellState::Revealed;
-		}
-	}
+	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
+	// 	for (size_t x = 0; x < grid.GetWidth(); ++x) {
+	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
+	// 	}
+	// }
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,

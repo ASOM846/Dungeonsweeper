@@ -128,7 +128,7 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	}
 
 	if (grid.cells[y][x].specialFunction ==
-		Grid::SpecialFunction::UncoverEnemiesVal3) {
+		Grid::SpecialFunction::UncoverEnemiesVal1) {
 		RenderTexture(x, y, TextureId::FlaskGreen, offset);
 		return;
 	}
