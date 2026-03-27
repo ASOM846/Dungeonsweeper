@@ -33,7 +33,10 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		}
 	}
 
-	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1, 1);
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::Starting, 1, true);
+
+	PlaceSpecialFunction(grid, Grid::SpecialFunction::UncoverEnemiesVal3, 1,
+						 false);
 
 	InitOgre(grid);
 

@@ -33,6 +33,7 @@ enum class TextureId {
 	Hole,
 	MysteryEnemy,
 	Explosion,
+	FlaskGreen,
 	Ladder,
 	Floor1,
 	Floor2,
@@ -76,6 +77,7 @@ class TextureManager {
 		load(TextureId::Hole, "assets/hole.png");
 		load(TextureId::MysteryEnemy, "assets/mysteryEnemy.png");
 		load(TextureId::Explosion, "assets/Explosion.png");
+		load(TextureId::FlaskGreen, "assets/flask_big_green.png");
 		load(TextureId::Ladder, "assets/ladder.png");
 		load(TextureId::SwordRed, "assets/swordRed.png");
 		load(TextureId::SwordGreen, "assets/swordGreen.png");

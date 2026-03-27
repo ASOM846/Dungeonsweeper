@@ -1,5 +1,6 @@
 #include "gridRender.hpp"
 #include "../entity/playerStats.hpp"
+#include "grid.hpp"
 #include "gridUtils.hpp"
 #include <raylib.h>
 
@@ -123,6 +124,12 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 
 	if (grid.cells[y][x].specialFunction == Grid::SpecialFunction::Mana) {
 		RenderTexture(x, y, TextureId::Coin, offset);
+		return;
+	}
+
+	if (grid.cells[y][x].specialFunction ==
+		Grid::SpecialFunction::UncoverEnemiesVal3) {
+		RenderTexture(x, y, TextureId::FlaskGreen, offset);
 		return;
 	}
 
