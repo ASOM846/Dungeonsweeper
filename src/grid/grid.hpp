@@ -4,8 +4,8 @@
 
 struct Grid {
   public:
-	size_t GetWidth() { return width; }
-	size_t GetHeight() { return height; }
+	[[nodiscard]] size_t GetWidth() const { return width; }
+	[[nodiscard]] size_t GetHeight() const { return height; }
 
 	static constexpr int CELL_SIZE = 66;
 

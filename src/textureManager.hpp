@@ -74,7 +74,7 @@ class TextureManager {
 		load(TextureId::Key, "assets/key1.png");
 		load(TextureId::Chest, "assets/chest1.png");
 		load(TextureId::Hole, "assets/hole.png");
-		load(TextureId::MysteryEnemy, "assets/MysteryEnemy.png");
+		load(TextureId::MysteryEnemy, "assets/mysteryEnemy.png");
 		load(TextureId::Explosion, "assets/Explosion.png");
 		load(TextureId::Ladder, "assets/ladder.png");
 		load(TextureId::SwordRed, "assets/swordRed.png");

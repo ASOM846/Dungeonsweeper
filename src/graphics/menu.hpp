@@ -22,11 +22,13 @@ class Menu {
 	void Update();
 	void Render(TextureManager &textureManager);
 
-	bool IsStartGamePressed() const;
+	[[nodiscard]] bool IsStartGamePressed() const;
 
-	MenuState GetCurrentState() const { return currentState; }
+	[[nodiscard]] MenuState GetCurrentState() const { return currentState; }
 
-	Difficulty GetSelectedDifficulty() const { return selectedDifficulty; }
+	[[nodiscard]] Difficulty GetSelectedDifficulty() const {
+		return selectedDifficulty;
+	}
 
   private:
 	void UpdateButtonsPosition();

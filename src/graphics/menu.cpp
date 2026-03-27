@@ -132,7 +132,7 @@ void Menu::RenderBackground(const TextureManager &textureManager) const {
 		for (int j = 0; j < numberOfTilesY; ++j) {
 			Vector2 position = {static_cast<float>(i * Grid::CELL_SIZE),
 								static_cast<float>(j * Grid::CELL_SIZE)};
-			DrawTextureEx(textureManager.get(TextureId::Floor1), position, 0.0f,
+			DrawTextureEx(textureManager.get(TextureId::Floor1), position, 0.0F,
 						  scale, WHITE);
 		}
 	}
