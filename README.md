@@ -47,8 +47,9 @@ Copy assets folder to your build directory and run
 #### Gameplay
 
 - [x] Working passive abilities
-- [ ] Working classic mode with score
 - [ ] Add more passive abilities
+- [ ] Score saving
+- [ ] Time Chalange
 
 ---
 
@@ -56,7 +57,6 @@ Copy assets folder to your build directory and run
 
 #### Code
 
-- [ ] Switch from manual to unique pointers
 - [ ] Change hardcoded values to const
 - [ ] Change if statements to switch cases in grid managers
 
