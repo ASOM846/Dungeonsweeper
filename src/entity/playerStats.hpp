@@ -65,5 +65,35 @@ struct PlayerStats {
 		hpHalf = drawHalfHp;
 	}
 
-	void EveryFrameReset() { wasGridClicked = false; }
+	void Update() {
+		if (IsKeyPressed(KEY_E)) {
+			TryEvolve();
+		}
+
+		wasGridClicked = false;
+	}
+
+	void TryEvolve() {
+		if (currentPointsToEvo < pointsToEvo) {
+			return;
+		}
+
+		currentPointsToEvo -= pointsToEvo;
+		evolutionLevel++;
+
+		maxHp = 5 + (evolutionLevel / 2);
+		drawHalfHp = (evolutionLevel % 2) == 1;
+
+		if (evolutionLevel == 0) {
+			pointsToEvo = 4;
+		} else if (evolutionLevel == 1) {
+			pointsToEvo = 5;
+		} else {
+			pointsToEvo = 2 * evolutionLevel + 3;
+		}
+
+		evolutions++;
+
+		HealToFull();
+	}
 };

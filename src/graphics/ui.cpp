@@ -261,6 +261,13 @@ void UI::RenderUi(PlayerStats &playerStats, const GameState &gameState) {
 	const int barW = cardW - 20;
 	const int barH = 14;
 
+	Rectangle EvoRect = {static_cast<float>(barX), static_cast<float>(barY),
+						 static_cast<float>(barW), static_cast<float>(barH)};
+
+	if (CheckCollisionPointRec(GetMousePosition(), EvoRect)) {
+		playerStats.TryEvolve();
+	}
+
 	DrawRectangle(barX, barY, barW, barH, Color{22, 20, 18, 255});
 
 	DrawRectangle(barX, barY, static_cast<int>(barW * progress), barH,

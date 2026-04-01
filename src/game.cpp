@@ -90,7 +90,7 @@ void Game::UpdatePlaying() {
 		playerStats.currentPointsToEvo += 50;
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
-	playerStats.EveryFrameReset();
+	playerStats.Update();
 }
 
 void Game::RenderPlaying() {
