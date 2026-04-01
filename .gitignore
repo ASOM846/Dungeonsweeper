@@ -3,10 +3,10 @@ out/
 build/
 
 # --- Web Build (Emscripten) ---
-# /index.html
-# /index.js
-# /index.wasm
-# /index.data
+/index.html
+/index.js
+/index.wasm
+/index.data
 
 # --- Android / Gradle ---
 .gradle/
