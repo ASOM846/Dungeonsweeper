@@ -1,8 +1,24 @@
-# Build output
+# --- Build output ---
 out/
 build/
 
-# CMake files
+# --- Web Build (Emscripten) ---
+# /index.html
+# /index.js
+# /index.wasm
+# /index.data
+
+# --- Android / Gradle ---
+.gradle/
+local.properties
+/android/build/
+/android/app/build/
+/android/app/.cxx/
+*.apk
+*.aab
+*.keystore
+
+# --- CMake files ---
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles/
@@ -12,10 +28,10 @@ CTestTestfile.cmake
 install_manifest.txt
 Makefile
 
-# Dependencies
+# --- Dependencies ---
 _deps/
 
-# System/IDE files
+# --- System/IDE files ---
 *.swp
 *.swo
 *.tmp
@@ -25,14 +41,14 @@ _deps/
 *.vscode/
 *.idea/
 
-# MacOS
+# --- MacOS ---
 .DS_Store
 
-# Windows
+# --- Windows ---
 Thumbs.db
 
-# Cache
+# --- Cache ---
 .cache/
 
-#compile commands
+# --- compile commands ---
 **/compile_commands.json
