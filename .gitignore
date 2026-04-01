@@ -17,6 +17,8 @@ local.properties
 *.apk
 *.aab
 *.keystore
+/android/
+buildAndroid.sh
 
 # --- CMake files ---
 CMakeLists.txt.user

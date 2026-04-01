@@ -5,8 +5,14 @@
 void WindowManager::Init() {
 	// InitWindow(1920, 1080, "Dungeonsweeper");
 
+#if defined(__ANDROID__)
+	width = height = 0;
+#else
 	width = 1280;
-	InitWindow(0, 0, "Dungeonsweeper");
+	height = width / 16 * 10;
+#endif
+
+	InitWindow(width, height, "Dungeonsweeper");
 	SetTargetFPS(60);
 
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
@@ -67,6 +73,11 @@ void WindowManager::Render() {
 			break;
 		case AppMode::Game:
 			game.Render();
+
+#if defined(__ANDROID__)
+			DrawText("ANDROID TEST", 10, 10, 50, RED);
+#endif
+
 			break;
 		case AppMode::Settings:
 			break;
