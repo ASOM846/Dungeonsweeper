@@ -5,14 +5,11 @@
 void WindowManager::Init() {
 	// InitWindow(1920, 1080, "Dungeonsweeper");
 
+	width = 1280;
+	height = width / 16 * 10;
+
 #if defined(__ANDROID__)
 	width = height = 0;
-#elif defined(__EMSCRIPTEN__)
-	width = 1280;
-	height = width / 16 * 10;
-#else
-	width = 1280;
-	height = width / 16 * 10;
 #endif
 
 	InitWindow(width, height, "Dungeonsweeper");
