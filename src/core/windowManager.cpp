@@ -1,4 +1,5 @@
 #include "windowManager.hpp"
+#include "../graphics/startAnim.hpp"
 #include <raylib.h>
 
 void WindowManager::Init() {
@@ -28,22 +29,27 @@ void WindowManager::Run() {
 }
 
 void WindowManager::Update() {
-	switch (currentMode) {
-	case AppMode::Menu:
-		menu.Update();
-		if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
-			game.RunGame(menu.GetSelectedDifficulty());
-			SwitchMode(AppMode::Game);
+	if (!IsAnimFinished()) {
+		UpdateAnim();
+
+	} else {
+		switch (currentMode) {
+		case AppMode::Menu:
+			menu.Update();
+			if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
+				game.RunGame(menu.GetSelectedDifficulty());
+				SwitchMode(AppMode::Game);
+			}
+			break;
+		case AppMode::Game:
+			game.Update();
+			if (game.ShouldReturnToMenu()) {
+				SwitchMode(AppMode::Menu);
+			}
+			break;
+		case AppMode::Settings:
+			break;
 		}
-		break;
-	case AppMode::Game:
-		game.Update();
-		if (game.ShouldReturnToMenu()) {
-			SwitchMode(AppMode::Menu);
-		}
-		break;
-	case AppMode::Settings:
-		break;
 	}
 }
 
@@ -51,18 +57,21 @@ void WindowManager::Render() {
 	BeginDrawing();
 	ClearBackground(BLACK);
 
-	switch (currentMode) {
-		void Run();
-	case AppMode::Menu:
-		menu.Render(game.GetTextureManager());
-		break;
-	case AppMode::Game:
-		game.Render();
-		break;
-	case AppMode::Settings:
-		break;
+	if (!IsAnimFinished()) {
+		RenderAnim();
+	} else {
+		switch (currentMode) {
+			void Run();
+		case AppMode::Menu:
+			menu.Render(game.GetTextureManager());
+			break;
+		case AppMode::Game:
+			game.Render();
+			break;
+		case AppMode::Settings:
+			break;
+		}
 	}
-
 	EndDrawing();
 }
 
