@@ -3,6 +3,7 @@
 #include "grid.hpp"
 #include "gridUtils.hpp"
 #include <raylib.h>
+#include <string>
 
 namespace {
 inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
@@ -43,8 +44,8 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 								  grid.cells[y][x].rotation * 90.0f, scale,
 								  WHITE);
 
-			if (grid.cells[y][x].flagVal > 0) {
-				DrawText(std::to_string(grid.cells[y][x].flagVal).c_str(),
+			if (grid.cells[y][x].flagVal != std::to_string(0)) {
+				DrawText(grid.cells[y][x].flagVal.c_str(),
 						 x * size + offset.x + size / 2 - size / 4,
 						 y * size + offset.y + size / 2 - size / 4,
 						 size / 2 + size / 4, Color{220, 200, 170, 255});

@@ -9,6 +9,7 @@ void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
 	itemChooser.Init();
+	popup.Init();
 	Reset();
 }
 

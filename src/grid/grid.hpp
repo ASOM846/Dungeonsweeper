@@ -1,5 +1,6 @@
 #pragma once
 #include <raylib.h>
+#include <string>
 #include <vector>
 
 struct Grid {
@@ -40,7 +41,7 @@ struct Grid {
 		int hint = 0;
 		int val = 0;
 		bool defeted = false;
-		int flagVal = 0;
+		std::string flagVal;
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;

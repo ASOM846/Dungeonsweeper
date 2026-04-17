@@ -6,7 +6,7 @@ struct LogoAnim {
 	int framesCounter = 0;
 	int lettersCount = 0;
 	float alpha = 0.0f;
-	bool animFinished = false;
+	bool animFinished = true;
 };
 
 LogoAnim logoAnim;
