@@ -230,6 +230,10 @@ void GridInterpreter::UncoverStartingCellNeighbors(int x, int y, Grid &grid) {
 		}
 
 		auto &cell = cells[ry][rx];
+		if (cell.state != CellState::Hidden) {
+			return;
+		}
+
 		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
 			cell.state = CellState::Hinting;
 		} else {
