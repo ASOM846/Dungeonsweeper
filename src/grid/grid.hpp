@@ -12,6 +12,7 @@ struct Grid {
 
 	enum class CellState {
 		Hidden,
+		Revealing,
 		Revealed,
 		pointsNotTaken,
 		Hinting,
@@ -45,6 +46,7 @@ struct Grid {
 		CellState state = CellState::Hidden;
 		SpecialFunction specialFunction = SpecialFunction::None;
 		Grid *LowerGrid = nullptr;
+		short framesCounter = 0;
 		short animationFrame = 0;
 	};
 

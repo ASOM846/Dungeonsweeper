@@ -6,6 +6,10 @@
 
 void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 							 InputManager &inputManager) {
+
+	if (IsKeyPressed(KEY_R))
+		RecalculateHints(*grid);
+
 	if (inputManager.IsLocked())
 		return;
 
@@ -82,7 +86,7 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 		cell.specialFunction == SpecialFunction::Chest ||
 		cell.specialFunction == SpecialFunction::ChestKey ||
 		cell.specialFunction == Grid::SpecialFunction::UncoverEnemiesVal1) {
-		cell.state = CellState::Revealed;
+		cell.state = CellState::Revealing;
 		return;
 	}
 

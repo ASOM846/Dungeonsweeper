@@ -69,11 +69,13 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
-	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
-	// 	for (size_t x = 0; x < grid.GetWidth(); ++x) {
-	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
-	// 	}
-	// }
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			if (grid.cells[y][x].specialFunction ==
+				Grid::SpecialFunction::Necromancer)
+				grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,

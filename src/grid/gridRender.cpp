@@ -54,6 +54,10 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 			switch (grid.cells[y][x].state) {
 			case Grid::CellState::Hidden:
 				break;
+			case Grid::CellState::Revealing:
+				RevealingCellRender(static_cast<int>(x), static_cast<int>(y),
+									grid, offset);
+				break;
 			case Grid::CellState::Revealed:
 				ReveledCellRender(static_cast<int>(x), static_cast<int>(y),
 								  grid, offset);
@@ -72,6 +76,15 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 			}
 			DrawRectangleLines(x * size + offset.x, y * size + offset.y, size,
 							   size, BLACK);
+
+			// int hint = gUtils::GetNeighboursSum(static_cast<int>(x),
+			// 									static_cast<int>(y), grid);
+			// if (hint != 0) {
+			// 	std::string text2 = std::to_string(hint);
+			// 	DrawText(text2.c_str(),
+			// 			 static_cast<int>(x * size + offset.x + 28),
+			// 			 static_cast<int>(y * size + offset.y + 8), 20, GREEN);
+			// }
 		}
 	}
 
@@ -106,6 +119,72 @@ TextureId GridRender::GetFloorTextureId(int type) {
 		return TextureId::Floor1;
 		TextureId textureId;
 	}
+}
+
+void GridRender::RevealingCellRender(int x, int y, Grid &grid, Vector2 offset) {
+	Grid::Cell &current = grid.cells[y][x];
+
+	const int framesSpeed =
+		5; // <--- Szybkość animacji (im więcej, tym wolniej)
+
+	// 1. Zwiększamy licznik klatek silnika
+	current.framesCounter++;
+
+	// 2. Jeśli licznik osiągnie limit, zmieniamy klatkę animacji
+	if (current.framesCounter >= framesSpeed) {
+		current.framesCounter = 0;
+		current.animationFrame++;
+
+		// 3. Sprawdzamy czy to koniec wybuchu
+		if (current.animationFrame > 7) {
+			current.state =
+				Grid::CellState::Revealed; // Zmieniamy stan na docelowy
+			current.animationFrame = 0;	   // Resetujemy na przyszłość
+			current.framesCounter = 0;
+
+			// Rysujemy od razu docelowy kafel, żeby nie mrugnęło
+			ReveledCellRender(x, y, grid, offset);
+			return;
+		}
+	}
+
+	// 4. Rysowanie wybuchu
+	// Założenie: W klasie TextureId dodałeś enumy dla wybuchów: Explosion0,
+	// Explosion1, ... Explosion7 Jeśli są ułożone po kolei w enumie, możemy je
+	// zrzutować rzutując na int:
+	TextureId explosionTexId;
+
+	switch (current.animationFrame) {
+	case 0:
+		explosionTexId = TextureId::Explosion0;
+		break;
+	case 1:
+		explosionTexId = TextureId::Explosion1;
+		break;
+	case 2:
+		explosionTexId = TextureId::Explosion2;
+		break;
+	case 3:
+		explosionTexId = TextureId::Explosion3;
+		break;
+	case 4:
+		explosionTexId = TextureId::Explosion4;
+		break;
+	case 5:
+		explosionTexId = TextureId::Explosion5;
+		break;
+	case 6:
+		explosionTexId = TextureId::Explosion6;
+		break;
+	case 7:
+		explosionTexId = TextureId::Explosion7;
+		break;
+	default:
+		explosionTexId = TextureId::Explosion0;
+		break;
+	}
+
+	RenderTexture(x, y, explosionTexId, offset);
 }
 
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {

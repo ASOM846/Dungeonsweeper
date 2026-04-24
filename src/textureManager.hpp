@@ -16,6 +16,14 @@ enum class TextureId {
 	Enemy9,
 	Enemy10,
 	Enemy11,
+	Explosion0,
+	Explosion1,
+	Explosion2,
+	Explosion3,
+	Explosion4,
+	Explosion5,
+	Explosion6,
+	Explosion7,
 	OgreBig,
 	OgreSmall,
 	BeginButton,
@@ -33,7 +41,6 @@ enum class TextureId {
 	SwordGold,
 	Hole,
 	MysteryEnemy,
-	Explosion,
 	FlaskGreen,
 	Ladder,
 	Floor1,
@@ -61,6 +68,14 @@ class TextureManager {
 		load(TextureId::Enemy7, "assets/enemy7.png");
 		load(TextureId::Enemy8, "assets/enemy8.png");
 		load(TextureId::Enemy9, "assets/enemy9.png");
+		load(TextureId::Explosion0, "assets/explosion000.png");
+		load(TextureId::Explosion1, "assets/explosion001.png");
+		load(TextureId::Explosion2, "assets/explosion002.png");
+		load(TextureId::Explosion3, "assets/explosion003.png");
+		load(TextureId::Explosion4, "assets/explosion004.png");
+		load(TextureId::Explosion5, "assets/explosion005.png");
+		load(TextureId::Explosion6, "assets/explosion006.png");
+		load(TextureId::Explosion7, "assets/explosion007.png");
 		load(TextureId::Enemy10, "assets/enemy10.png");
 		load(TextureId::Enemy11, "assets/enemy11.png");
 		load(TextureId::OgreBig, "assets/ogreBig.png");
@@ -77,7 +92,6 @@ class TextureManager {
 		load(TextureId::Chest, "assets/chest1.png");
 		load(TextureId::Hole, "assets/hole.png");
 		load(TextureId::MysteryEnemy, "assets/mysteryEnemy.png");
-		load(TextureId::Explosion, "assets/Explosion.png");
 		load(TextureId::FlaskGreen, "assets/flask_big_green.png");
 		load(TextureId::Ladder, "assets/ladder.png");
 		load(TextureId::SwordRed, "assets/swordRed.png");

@@ -1,6 +1,8 @@
 #pragma once
+#include <cstdint>
 
 #include "../gameMode.hpp"
+#include "../modules/particles.hpp"
 #include "../textureManager.hpp"
 #include "button.hpp"
 #include <raylib.h>
@@ -39,6 +41,9 @@ class Menu {
 	NewButton mediumGameButton;
 	NewButton hardGameButton;
 	NewButton settingsButton;
+
+	ParticleSystem fire1{{400, 300}};
+	ParticleSystem fire2{{400, 300}};
 
 	Difficulty selectedDifficulty;
 

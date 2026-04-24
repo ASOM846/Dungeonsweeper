@@ -88,8 +88,7 @@ void Game::UpdatePlaying() {
 	}
 
 	if (IsKeyPressed(KEY_H))
-		playerStats.currentPointsToEvo += 50;
-
+		playerStats.currentPointsToEvo += 500;
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();
 }
