@@ -18,7 +18,7 @@ class ParticleSystem {
 		ParticleType type;
 		Vector2 position;
 		Vector2 velocity;
-		float radius;
+		float size; // Zastąpiono 'radius' i 'Rectangle' pojedynczym rozmiarem
 		Color color;
 		float lifeTime;
 		bool alive;
@@ -59,17 +59,17 @@ class ParticleSystem {
 
 		switch (currentType) {
 		case WATER:
-			p.radius = 5.0f;
+			p.size = 10.0f; // Wcześniej radius = 5
 			p.color = BLUE;
 			break;
 
 		case SMOKE:
-			p.radius = 7.0f;
+			p.size = 14.0f; // Wcześniej radius = 7
 			p.color = GRAY;
 			break;
 
 		case FIRE:
-			p.radius = 10.0f;
+			p.size = 20.0f; // Wcześniej radius = 10
 			p.color = YELLOW;
 			speed *= 0.2f;
 			break;
@@ -113,7 +113,7 @@ class ParticleSystem {
 				p.position.x += p.velocity.x;
 				p.velocity.y -= 0.05f;
 				p.position.y += p.velocity.y;
-				p.radius += 0.5f;
+				p.size += 1.0f; // Zwiększanie rozmiaru
 				p.color.a -= 4;
 
 				if (p.color.a < 10)
@@ -124,10 +124,10 @@ class ParticleSystem {
 				p.position.x += p.velocity.x + cosf(p.lifeTime * 10.0f);
 				p.velocity.y -= 0.05f;
 				p.position.y += p.velocity.y;
-				p.radius -= 0.15f;
+				p.size -= 0.3f; // Zmniejszanie kwadratu
 				p.color.g -= 3;
 
-				if (p.radius <= 0.1f)
+				if (p.size <= 0.2f)
 					p.alive = false;
 				break;
 			}
@@ -150,7 +150,14 @@ class ParticleSystem {
 			if (!p.alive)
 				continue;
 
-			DrawCircleV(p.position, p.radius, p.color);
+			// Rysujemy kwadrat. Odejmujemy połowę rozmiaru od X i Y,
+			// aby pozycja (p.position) była idealnie na środku kwadratu,
+			// tak jak to działa w DrawCircleV.
+			Vector2 topLeft = {p.position.x - p.size / 2.0f,
+							   p.position.y - p.size / 2.0f};
+			Vector2 rectSize = {p.size, p.size};
+
+			DrawRectangleV(topLeft, rectSize, p.color);
 		}
 	}
 };

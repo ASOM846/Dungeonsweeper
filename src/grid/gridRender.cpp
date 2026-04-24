@@ -124,34 +124,6 @@ TextureId GridRender::GetFloorTextureId(int type) {
 void GridRender::RevealingCellRender(int x, int y, Grid &grid, Vector2 offset) {
 	Grid::Cell &current = grid.cells[y][x];
 
-	const int framesSpeed =
-		5; // <--- Szybkość animacji (im więcej, tym wolniej)
-
-	// 1. Zwiększamy licznik klatek silnika
-	current.framesCounter++;
-
-	// 2. Jeśli licznik osiągnie limit, zmieniamy klatkę animacji
-	if (current.framesCounter >= framesSpeed) {
-		current.framesCounter = 0;
-		current.animationFrame++;
-
-		// 3. Sprawdzamy czy to koniec wybuchu
-		if (current.animationFrame > 7) {
-			current.state =
-				Grid::CellState::Revealed; // Zmieniamy stan na docelowy
-			current.animationFrame = 0;	   // Resetujemy na przyszłość
-			current.framesCounter = 0;
-
-			// Rysujemy od razu docelowy kafel, żeby nie mrugnęło
-			ReveledCellRender(x, y, grid, offset);
-			return;
-		}
-	}
-
-	// 4. Rysowanie wybuchu
-	// Założenie: W klasie TextureId dodałeś enumy dla wybuchów: Explosion0,
-	// Explosion1, ... Explosion7 Jeśli są ułożone po kolei w enumie, możemy je
-	// zrzutować rzutując na int:
 	TextureId explosionTexId;
 
 	switch (current.animationFrame) {
