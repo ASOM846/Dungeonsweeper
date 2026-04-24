@@ -10,6 +10,17 @@ class Popup {
 	Popup() = default;
 	~Popup() = default;
 
+	void Init() {
+		for (int i = 0; i < 12; i++) {
+			contains.emplace_back(std::to_string(i));
+		}
+
+		contains.emplace_back("!");
+		contains.emplace_back("F");
+		contains.emplace_back("?");
+		contains.emplace_back("*");
+	}
+
 	void Update(Grid &grid, PlayerStats &playerStats) {
 		if (!playerStats.isSelectionPopup) { ///////wymaga optymalizacji, niech
 											 /// update selected cell sie nie
@@ -45,7 +56,7 @@ class Popup {
 				};
 
 				if (CheckCollisionPointRec(mousePos, rec))
-					grid.cells[cellY][cellX].flagVal = counter;
+					grid.cells[cellY][cellX].flagVal = contains[y * 4 + x];
 				else
 					playerStats.isSelectionPopup = false;
 
@@ -78,7 +89,7 @@ class Popup {
 								   size, borderColor);
 
 				DrawText(
-					std::to_string(counter).c_str(),
+					contains[y * 4 + x].c_str(),
 					static_cast<int>(topLeftCorner.x + size / 2 - size / 4),
 					static_cast<int>(topLeftCorner.y + size / 2 - size / 4),
 					size / 2 + size / 4, textColor);
@@ -98,6 +109,8 @@ class Popup {
 
   private:
 	Vector2 position;
+
+	std::vector<std::string> contains;
 
 	size_t cellX;
 	size_t cellY;

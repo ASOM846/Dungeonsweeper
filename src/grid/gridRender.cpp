@@ -3,6 +3,7 @@
 #include "grid.hpp"
 #include "gridUtils.hpp"
 #include <raylib.h>
+#include <string>
 
 namespace {
 inline void DrawTextureExCentered(const Texture2D &texture, Vector2 position,
@@ -43,8 +44,8 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 								  grid.cells[y][x].rotation * 90.0f, scale,
 								  WHITE);
 
-			if (grid.cells[y][x].flagVal > 0) {
-				DrawText(std::to_string(grid.cells[y][x].flagVal).c_str(),
+			if (grid.cells[y][x].flagVal != std::to_string(0)) {
+				DrawText(grid.cells[y][x].flagVal.c_str(),
 						 x * size + offset.x + size / 2 - size / 4,
 						 y * size + offset.y + size / 2 - size / 4,
 						 size / 2 + size / 4, Color{220, 200, 170, 255});
@@ -52,6 +53,10 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 
 			switch (grid.cells[y][x].state) {
 			case Grid::CellState::Hidden:
+				break;
+			case Grid::CellState::Revealing:
+				RevealingCellRender(static_cast<int>(x), static_cast<int>(y),
+									grid, offset);
 				break;
 			case Grid::CellState::Revealed:
 				ReveledCellRender(static_cast<int>(x), static_cast<int>(y),
@@ -71,6 +76,15 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 			}
 			DrawRectangleLines(x * size + offset.x, y * size + offset.y, size,
 							   size, BLACK);
+
+			// int hint = gUtils::GetNeighboursSum(static_cast<int>(x),
+			// 									static_cast<int>(y), grid);
+			// if (hint != 0) {
+			// 	std::string text2 = std::to_string(hint);
+			// 	DrawText(text2.c_str(),
+			// 			 static_cast<int>(x * size + offset.x + 28),
+			// 			 static_cast<int>(y * size + offset.y + 8), 20, GREEN);
+			// }
 		}
 	}
 
@@ -105,6 +119,44 @@ TextureId GridRender::GetFloorTextureId(int type) {
 		return TextureId::Floor1;
 		TextureId textureId;
 	}
+}
+
+void GridRender::RevealingCellRender(int x, int y, Grid &grid, Vector2 offset) {
+	Grid::Cell &current = grid.cells[y][x];
+
+	TextureId explosionTexId;
+
+	switch (current.animationFrame) {
+	case 0:
+		explosionTexId = TextureId::Explosion0;
+		break;
+	case 1:
+		explosionTexId = TextureId::Explosion1;
+		break;
+	case 2:
+		explosionTexId = TextureId::Explosion2;
+		break;
+	case 3:
+		explosionTexId = TextureId::Explosion3;
+		break;
+	case 4:
+		explosionTexId = TextureId::Explosion4;
+		break;
+	case 5:
+		explosionTexId = TextureId::Explosion5;
+		break;
+	case 6:
+		explosionTexId = TextureId::Explosion6;
+		break;
+	case 7:
+		explosionTexId = TextureId::Explosion7;
+		break;
+	default:
+		explosionTexId = TextureId::Explosion0;
+		break;
+	}
+
+	RenderTexture(x, y, explosionTexId, offset);
 }
 
 void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {

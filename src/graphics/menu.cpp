@@ -1,6 +1,7 @@
 #include "menu.hpp"
 #include "../grid/grid.hpp"
 #include <algorithm>
+#include <raylib.h>
 
 namespace {
 struct MenuLayout {
@@ -54,6 +55,9 @@ void Menu::Init() {
 
 	settingsButton = NewButton(layout.x, layout.topY, layout.buttonW,
 							   layout.buttonH, "Settings");
+
+	fire1.SetType(ParticleSystem::FIRE);
+	fire2.SetType(ParticleSystem::FIRE);
 }
 
 void Menu::Update() {
@@ -64,6 +68,20 @@ void Menu::Update() {
 	hardGameButton.Update();
 
 	settingsButton.Update();
+
+	fire1.Update(GetScreenWidth(), GetScreenHeight());
+	fire2.Update(GetScreenWidth(), GetScreenHeight());
+
+	const int fontSize = 60;
+	auto textLength =
+		static_cast<float>(MeasureText("DungeonSweeper", fontSize));
+
+	const int fireSpacing = 30;
+	fire1.SetPosition(
+		{GetScreenWidth() / 2 - textLength / 2 - fireSpacing, 140});
+
+	fire2.SetPosition(
+		{GetScreenWidth() / 2 + textLength / 2 + fireSpacing, 140});
 
 	if (easyGameButton.IsClicked()) {
 		currentState = MenuState::ClassicGameShoudlStart;
@@ -92,6 +110,9 @@ void Menu::Render(TextureManager &textureManager) {
 	hardGameButton.Draw();
 
 	settingsButton.Draw();
+
+	fire1.Draw();
+	fire2.Draw();
 }
 
 void Menu::Reset() {

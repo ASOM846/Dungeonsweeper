@@ -10,6 +10,7 @@ void Game::Init() {
 	textureManager.loadAll();
 	ui.Init(&textureManager);
 	itemChooser.Init();
+	popup.Init();
 	Reset();
 }
 
@@ -92,8 +93,7 @@ void Game::UpdatePlaying() {
 	}
 
 	if (IsKeyPressed(KEY_H))
-		playerStats.currentPointsToEvo += 50;
-
+		playerStats.currentPointsToEvo += 500;
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();
 }

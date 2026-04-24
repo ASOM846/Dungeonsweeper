@@ -24,6 +24,7 @@ class GridRender {
   private:
 	TextureId GetFloorTextureId(int type);
 	void HidenCellRender();
+	void RevealingCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void ReveledCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void ShopCellRender(int x, int y, Grid &grid, Vector2 offset);
 	void PointsNotTakenCellRender(int x, int y, Grid &grid, Vector2 offset);

@@ -6,6 +6,28 @@
 
 void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 							 InputManager &inputManager) {
+	const int framesSpeed = 4;
+	for (size_t y = 0; y < grid->GetHeight(); ++y) {
+		for (size_t x = 0; x < grid->GetWidth(); ++x) {
+			Grid::Cell &cell = grid->cells[y][x];
+
+			if (cell.state == CellState::Revealing) {
+				cell.framesCounter++;
+
+				if (cell.framesCounter >= framesSpeed) {
+					cell.framesCounter = 0;
+					cell.animationFrame++;
+
+					if (cell.animationFrame > 7) {
+						cell.state = CellState::Revealed;
+						cell.animationFrame = 0;
+						cell.framesCounter = 0;
+					}
+				}
+			}
+		}
+	}
+
 	if (inputManager.IsLocked())
 		return;
 
@@ -82,7 +104,7 @@ void GridInterpreter::OnHidenClick(int x, int y, Grid *&grid,
 		cell.specialFunction == SpecialFunction::Chest ||
 		cell.specialFunction == SpecialFunction::ChestKey ||
 		cell.specialFunction == Grid::SpecialFunction::UncoverEnemiesVal1) {
-		cell.state = CellState::Revealed;
+		cell.state = CellState::Revealing;
 		return;
 	}
 
@@ -230,10 +252,14 @@ void GridInterpreter::UncoverStartingCellNeighbors(int x, int y, Grid &grid) {
 		}
 
 		auto &cell = cells[ry][rx];
+		if (cell.state != CellState::Hidden) {
+			return;
+		}
+
 		if (cell.specialFunction == SpecialFunction::None && cell.val <= 0) {
 			cell.state = CellState::Hinting;
 		} else {
-			cell.state = CellState::Revealed;
+			cell.state = CellState::Revealing;
 		}
 	};
 

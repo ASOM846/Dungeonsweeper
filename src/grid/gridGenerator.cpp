@@ -3,6 +3,7 @@
 #include "../utils/randomUtils.hpp"
 #include "grid.hpp"
 #include <raylib.h>
+#include <string>
 
 void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 						 GameMode gameMode, GridConfig config) {
@@ -18,7 +19,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 			c.specialFunction = Grid::SpecialFunction::None;
 			c.textureNumber = GetFlorTextureNumber();
 			c.rotation = GetRandomValue(0, 3);
-			c.flagVal = 0;
+			c.flagVal = std::to_string(0);
 
 			int seed = GetRandomValue(1, 20);
 			if (seed <= 15) {
@@ -68,11 +69,13 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
-	// for (size_t y = 0; y < grid.GetHeight(); ++y) {
-	// 	for (size_t x = 0; x < grid.GetWidth(); ++x) {
-	// 		grid.cells[y][x].state = Grid::CellState::Revealed;
-	// 	}
-	// }
+	for (size_t y = 0; y < grid.GetHeight(); ++y) {
+		for (size_t x = 0; x < grid.GetWidth(); ++x) {
+			if (grid.cells[y][x].specialFunction ==
+				Grid::SpecialFunction::Necromancer)
+				grid.cells[y][x].state = Grid::CellState::Revealed;
+		}
+	}
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,
