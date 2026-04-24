@@ -1,5 +1,6 @@
 #include "windowManager.hpp"
 #include "../graphics/startAnim.hpp"
+#include "../utils/randomUtils.hpp"
 #include <raylib.h>
 
 void WindowManager::Init() {
@@ -11,6 +12,8 @@ void WindowManager::Init() {
 #if defined(__ANDROID__)
 	width = height = 0;
 #endif
+
+	SetTraceLogCallback(util::Log);
 
 	InitWindow(width, height, "Dungeonsweeper");
 	SetTargetFPS(60);

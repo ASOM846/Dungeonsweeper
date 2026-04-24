@@ -3,6 +3,7 @@
 #include "gameMode.hpp"
 #include "graphics/ui.hpp"
 #include "grid/grid.hpp"
+#include "utils/randomUtils.hpp"
 #include <raylib.h>
 
 void Game::Init() {
@@ -73,6 +74,10 @@ void Game::UpdatePlaying() {
 	if (playerStats.gameWon) {
 		ui.TriggerMessageBox("You have won! \n Press R to return to menu.");
 		gameState = GameState::Lose;
+	}
+
+	if (IsKeyPressed(KEY_T)) {
+		util::LogMsg(LOG_INFO, "test log");
 	}
 
 	if (IsKeyPressed(KEY_C)) {

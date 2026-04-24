@@ -2,9 +2,6 @@
 #include <iostream>
 
 void EvolutionSystem::Update(PlayerStats &player) {
-
-	std::cout << player.evolutions << std::endl;
-
 	if (player.currentPointsToEvo < player.pointsToEvo) {
 		return;
 	}
