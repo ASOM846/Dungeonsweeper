@@ -23,9 +23,9 @@ struct GridConfig {
 inline GridConfig GetGridConfig(Difficulty diff) {
 	switch (diff) {
 	case Difficulty::Easy:
-		return {7, 8, 3, 3, 0, 0};
+		return {6, 6, 3, 3, 0, 0};
 	case Difficulty::Medium:
-		return {6, 8, 3, 3, 1, 1};
+		return {5, 6, 3, 3, 1, 1};
 	case Difficulty::Hard:
 		return {3, 4, 2, 2, 3, 2};
 	default:
