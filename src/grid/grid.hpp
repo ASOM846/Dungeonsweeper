@@ -8,7 +8,11 @@ struct Grid {
 	[[nodiscard]] size_t GetWidth() const { return width; }
 	[[nodiscard]] size_t GetHeight() const { return height; }
 
+#if defined(__ANDROID__)
+	static constexpr int CELL_SIZE = 150;
+#else
 	static constexpr int CELL_SIZE = 66;
+#endif
 
 	enum class CellState {
 		Hidden,

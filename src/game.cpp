@@ -77,10 +77,6 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (IsKeyPressed(KEY_T)) {
-		util::LogMsg(LOG_INFO, "test log");
-	}
-
 	if (IsKeyPressed(KEY_C)) {
 		for (size_t y = 0; y < gridManager.GetGrid().GetHeight(); ++y) {
 			for (size_t x = 0; x < gridManager.GetGrid().GetWidth(); ++x) {

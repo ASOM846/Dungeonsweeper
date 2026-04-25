@@ -13,8 +13,6 @@ void WindowManager::Init() {
 	width = height = 0;
 #endif
 
-	SetTraceLogCallback(util::Log);
-
 	InitWindow(width, height, "Dungeonsweeper");
 	SetTargetFPS(60);
 

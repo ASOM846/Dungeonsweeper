@@ -6,7 +6,7 @@
 
 void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 							 InputManager &inputManager) {
-	const int framesSpeed = 4;
+	const int framesSpeed = 3;
 	for (size_t y = 0; y < grid->GetHeight(); ++y) {
 		for (size_t x = 0; x < grid->GetWidth(); ++x) {
 			Grid::Cell &cell = grid->cells[y][x];
