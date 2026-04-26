@@ -54,3 +54,10 @@ Thumbs.db
 
 # --- compile commands ---
 **/compile_commands.json
+
+# --- WEB BUILD files
+
+index.html
+index.js
+index.wasm
+index.data
