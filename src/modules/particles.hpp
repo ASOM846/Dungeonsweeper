@@ -33,7 +33,7 @@ class ParticleSystem {
 	int maxParticles = 3000;
 
   public:
-	ParticleSystem(Vector2 pos, int maxCount = 3000) {
+	ParticleSystem(Vector2 pos = {-100, -100}, int maxCount = 3000) {
 		emitterPosition = pos;
 		maxParticles = maxCount;
 		particles.reserve(maxParticles);

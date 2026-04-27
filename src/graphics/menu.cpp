@@ -73,15 +73,17 @@ void Menu::Update() {
 	fire2.Update(GetScreenWidth(), GetScreenHeight());
 
 	const int fontSize = 60;
-	auto textLength =
-		static_cast<float>(MeasureText("DungeonSweeper", fontSize));
+	auto textDungeonLength =
+		static_cast<float>(MeasureText("Dungeon", fontSize));
+	auto textSweeperLength =
+		static_cast<float>(MeasureText("Sweeper", fontSize));
 
-	const int fireSpacing = 30;
+	const int fireSpacing = 50;
 	fire1.SetPosition(
-		{GetScreenWidth() / 2 - textLength / 2 - fireSpacing, 140});
+		{GetScreenWidth() / 2 - textDungeonLength / 2 - fireSpacing, 180});
 
 	fire2.SetPosition(
-		{GetScreenWidth() / 2 + textLength / 2 + fireSpacing, 140});
+		{GetScreenWidth() / 2 + textDungeonLength / 2 + fireSpacing, 180});
 
 	if (easyGameButton.IsClicked()) {
 		currentState = MenuState::ClassicGameShoudlStart;
@@ -159,10 +161,17 @@ void Menu::RenderBackground(const TextureManager &textureManager) const {
 	}
 
 	const int fontSize = 60;
-	float textLength =
-		static_cast<float>(MeasureText("DungeonSweeper", fontSize));
-	DrawText("DungeonSweeper", GetScreenWidth() / 2 - textLength / 2, 100,
-			 fontSize, Color{200, 170, 140, 255});
+	const int offset = 20;
+
+	auto textDungeonLength =
+		static_cast<float>(MeasureText("Dungeon", fontSize));
+	auto textSweeperLength =
+		static_cast<float>(MeasureText("Sweeper", fontSize));
+
+	DrawText("Dungeon", GetScreenWidth() / 2 - textDungeonLength / 2 - offset,
+			 100, fontSize, Color{200, 170, 140, 255});
+	DrawText("Sweeper", GetScreenWidth() / 2 - textSweeperLength / 2 + offset,
+			 150, fontSize, Color{200, 170, 140, 255});
 }
 
 bool Menu::IsStartGamePressed() const {
