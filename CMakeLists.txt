@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Opcje ---------------------------------------------------------------
 # Włącz FAST_BUILD domyślnie — wyłącz ręcznie z -DFAST_BUILD=OFF jeśli chcesz
-option(FAST_BUILD "Enable fast build helpers (ccache/sccache, PCH, UNITY_BUILD, 
+option(FAST_BUILD "Enable fast build helpers (ccache/sccache, PCH, UNITY_BUILD,
 faster compile flags)" ON)
 option(RAYLIB_USE_SUBMODULE "Use external/raylib subdirectory if present" OFF)
 
@@ -41,7 +41,7 @@ if(FAST_BUILD)
     # szybkie flagi devel: brak optymalizacji, debug symbols, mniej I/O overhead
     add_compile_options(-O0 -g -pipe)
     # jeśli chcesz widzieć warningi, usuń -w
-    add_compile_options(-w)
+    # add_compile_options(-w)
   endif()
 endif()
 
@@ -68,40 +68,40 @@ set(RAYLIB_TARGET "")
 
 find_package(raylib CONFIG QUIET)
 if(raylib_FOUND)
-    if(TARGET raylib)
-        set(RAYLIB_TARGET raylib)
-    elseif(TARGET raylib::raylib)
-        set(RAYLIB_TARGET raylib::raylib)
-    endif()
+  if(TARGET raylib)
+    set(RAYLIB_TARGET raylib)
+  elseif(TARGET raylib::raylib)
+    set(RAYLIB_TARGET raylib::raylib)
+  endif()
 endif()
 
 if(NOT RAYLIB_TARGET)
-    find_package(PkgConfig QUIET)
-    if(PkgConfig_FOUND)
-        pkg_check_modules(RAYLIB_PKG QUIET raylib)
-        if(RAYLIB_PKG_FOUND)
-            add_library(raylib::pkg INTERFACE IMPORTED)
-            target_include_directories(raylib::pkg INTERFACE ${RAYLIB_PKG_INCLUDE_DIRS})
-            target_link_libraries(raylib::pkg INTERFACE ${RAYLIB_PKG_LIBRARIES})
-            target_compile_options(raylib::pkg INTERFACE ${RAYLIB_PKG_CFLAGS_OTHER})
-            set(RAYLIB_TARGET raylib::pkg)
-        endif()
+  find_package(PkgConfig QUIET)
+  if(PkgConfig_FOUND)
+    pkg_check_modules(RAYLIB_PKG QUIET raylib)
+    if(RAYLIB_PKG_FOUND)
+      add_library(raylib::pkg INTERFACE IMPORTED)
+      target_include_directories(raylib::pkg INTERFACE ${RAYLIB_PKG_INCLUDE_DIRS})
+      target_link_libraries(raylib::pkg INTERFACE ${RAYLIB_PKG_LIBRARIES})
+      target_compile_options(raylib::pkg INTERFACE ${RAYLIB_PKG_CFLAGS_OTHER})
+      set(RAYLIB_TARGET raylib::pkg)
     endif()
+  endif()
 endif()
 
 if(NOT RAYLIB_TARGET AND RAYLIB_USE_SUBMODULE)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/external/raylib/CMakeLists.txt")
-        add_subdirectory(external/raylib)
-        if(TARGET raylib)
-            set(RAYLIB_TARGET raylib)
-        elseif(TARGET raylib::raylib)
-            set(RAYLIB_TARGET raylib::raylib)
-        endif()
+  if(EXISTS "${CMAKE_SOURCE_DIR}/external/raylib/CMakeLists.txt")
+    add_subdirectory(external/raylib)
+    if(TARGET raylib)
+      set(RAYLIB_TARGET raylib)
+    elseif(TARGET raylib::raylib)
+      set(RAYLIB_TARGET raylib::raylib)
     endif()
+  endif()
 endif()
 
 if(NOT RAYLIB_TARGET)
-    message(FATAL_ERROR
+  message(FATAL_ERROR
       "raylib not found.\n"
       "Na Linux: zainstaluj pakiet dev i pkg-config (np. 'sudo apt install libraylib-dev pkg-config').\n"
       "Lub dodaj submodule external/raylib i ustaw RAYLIB_USE_SUBMODULE=ON."
@@ -112,9 +112,9 @@ target_link_libraries(mineswepper PRIVATE ${RAYLIB_TARGET})
 
 # --- Drobne ustawienia kompilatora (opcjonalne) ----------------------------
 if(MSVC)
-    target_compile_options(mineswepper PRIVATE /W4)
+  target_compile_options(mineswepper PRIVATE /W4)
 else()
-    target_compile_options(mineswepper PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(mineswepper PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 # --- Informacje na konfiguracji ------------------------------------------

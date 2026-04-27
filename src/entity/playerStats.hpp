@@ -27,13 +27,15 @@ struct PlayerStats {
 	int curretTurn = 0;
 	bool wasGridClicked = 0;
 
-	float timer = 0.0f;
+	float timer = 0.0F;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
 	int evolutionLevel = 0;
 
 	bool isInputLocked = false;
+
+	int x;
 
 	// passiveInventory
 	int inventorySize = 3;
