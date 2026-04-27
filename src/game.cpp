@@ -4,6 +4,7 @@
 #include "graphics/ui.hpp"
 #include "grid/grid.hpp"
 #include "utils/randomUtils.hpp"
+#include <iostream>
 #include <raylib.h>
 
 void Game::Init() {
@@ -89,7 +90,15 @@ void Game::UpdatePlaying() {
 	}
 
 	if (IsKeyPressed(KEY_H))
-		playerStats.currentPointsToEvo += 500;
+		playerStats.timer = 600.0f;
+
+	if (IsKeyPressed(KEY_J))
+		playerStats.timer -= 10.0f;
+
+	playerStats.timer -= GetFrameTime();
+
+	std::cout << "Time remaining:   " << playerStats.timer << std::endl;
+
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();
 }
@@ -97,6 +106,7 @@ void Game::UpdatePlaying() {
 void Game::RenderPlaying() {
 	gridManager.Render(&textureManager, playerStats, gameMode);
 	ui.RenderUi(playerStats, gameState);
+	ui.RenderTimeBar(playerStats);
 
 	if (playerStats.isChoosePending) {
 		itemChooser.Render(playerStats);

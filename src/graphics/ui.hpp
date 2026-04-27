@@ -17,6 +17,7 @@ class UI {
 	void UpdateInventoryClick(PlayerStats &playerStats);
 	void RenderUi(PlayerStats &playerStats, const GameState &gameState);
 	void RenderLose(const PlayerStats &playerStats);
+	void RenderTimeBar(const PlayerStats &playerStats);
 
 	void TriggerMessageBox(const char *message);
 	void CloseMessageBox();

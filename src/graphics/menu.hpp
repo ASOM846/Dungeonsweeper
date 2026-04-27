@@ -42,8 +42,8 @@ class Menu {
 	NewButton hardGameButton;
 	NewButton settingsButton;
 
-	ParticleSystem fire1{{400, 300}};
-	ParticleSystem fire2{{400, 300}};
+	ParticleSystem fire1;
+	ParticleSystem fire2;
 
 	Difficulty selectedDifficulty;
 

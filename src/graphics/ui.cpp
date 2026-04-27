@@ -3,6 +3,7 @@
 #include "../game.hpp"
 #include "button.hpp"
 #include <algorithm>
+#include <ctime>
 #include <raylib.h>
 
 namespace {
@@ -516,4 +517,61 @@ void UI::RenderMessageBox() {
 	if (okBtn.IsClicked()) {
 		CloseMessageBox();
 	}
+}
+
+void UI::RenderTimeBar(const PlayerStats &playerStats) {
+	const int barHeight = 20;
+	const int padding = 10;
+	const int fontSize = 30;
+	const int gap = 20;
+	const int rightBarWidth = GetBarWidth();
+
+	int screenWidth = GetScreenWidth();
+	int usableScreenWidth = screenWidth - rightBarWidth;
+	int centerX = usableScreenWidth / 2;
+
+	float fullTime = 600.0f;
+	float currentTime = playerStats.timer / fullTime;
+
+	int minutes = static_cast<int>(playerStats.timer) / 60;
+	int seconds = static_cast<int>(playerStats.timer) % 60;
+
+	const char *timeText = TextFormat("%02d:%02d", minutes, seconds);
+
+	int textWidth = MeasureText(timeText, fontSize);
+	int barY = 10;
+
+	int availableWidth = usableScreenWidth - 2 * padding;
+	int halfBarWidth = (availableWidth - textWidth - 2 * gap) / 2;
+
+	float leftRatio = 0.0f;
+	float rightRatio = 0.0f;
+
+	if (currentTime > 0.5f) {
+		leftRatio = 1.0f;
+		rightRatio = (currentTime - 0.5f) * 2.0f;
+	} else {
+		leftRatio = currentTime * 2.0f;
+		rightRatio = 0.0f;
+	}
+
+	int leftFillWidth = static_cast<int>(halfBarWidth * leftRatio);
+	int rightFillWidth = static_cast<int>(halfBarWidth * rightRatio);
+
+	Color barBgColor = Color{22, 20, 18, 255};
+	Color barFillColor = Color{180, 140, 90, 255};
+	Color borderColor = Color{100, 88, 70, 255};
+	Color textColor = Color{220, 200, 170, 255};
+
+	int leftX = padding;
+	DrawRectangle(leftX, barY, halfBarWidth, barHeight, barBgColor);
+	DrawRectangle(leftX, barY, leftFillWidth, barHeight, barFillColor);
+	DrawRectangleLines(leftX, barY, halfBarWidth, barHeight, borderColor);
+
+	int rightX = centerX + textWidth / 2 + gap;
+	DrawRectangle(rightX, barY, halfBarWidth, barHeight, barBgColor);
+	DrawRectangle(rightX, barY, rightFillWidth, barHeight, barFillColor);
+	DrawRectangleLines(rightX, barY, halfBarWidth, barHeight, borderColor);
+
+	DrawText(timeText, centerX - textWidth / 2, barY - 5, fontSize, textColor);
 }
