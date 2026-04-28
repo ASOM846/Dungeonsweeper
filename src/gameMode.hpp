@@ -11,6 +11,16 @@ enum class Difficulty {
 	Hard
 };
 
+enum class GameType {
+	Normal,
+	Challenge
+};
+
+struct GameConfig {
+	Difficulty difficulty;
+	GameType type;
+};
+
 struct GridConfig {
 	int numberOfHearts;
 	int numberOfMana;

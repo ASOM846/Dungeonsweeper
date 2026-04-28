@@ -4,8 +4,6 @@
 #include <raylib.h>
 
 void WindowManager::Init() {
-	// InitWindow(1920, 1080, "Dungeonsweeper");
-
 	width = 1280;
 	height = width / 16 * 10;
 
@@ -44,7 +42,15 @@ void WindowManager::Update() {
 		case AppMode::Menu:
 			menu.Update();
 			if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
-				game.RunGame(menu.GetSelectedDifficulty());
+				currentConfig.difficulty = menu.GetSelectedDifficulty();
+				// game.RunGame(menu.GetSelectedDifficulty());
+				SwitchMode(AppMode::SelectingGameType);
+			}
+			break;
+		case AppMode::SelectingGameType:
+			gameTypeMenu.Update();
+			if (gameTypeMenu.IsPicked()) {
+				currentConfig.type = gameTypeMenu.GetSelectedType();
 				SwitchMode(AppMode::Game);
 			}
 			break;
@@ -72,6 +78,9 @@ void WindowManager::Render() {
 		case AppMode::Menu:
 			menu.Render(game.GetTextureManager());
 			break;
+		case AppMode::SelectingGameType:
+			gameTypeMenu.Render();
+			break;
 		case AppMode::Game:
 			game.Render();
 
@@ -95,6 +104,9 @@ void WindowManager::SwitchMode(AppMode newMode) {
 	case AppMode::Menu:
 		currentMode = AppMode::Menu;
 		menu.Reset();
+		break;
+	case AppMode::SelectingGameType:
+		currentMode = AppMode::SelectingGameType;
 		break;
 	case AppMode::Game:
 		currentMode = AppMode::Game;
