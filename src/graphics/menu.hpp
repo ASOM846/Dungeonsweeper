@@ -32,9 +32,10 @@ class Menu {
 		return selectedDifficulty;
 	}
 
+	void RenderBackground(const TextureManager &TextureManager) const;
+
   private:
 	void UpdateButtonsPosition();
-	void RenderBackground(const TextureManager &TextureManager) const;
 
   private:
 	NewButton easyGameButton;

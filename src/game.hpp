@@ -26,7 +26,7 @@ class Game {
 	void Init();
 	void Reset();
 
-	void RunGame(Difficulty diff);
+	void RunGame(GameConfig conf);
 
 	void Update();
 	void Render();

@@ -6,7 +6,7 @@
 
 class GameTypeMenu {
   public:
-	GameTypeMenu() = default;
+	GameTypeMenu() : isPicked{false} {}
 	~GameTypeMenu() = default;
 
 	void Render();

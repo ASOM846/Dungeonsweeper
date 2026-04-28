@@ -7,9 +7,9 @@ void WindowManager::Init() {
 	width = 1280;
 	height = width / 16 * 10;
 
-#if defined(__ANDROID__)
-	width = height = 0;
-#endif
+	// #if defined(__ANDROID__)
+	// 	width = height = 0;
+	// #endif
 
 	InitWindow(width, height, "Dungeonsweeper");
 	SetTargetFPS(60);
@@ -51,6 +51,7 @@ void WindowManager::Update() {
 			gameTypeMenu.Update();
 			if (gameTypeMenu.IsPicked()) {
 				currentConfig.type = gameTypeMenu.GetSelectedType();
+				game.RunGame(currentConfig);
 				SwitchMode(AppMode::Game);
 			}
 			break;
@@ -79,20 +80,19 @@ void WindowManager::Render() {
 			menu.Render(game.GetTextureManager());
 			break;
 		case AppMode::SelectingGameType:
+			menu.RenderBackground(game.GetTextureManager());
 			gameTypeMenu.Render();
 			break;
 		case AppMode::Game:
+
 			game.Render();
-
-#if defined(__ANDROID__)
-			DrawText("ANDROID TEST", 10, 10, 50, RED);
-#endif
-
 			break;
 		case AppMode::Settings:
 			break;
 		}
 	}
+
+	DrawFPS(GetScreenWidth() - 100, GetScreenHeight() - 40);
 	EndDrawing();
 }
 

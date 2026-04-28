@@ -52,9 +52,9 @@ void Game::Reset() {
 	gameState = GameState::Playing;
 }
 
-void Game::RunGame(Difficulty diff) {
-	currentDiff = diff;
-	gridManager.InitGrid(playerStats, gameMode, diff);
+void Game::RunGame(GameConfig conf) {
+	currentDiff = conf.difficulty;
+	gridManager.InitGrid(playerStats, gameMode, conf.difficulty);
 }
 
 void Game::UpdatePlaying() {
