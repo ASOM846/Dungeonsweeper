@@ -32,8 +32,6 @@ class Menu {
 		return selectedDifficulty;
 	}
 
-	void RenderBackground(const TextureManager &TextureManager) const;
-
   private:
 	void UpdateButtonsPosition();
 
@@ -42,9 +40,6 @@ class Menu {
 	NewButton mediumGameButton;
 	NewButton hardGameButton;
 	NewButton settingsButton;
-
-	ParticleSystem fire1;
-	ParticleSystem fire2;
 
 	Difficulty selectedDifficulty;
 

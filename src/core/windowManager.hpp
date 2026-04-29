@@ -4,6 +4,7 @@
 #include "../gameMode.hpp"
 #include "../graphics/gameTypeMenu.hpp"
 #include "../graphics/menu.hpp"
+#include "../graphics/menuBackground.hpp"
 #include <raylib.h>
 
 enum class AppMode {
@@ -30,6 +31,7 @@ class WindowManager {
 	Game game;
 	Menu menu;
 	GameTypeMenu gameTypeMenu;
+	MenuBackground background;
 
 	AppMode currentMode;
 

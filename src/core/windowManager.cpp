@@ -21,6 +21,7 @@ void WindowManager::Init() {
 	currentMode = AppMode::Menu;
 
 	menu.Init();
+	background.Init();
 	game.Init();
 }
 
@@ -40,6 +41,7 @@ void WindowManager::Update() {
 	} else {
 		switch (currentMode) {
 		case AppMode::Menu:
+			background.Update();
 			menu.Update();
 			if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
 				currentConfig.difficulty = menu.GetSelectedDifficulty();
@@ -48,6 +50,7 @@ void WindowManager::Update() {
 			}
 			break;
 		case AppMode::SelectingGameType:
+			background.Update();
 			gameTypeMenu.Update();
 			if (gameTypeMenu.IsPicked()) {
 				currentConfig.type = gameTypeMenu.GetSelectedType();
@@ -77,10 +80,11 @@ void WindowManager::Render() {
 		switch (currentMode) {
 			void Run();
 		case AppMode::Menu:
+			background.Render(game.GetTextureManager());
 			menu.Render(game.GetTextureManager());
 			break;
 		case AppMode::SelectingGameType:
-			menu.RenderBackground(game.GetTextureManager());
+			background.Render(game.GetTextureManager());
 			gameTypeMenu.Render();
 			break;
 		case AppMode::Game:
