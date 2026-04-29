@@ -55,6 +55,12 @@ void Game::Reset() {
 void Game::RunGame(GameConfig conf) {
 	currentDiff = conf.difficulty;
 	gridManager.InitGrid(playerStats, gameMode, conf.difficulty);
+
+	std::cout << "zaimportowano config=======================" << std::endl;
+	if (conf.type == GameType::Challenge) {
+		playerStats.timer = 300.0f;
+		std::cout << "tryb challenge zaczęto\n";
+	}
 }
 
 void Game::UpdatePlaying() {
@@ -78,17 +84,6 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (IsKeyPressed(KEY_C)) {
-		for (size_t y = 0; y < gridManager.GetGrid().GetHeight(); ++y) {
-			for (size_t x = 0; x < gridManager.GetGrid().GetWidth(); ++x) {
-				if (gridManager.GetGrid().cells[y][x].specialFunction ==
-					Grid::SpecialFunction::UncoverEnemiesVal1)
-					gridManager.GetGrid().cells[y][x].state =
-						Grid::CellState::Revealed;
-			}
-		}
-	}
-
 	if (IsKeyPressed(KEY_H))
 		playerStats.timer = 600.0f;
 
@@ -97,7 +92,7 @@ void Game::UpdatePlaying() {
 
 	playerStats.timer -= GetFrameTime();
 
-	std::cout << "Time remaining:   " << playerStats.timer << std::endl;
+	// std::cout << "Time remaining:   " << playerStats.timer << std::endl;
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();

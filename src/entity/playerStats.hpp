@@ -46,15 +46,20 @@ struct PlayerStats {
 	bool isChoosePending = false;
 	bool isSelectionPopup = false;
 
-	float GetHp() const {
+	[[nodiscard]] float GetHp() const {
 		return static_cast<float>(hp) + (hpHalf ? 0.5f : 0.0f);
 	}
 
-	float GetMaxHp() const {
+	[[nodiscard]] float GetMaxHp() const {
 		return static_cast<float>(maxHp) + (drawHalfHp ? 0.5f : 0.0f);
 	}
 
-	bool IsFullHp() const { return hp == maxHp && hpHalf == drawHalfHp; }
+	[[nodiscard]] bool IsFullHp() const {
+		return hp == maxHp && hpHalf == drawHalfHp;
+	}
+
+	// timer functions
+	void SetTimer(const float time) { timer = 600.00F; }
 
 	void Heal(int val_) {
 		hp += val_;

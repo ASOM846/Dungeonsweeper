@@ -88,7 +88,6 @@ void WindowManager::Render() {
 			gameTypeMenu.Render();
 			break;
 		case AppMode::Game:
-
 			game.Render();
 			break;
 		case AppMode::Settings:
