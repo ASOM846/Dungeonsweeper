@@ -52,6 +52,10 @@ void GameTypeMenu::Update() {
 	}
 }
 
+void GameTypeMenu::Reset() {
+	isPicked = false;
+}
+
 void GameTypeMenu::InitButtons() {
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();

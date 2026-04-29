@@ -12,6 +12,8 @@ class GameTypeMenu {
 	void Render();
 	void Update();
 
+	void Reset();
+
 	void InitButtons();
 
 	[[nodiscard]] GameType GetSelectedType() const { return selectedType; }

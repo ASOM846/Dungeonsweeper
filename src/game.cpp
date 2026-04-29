@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "entity/passiveItem.hpp"
+#include "entity/playerStats.hpp"
 #include "gameMode.hpp"
 #include "graphics/ui.hpp"
 #include "grid/grid.hpp"
@@ -13,6 +14,7 @@ void Game::Init() {
 	itemChooser.Init();
 	popup.Init();
 	Reset();
+	std::cout << "zainicjowano Game Init\n";
 }
 
 void Game::Update() {
@@ -47,18 +49,20 @@ void Game::Render() {
 }
 
 void Game::Reset() {
-	playerStats = PlayerStats();
+	// playerStats = PlayerStats();
 	ui.CloseMessageBox();
 	gameState = GameState::Playing;
+	std::cout << "zresetowano gre Game::Reset() \n";
 }
 
 void Game::RunGame(GameConfig conf) {
 	currentDiff = conf.difficulty;
 	gridManager.InitGrid(playerStats, gameMode, conf.difficulty);
+	playerStats = PlayerStats();
 
-	std::cout << "zaimportowano config=======================" << std::endl;
+	std::cout << "zaimportowano config=======================" << '\n';
 	if (conf.type == GameType::Challenge) {
-		playerStats.timer = 300.0f;
+		playerStats.SetTimer(180.0F);
 		std::cout << "tryb challenge zaczęto\n";
 	}
 }

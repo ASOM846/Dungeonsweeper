@@ -21,21 +21,20 @@ struct PlayerStats {
 
 	int coins = 0;
 
-	bool gameWon = 0;
+	bool gameWon = false;
 
 	int evolutions = 0;
 	int curretTurn = 0;
-	bool wasGridClicked = 0;
+	bool wasGridClicked = false;
 
 	float timer = 0.0F;
+	float maxTIme = 600.0F;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
 	int evolutionLevel = 0;
 
 	bool isInputLocked = false;
-
-	int x;
 
 	// passiveInventory
 	int inventorySize = 3;
@@ -59,7 +58,14 @@ struct PlayerStats {
 	}
 
 	// timer functions
-	void SetTimer(const float time) { timer = 600.00F; }
+	void SetTimer(const float time) { timer = time; }
+
+	void IncreaseTime(const float time) {
+		timer = timer + time;
+		if (timer > maxTIme) {
+			timer = maxTIme;
+		}
+	}
 
 	void Heal(int val_) {
 		hp += val_;

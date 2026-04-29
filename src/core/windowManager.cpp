@@ -110,6 +110,7 @@ void WindowManager::SwitchMode(AppMode newMode) {
 		break;
 	case AppMode::SelectingGameType:
 		currentMode = AppMode::SelectingGameType;
+		gameTypeMenu.Reset();
 		break;
 	case AppMode::Game:
 		currentMode = AppMode::Game;
