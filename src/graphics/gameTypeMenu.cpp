@@ -5,24 +5,32 @@ void GameTypeMenu::Render() {
 	int screenWidth = GetScreenWidth();
 	int screenHeight = GetScreenHeight();
 
-	const char *descStandard = "Klasyczna rozgrywka";
-	const char *descChallenge = "Prawdziwe wyzwanie";
-
 	int fontSize = 20;
-
-	int textStandardWidth = MeasureText(descStandard, fontSize);
-	int textChallengeWidth = MeasureText(descChallenge, fontSize);
+	int lineSpacing = fontSize + 6;
 
 	int leftCenter = screenWidth / 4;
 	int rightCenter = 3 * screenWidth / 4;
 
 	int centerY = screenHeight / 2;
-	int textY = centerY - 80;
+	int startY = centerY - 120;
 
-	DrawText(descStandard, leftCenter - (textStandardWidth / 2), textY,
-			 fontSize, LIGHTGRAY);
-	DrawText(descChallenge, rightCenter - (textChallengeWidth / 2), textY,
-			 fontSize, LIGHTGRAY);
+	const char *standardLines[] = {"Standard", "No time limit",
+								   "Classic gameplay"};
+
+	for (int i = 0; i < 3; i++) {
+		int textWidth = MeasureText(standardLines[i], fontSize);
+		DrawText(standardLines[i], leftCenter - textWidth / 2,
+				 startY + i * lineSpacing, fontSize, LIGHTGRAY);
+	}
+
+	const char *challengeLines[] = {"Challenge", "Start with 3:00",
+									"+30 seconds per move", "Time cap: 6:00"};
+
+	for (int i = 0; i < 3; i++) {
+		int textWidth = MeasureText(challengeLines[i], fontSize);
+		DrawText(challengeLines[i], rightCenter - textWidth / 2,
+				 startY + i * lineSpacing, fontSize, LIGHTGRAY);
+	}
 
 	buttonStandard.Draw();
 	buttonChallenge.Draw();
@@ -63,5 +71,5 @@ void GameTypeMenu::InitButtons() {
 	buttonStandard =
 		NewButton(leftButtonX, buttonY, buttonW, buttonH, "Standard Mode");
 	buttonChallenge =
-		NewButton(rightButtonX, buttonY, buttonW, buttonH, "Hard Mode");
+		NewButton(rightButtonX, buttonY, buttonW, buttonH, "Challenge Mode");
 }

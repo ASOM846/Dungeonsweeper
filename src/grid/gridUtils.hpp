@@ -26,8 +26,8 @@ inline int GetNeighboursSum(int x, int y, Grid &grid) {
 	std::vector<std::vector<Grid::Cell>> &cells = grid.cells;
 
 	int sum = 0;
-	int bX = x;
-	int bY = y;
+	size_t bX = x;
+	size_t bY = y;
 
 	bX--;
 	bY--;
