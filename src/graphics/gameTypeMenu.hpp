@@ -12,6 +12,8 @@ class GameTypeMenu {
 	void Render();
 	void Update();
 
+	void Init(const Difficulty &diff);
+
 	void Reset();
 
 	void InitButtons();
@@ -25,6 +27,7 @@ class GameTypeMenu {
 	bool shoudlReturnToMenu;
 
 	GameType selectedType;
+	Difficulty selectedDiff;
 
 	NewButton buttonStandard;
 	NewButton buttonChallenge;

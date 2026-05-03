@@ -1,5 +1,6 @@
 #include "gameTypeMenu.hpp"
 #include "button.hpp"
+#include <iostream>
 #include <raylib.h>
 
 void GameTypeMenu::Render() {
@@ -13,7 +14,7 @@ void GameTypeMenu::Render() {
 	int rightCenter = 3 * screenWidth / 4;
 
 	int centerY = screenHeight / 2;
-	int startY = centerY - 120;
+	int startY = centerY - 160;
 
 	const char *standardLines[] = {"Standard", "No time limit",
 								   "Classic gameplay"};
@@ -24,10 +25,22 @@ void GameTypeMenu::Render() {
 				 startY + i * lineSpacing, fontSize, LIGHTGRAY);
 	}
 
-	const char *challengeLines[] = {"Challenge", "Start with 3:00",
-									"+30 seconds per move", "Time cap: 6:00"};
+	const GameTime gameTime = GetGameTime(selectedDiff);
 
-	for (int i = 0; i < 3; i++) {
+	std::string startLine =
+		"Start with " +
+		std::to_string((static_cast<int>(gameTime.starting) / 60)) + " minutes";
+	std::string secondLine =
+		"+" + std::to_string(static_cast<int>(gameTime.onClick)) +
+		" seconds per move";
+	std::string thirdLine =
+		"Time cap: " + std::to_string(static_cast<int>(gameTime.cap / 60)) +
+		" minutes";
+
+	const char *challengeLines[] = {"Challenge", startLine.c_str(),
+									secondLine.c_str(), thirdLine.c_str()};
+
+	for (int i = 0; i < 4; i++) {
 		int textWidth = MeasureText(challengeLines[i], fontSize);
 		DrawText(challengeLines[i], rightCenter - (textWidth / 2),
 				 startY + (i * lineSpacing), fontSize, LIGHTGRAY);
@@ -59,9 +72,14 @@ void GameTypeMenu::Update() {
 	}
 }
 
+void GameTypeMenu::Init(const Difficulty &diff) {
+	selectedDiff = diff;
+}
+
 void GameTypeMenu::Reset() {
 	isPicked = false;
 	shoudlReturnToMenu = false;
+	selectedDiff = Difficulty();
 }
 
 void GameTypeMenu::InitButtons() {
