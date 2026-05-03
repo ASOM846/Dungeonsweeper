@@ -57,6 +57,9 @@ void WindowManager::Update() {
 				game.RunGame(currentConfig);
 				SwitchMode(AppMode::Game);
 			}
+			if (gameTypeMenu.ShoudlReturnToMenu()) {
+				SwitchMode(AppMode::Menu);
+			}
 			break;
 		case AppMode::Game:
 			game.Update();

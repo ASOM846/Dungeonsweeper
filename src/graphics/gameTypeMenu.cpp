@@ -1,4 +1,5 @@
 #include "gameTypeMenu.hpp"
+#include "button.hpp"
 #include <raylib.h>
 
 void GameTypeMenu::Render() {
@@ -28,18 +29,20 @@ void GameTypeMenu::Render() {
 
 	for (int i = 0; i < 3; i++) {
 		int textWidth = MeasureText(challengeLines[i], fontSize);
-		DrawText(challengeLines[i], rightCenter - textWidth / 2,
-				 startY + i * lineSpacing, fontSize, LIGHTGRAY);
+		DrawText(challengeLines[i], rightCenter - (textWidth / 2),
+				 startY + (i * lineSpacing), fontSize, LIGHTGRAY);
 	}
 
 	buttonStandard.Draw();
 	buttonChallenge.Draw();
+	buttonGoBack.Draw();
 }
 
 void GameTypeMenu::Update() {
 	InitButtons();
 	buttonChallenge.Update();
 	buttonStandard.Update();
+	buttonGoBack.Update();
 
 	if (buttonStandard.IsClicked()) {
 		isPicked = true;
@@ -50,10 +53,15 @@ void GameTypeMenu::Update() {
 		isPicked = true;
 		selectedType = GameType::Challenge;
 	}
+
+	if (buttonGoBack.IsClicked()) {
+		shoudlReturnToMenu = true;
+	}
 }
 
 void GameTypeMenu::Reset() {
 	isPicked = false;
+	shoudlReturnToMenu = false;
 }
 
 void GameTypeMenu::InitButtons() {
@@ -72,8 +80,12 @@ void GameTypeMenu::InitButtons() {
 	int centerY = screenHeight / 2;
 	int buttonY = centerY - (buttonH / 2);
 
+	int centerX = screenWidth / 2;
+
 	buttonStandard =
 		NewButton(leftButtonX, buttonY, buttonW, buttonH, "Standard Mode");
 	buttonChallenge =
 		NewButton(rightButtonX, buttonY, buttonW, buttonH, "Challenge Mode");
+	buttonGoBack =
+		NewButton(centerX - buttonW / 2, centerY + 100, buttonW, buttonH, "<");
 }

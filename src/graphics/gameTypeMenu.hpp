@@ -6,7 +6,7 @@
 
 class GameTypeMenu {
   public:
-	GameTypeMenu() : isPicked{false} {}
+	GameTypeMenu() : isPicked{false}, shoudlReturnToMenu{false} {}
 	~GameTypeMenu() = default;
 
 	void Render();
@@ -18,12 +18,16 @@ class GameTypeMenu {
 
 	[[nodiscard]] GameType GetSelectedType() const { return selectedType; }
 	[[nodiscard]] bool IsPicked() const { return isPicked; }
+	[[nodiscard]] bool ShoudlReturnToMenu() const { return shoudlReturnToMenu; }
 
   private:
 	bool isPicked;
+	bool shoudlReturnToMenu;
 
 	GameType selectedType;
 
 	NewButton buttonStandard;
 	NewButton buttonChallenge;
+
+	NewButton buttonGoBack;
 };
