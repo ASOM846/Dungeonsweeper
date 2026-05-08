@@ -28,7 +28,8 @@ struct PlayerStats {
 	bool wasGridClicked = false;
 
 	float timer = 0.0F;
-	float maxTIme = 600.0F;
+	float maxTime = 600.0F;
+	float timeToAdd = 0.0F;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
@@ -60,10 +61,14 @@ struct PlayerStats {
 	// timer functions
 	void SetTimer(const float time) { timer = time; }
 
+	void SetTimeLimit(const float time) { maxTime = time; }
+
+	void SetTimeAdd(const float time) { timeToAdd = time; }
+
 	void IncreaseTime(const float time) {
 		timer = timer + time;
-		if (timer > maxTIme) {
-			timer = maxTIme;
+		if (timer > maxTime) {
+			timer = maxTime;
 		}
 	}
 

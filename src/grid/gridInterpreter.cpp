@@ -157,7 +157,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 				if (grid->cells[y][x].val == 1 &&
 					grid->cells[y][x].state != Grid::CellState::Hinting &&
 					grid->cells[y][x].state != Grid::CellState::pointsNotTaken)
-					grid->cells[y][x].state = Grid::CellState::Revealed;
+					grid->cells[y][x].state = Grid::CellState::Revealing;
 			}
 		}
 		break;

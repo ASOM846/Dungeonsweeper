@@ -49,7 +49,6 @@ void Game::Render() {
 }
 
 void Game::Reset() {
-	// playerStats = PlayerStats();
 	ui.CloseMessageBox();
 	gameState = GameState::Playing;
 	std::cout << "zresetowano gre Game::Reset() \n";
@@ -60,10 +59,12 @@ void Game::RunGame(GameConfig conf) {
 	gridManager.InitGrid(playerStats, gameMode, conf.difficulty);
 	playerStats = PlayerStats();
 
-	std::cout << "zaimportowano config=======================" << '\n';
 	if (conf.type == GameType::Challenge) {
-		playerStats.SetTimer(180.0F);
-		std::cout << "tryb challenge zaczęto\n";
+		GameTime gameTime = GetGameTime(conf.difficulty);
+
+		playerStats.SetTimer(gameTime.starting);
+		playerStats.SetTimeLimit(gameTime.cap);
+		playerStats.SetTimeAdd(gameTime.onClick);
 	}
 }
 
@@ -95,8 +96,6 @@ void Game::UpdatePlaying() {
 		playerStats.timer -= 10.0f;
 
 	playerStats.timer -= GetFrameTime();
-
-	// std::cout << "Time remaining:   " << playerStats.timer << std::endl;
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();
