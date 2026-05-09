@@ -65,6 +65,7 @@ void Game::RunGame(GameConfig conf) {
 		playerStats.SetTimer(gameTime.starting);
 		playerStats.SetTimeLimit(gameTime.cap);
 		playerStats.SetTimeAdd(gameTime.onClick);
+		playerStats.SetTimerState(true);
 	}
 }
 
@@ -94,8 +95,6 @@ void Game::UpdatePlaying() {
 
 	if (IsKeyPressed(KEY_J))
 		playerStats.timer -= 10.0f;
-
-	playerStats.timer -= GetFrameTime();
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();

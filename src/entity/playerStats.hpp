@@ -28,8 +28,9 @@ struct PlayerStats {
 	bool wasGridClicked = false;
 
 	float timer = 0.0F;
-	float maxTime = 600.0F;
+	float maxTime = 0.0F;
 	float timeToAdd = 0.0F;
+	bool isTimerDecreasing = false;
 
 	int currentLevel = 1;
 	bool shoudlNewLevelStart = false;
@@ -72,6 +73,10 @@ struct PlayerStats {
 		}
 	}
 
+	void SetTimerState(const bool bIsTimerDecreasing) {
+		isTimerDecreasing = bIsTimerDecreasing;
+	}
+
 	void Heal(int val_) {
 		hp += val_;
 		if (hp > maxHp)
@@ -84,6 +89,11 @@ struct PlayerStats {
 	}
 
 	void Update() {
+		if (isTimerDecreasing)
+			timer -= GetFrameTime();
+		else
+			timer += GetFrameTime();
+
 		if (IsKeyPressed(KEY_E)) {
 			TryEvolve();
 		}

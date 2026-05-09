@@ -47,7 +47,6 @@ class Game {
 	void UpdateLose();
 	void RenderLose();
 
-  private:
 	GameState gameState;
 	GameMode gameMode = GameMode::Classic;
 	Difficulty currentDiff;
