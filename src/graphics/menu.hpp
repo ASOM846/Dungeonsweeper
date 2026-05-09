@@ -40,6 +40,7 @@ class Menu {
 	NewButton mediumGameButton;
 	NewButton hardGameButton;
 	NewButton settingsButton;
+	NewButton dailyGameButton;
 
 	Difficulty selectedDifficulty;
 

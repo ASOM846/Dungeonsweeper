@@ -52,6 +52,9 @@ Copy assets folder to your build directory and run
 - [ ] Time Chalange (almost working)
 - [ ] Time adding item for Chalange Modes
 - [ ] Random enemies with special abilities that might or might not spawn
+- [ ] Daily challange based on current date!!!
+- [ ] Seed displaying at the end of game
+- [ ] Own seed game
 
 ---
 
