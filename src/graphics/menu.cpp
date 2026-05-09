@@ -62,9 +62,8 @@ void Menu::Init() {
 
 	settingsButton = NewButton(0, 0, 0, 0, "Settings");
 
-	dailyCard =
-		SideCard(0, 0, 0, 0, "DAILY", "CHALLENGE", "One Seed.", "One Attempt.",
-				 "Prove your worth.", "PLAY NOW", false);
+	dailyCard = SideCard(0, 0, 0, 0, "DAILY", "CHALLENGE", "One Seed.",
+						 "One Attempt.", "Coming soon.", "PLAY NOW", false);
 
 	dailyCard.SetColors(Color{184, 134, 11, 200}, Color{255, 215, 0, 255},
 						Color{50, 40, 30, 240});
