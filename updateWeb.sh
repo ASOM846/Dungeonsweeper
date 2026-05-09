@@ -17,7 +17,7 @@ git commit -m "Aktualizacja wersji webowej"
 git push -f origin web-build
 
 # 6. Wróć na swoją główną gałąź (jeśli używasz 'master' zamiast 'main', zmień to poniżej)
-git checkout main
+git checkout eq
 
 # 7. Usuń gałąź 'web-build' z dysku lokalnego.
 # Dzięki temu przy następnym uruchomieniu skryptu krok 2 znów zadziała poprawnie.
