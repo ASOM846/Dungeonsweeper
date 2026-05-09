@@ -60,12 +60,19 @@ void Game::RunGame(GameConfig conf) {
 	playerStats = PlayerStats();
 
 	if (conf.type == GameType::Challenge) {
+		std::cout << "Challenge mode initialized\n";
 		GameTime gameTime = GetGameTime(conf.difficulty);
 
 		playerStats.SetTimer(gameTime.starting);
 		playerStats.SetTimeLimit(gameTime.cap);
 		playerStats.SetTimeAdd(gameTime.onClick);
 		playerStats.SetTimerState(true);
+	} else {
+		std::cout << "normal mode initialized\n";
+		playerStats.SetTimer(0.0F);
+		playerStats.SetTimeLimit(0.0F);
+		playerStats.SetTimeAdd(0.0F);
+		playerStats.SetTimerState(false);
 	}
 }
 
@@ -75,12 +82,13 @@ void Game::UpdatePlaying() {
 	}
 
 	evolutionSystem.Update(playerStats);
-	if (!playerStats.isSelectionPopup)
+	if (!playerStats.isSelectionPopup) {
 		gridManager.Update(playerStats, ui, inputManager);
+	}
 
 	popup.Update(gridManager.GetGrid(), playerStats);
 
-	if (playerStats.hp < 0) {
+	if (playerStats.hp < 0 || playerStats.timer < 0) {
 		ui.TriggerMessageBox("You have lost! \n Press R to return to menu.");
 		gameState = GameState::Lose;
 	}
@@ -90,11 +98,9 @@ void Game::UpdatePlaying() {
 		gameState = GameState::Lose;
 	}
 
-	if (IsKeyPressed(KEY_H))
-		playerStats.timer = 600.0f;
-
-	if (IsKeyPressed(KEY_J))
-		playerStats.timer -= 10.0f;
+	if (IsKeyPressed(KEY_J)) {
+		playerStats.timer -= 10.0F;
+	}
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);
 	playerStats.Update();

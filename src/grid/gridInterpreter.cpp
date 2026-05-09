@@ -68,7 +68,7 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 
 		if (grid->cells[y][x].state != CellState::Revealed &&
 			grid->cells[y][x].state != CellState::Hinting) {
-			playerStats.IncreaseTime(30.0F);
+			playerStats.IncreaseTime();
 		}
 
 		switch (grid->cells[y][x].state) {

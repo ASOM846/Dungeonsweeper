@@ -530,7 +530,7 @@ void UI::RenderTimeBar(const PlayerStats &playerStats) {
 	int usableScreenWidth = screenWidth - rightBarWidth;
 	int centerX = usableScreenWidth / 2;
 
-	float fullTime = 600.0f;
+	float fullTime = playerStats.maxTime;
 	float currentTime = playerStats.timer / fullTime;
 
 	int minutes = static_cast<int>(playerStats.timer) / 60;

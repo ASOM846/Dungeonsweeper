@@ -49,7 +49,9 @@ Copy assets folder to your build directory and run
 - [x] Working passive abilities
 - [ ] Add more passive abilities
 - [ ] Score saving
-- [ ] Time Chalange
+- [ ] Time Chalange (almost working)
+- [ ] Time adding item for Chalange Modes
+- [ ] Random enemies with special abilities that might or might not spawn
 
 ---
 
@@ -67,4 +69,4 @@ Copy assets folder to your build directory and run
 
 ## Bugs
 
-- [ ] Clicks are counted when changing grids
+- [x] Clicks are counted when changing grids

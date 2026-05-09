@@ -66,8 +66,13 @@ struct PlayerStats {
 
 	void SetTimeAdd(const float time) { timeToAdd = time; }
 
-	void IncreaseTime(const float time) {
-		timer = timer + time;
+	void IncreaseTime() {
+		if (!isTimerDecreasing) {
+			return;
+		}
+
+		timer += timeToAdd;
+
 		if (timer > maxTime) {
 			timer = maxTime;
 		}
