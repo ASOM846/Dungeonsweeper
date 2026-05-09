@@ -5,6 +5,7 @@
 #include "../modules/particles.hpp"
 #include "../textureManager.hpp"
 #include "button.hpp"
+#include "card.hpp"
 #include <raylib.h>
 
 enum class MenuState {
@@ -40,7 +41,9 @@ class Menu {
 	NewButton mediumGameButton;
 	NewButton hardGameButton;
 	NewButton settingsButton;
-	NewButton dailyGameButton;
+
+	SideCard dailyCard;
+	SideCard placeholderCard;
 
 	Difficulty selectedDifficulty;
 

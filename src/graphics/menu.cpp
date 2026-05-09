@@ -1,18 +1,10 @@
-
 #include "menu.hpp"
 #include "../grid/grid.hpp"
+#include "card.hpp"
 #include <algorithm>
 #include <raylib.h>
 
 namespace {
-struct SideCard {
-	Rectangle rect;
-	bool isHovered;
-	bool isClicked;
-};
-
-SideCard dailyCard;
-SideCard placeholderCard;
 
 struct MenuLayout {
 	float x;
@@ -27,17 +19,25 @@ MenuLayout ComputeMainMenuLayout(int screenW, int screenH) {
 	float h = static_cast<float>(screenH);
 
 	float buttonW = std::clamp(w * 0.32f, 240.0f, 360.0f);
+
 	float buttonH = std::clamp(h * 0.085f, 56.0f, 82.0f);
+
 	float spacing = std::clamp(buttonH * 0.35f, 14.0f, 26.0f);
 
-	float totalH = 3.0f * buttonH + 2.0f * spacing;
+	float totalH = 4.0f * buttonH + 3.0f * spacing;
+
 	float desiredTop = h * 0.38f;
+
 	float minTop = 160.0f;
+
 	float maxTop = h - totalH - 30.0f;
+
 	float topY = desiredTop;
+
 	if (topY < minTop) {
 		topY = minTop;
 	}
+
 	if (maxTop < minTop) {
 		topY = minTop;
 	} else if (topY > maxTop) {
@@ -45,49 +45,80 @@ MenuLayout ComputeMainMenuLayout(int screenW, int screenH) {
 	}
 
 	float x = (w - buttonW) * 0.5f;
+
 	return MenuLayout{x, topY, buttonW, buttonH, spacing};
 }
+
 } // namespace
 
 void Menu::Init() {
 	currentState = MenuState::MainMenu;
 
 	easyGameButton = NewButton(0, 0, 0, 0, "Easy Mode");
+
 	mediumGameButton = NewButton(0, 0, 0, 0, "Medium Mode");
+
 	hardGameButton = NewButton(0, 0, 0, 0, "Hard Mode");
+
 	settingsButton = NewButton(0, 0, 0, 0, "Settings");
+
+	dailyCard =
+		SideCard(0, 0, 0, 0, "DAILY", "CHALLENGE", "One Seed.", "One Attempt.",
+				 "Prove your worth.", "PLAY NOW", false);
+
+	dailyCard.SetColors(Color{184, 134, 11, 200}, Color{255, 215, 0, 255},
+						Color{50, 40, 30, 240});
+
+	placeholderCard =
+		SideCard(0, 0, 0, 0, "WEEKLY", "DUNGEON", "New modifiers.",
+				 "Special rewards.", "Coming soon.", "LOCKED", true);
+
+	placeholderCard.SetColors(Color{100, 110, 120, 200},
+							  Color{180, 200, 220, 255},
+							  Color{40, 50, 60, 240});
 }
 
 void Menu::UpdateButtonsPosition() {
 	float w = static_cast<float>(GetScreenWidth());
+
 	float h = static_cast<float>(GetScreenHeight());
 
 	auto layout = ComputeMainMenuLayout(w, h);
 
 	float cardW = std::clamp(w * 0.25f, 260.0f, 350.0f);
+
 	float cardH = std::clamp(h * 0.40f, 300.0f, 400.0f);
+
 	float cardY =
 		layout.topY -
 		(cardH - (layout.buttonH * 3.0f + layout.spacing * 3.0f)) / 2.0f;
+
 	float marginX = w * 0.05f;
 
-	placeholderCard.rect = {
-		.x = marginX, .y = cardY, .width = cardW, .height = cardH};
-	dailyCard.rect = {
-		.x = w - cardW - marginX, .y = cardY, .width = cardW, .height = cardH};
+	placeholderCard.SetPosition(marginX, cardY);
+
+	placeholderCard.SetSize(cardW, cardH);
+
+	dailyCard.SetPosition(w - cardW - marginX, cardY);
+
+	dailyCard.SetSize(cardW, cardH);
 
 	easyGameButton.SetSize(layout.buttonW, layout.buttonH);
+
 	easyGameButton.SetPosition(layout.x, layout.topY);
 
 	mediumGameButton.SetSize(layout.buttonW, layout.buttonH);
+
 	mediumGameButton.SetPosition(
 		layout.x, layout.topY + 1.0f * (layout.buttonH + layout.spacing));
 
 	hardGameButton.SetSize(layout.buttonW, layout.buttonH);
+
 	hardGameButton.SetPosition(
 		layout.x, layout.topY + 2.0f * (layout.buttonH + layout.spacing));
 
 	settingsButton.SetSize(layout.buttonW, layout.buttonH);
+
 	settingsButton.SetPosition(
 		layout.x, layout.topY + 3.0f * (layout.buttonH + layout.spacing));
 }
@@ -100,32 +131,33 @@ void Menu::Update() {
 	hardGameButton.Update();
 	settingsButton.Update();
 
-	Vector2 mousePos = GetMousePosition();
-
-	dailyCard.isHovered = CheckCollisionPointRec(mousePos, dailyCard.rect);
-	dailyCard.isClicked =
-		dailyCard.isHovered && IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
-
-	placeholderCard.isHovered =
-		CheckCollisionPointRec(mousePos, placeholderCard.rect);
-	placeholderCard.isClicked =
-		placeholderCard.isHovered && IsMouseButtonReleased(MOUSE_BUTTON_LEFT);
+	dailyCard.Update();
+	placeholderCard.Update();
 
 	if (easyGameButton.IsClicked()) {
+
 		currentState = MenuState::ClassicGameShoudlStart;
+
 		selectedDifficulty = Difficulty::Easy;
+
 		IsStartGame = true;
 	} else if (mediumGameButton.IsClicked()) {
+
 		currentState = MenuState::ClassicGameShoudlStart;
+
 		selectedDifficulty = Difficulty::Medium;
+
 		IsStartGame = true;
 	} else if (hardGameButton.IsClicked()) {
-		currentState = MenuState::ClassicGameShoudlStart;
-		selectedDifficulty = Difficulty::Hard;
-		IsStartGame = true;
-	} else if (dailyCard.isClicked) {
 
-	} else if (placeholderCard.isClicked) {
+		currentState = MenuState::ClassicGameShoudlStart;
+
+		selectedDifficulty = Difficulty::Hard;
+
+		IsStartGame = true;
+	} else if (dailyCard.IsClicked()) {
+
+	} else if (placeholderCard.IsClicked()) {
 	}
 
 	if (settingsButton.IsClicked()) {
@@ -134,79 +166,18 @@ void Menu::Update() {
 }
 
 void Menu::Render(TextureManager &textureManager) {
-	auto drawSideCard = [](SideCard &card, Color baseBorder, Color hoverBorder,
-						   Color hoverBg, const char *title,
-						   const char *subtitle, const char *desc1,
-						   const char *desc2, const char *desc3,
-						   const char *btnText, bool isLocked) {
-		Rectangle bg = card.rect;
-
-		if (card.isHovered) {
-			bg.x -= 4;
-			bg.y -= 4;
-			bg.width += 8;
-			bg.height += 8;
-		}
-
-		Color bgColor = card.isHovered ? hoverBg : Color{30, 25, 30, 220};
-		Color borderColor = card.isHovered ? hoverBorder : baseBorder;
-
-		DrawRectangleRec(bg, bgColor);
-		DrawRectangleLinesEx(bg, 3.0f, borderColor);
-
-		Rectangle innerRect = {bg.x + 8, bg.y + 8, bg.width - 16,
-							   bg.height - 16};
-		DrawRectangleLinesEx(innerRect, 1.0f, ColorAlpha(borderColor, 0.3f));
-
-		int titleFontSize = 40;
-		DrawText(title,
-				 bg.x + (bg.width - MeasureText(title, titleFontSize)) / 2,
-				 bg.y + 30, titleFontSize, borderColor);
-
-		int subFontSize = 26;
-		DrawText(subtitle,
-				 bg.x + (bg.width - MeasureText(subtitle, subFontSize)) / 2,
-				 bg.y + 75, subFontSize, WHITE);
-
-		DrawLine(bg.x + 30, bg.y + 120, bg.x + bg.width - 30, bg.y + 120,
-				 Color{255, 255, 255, 50});
-
-		int descFont = 20;
-		DrawText(desc1, bg.x + (bg.width - MeasureText(desc1, descFont)) / 2,
-				 bg.y + 150, descFont, LIGHTGRAY);
-		DrawText(desc2, bg.x + (bg.width - MeasureText(desc2, descFont)) / 2,
-				 bg.y + 180, descFont, LIGHTGRAY);
-		DrawText(desc3, bg.x + (bg.width - MeasureText(desc3, descFont)) / 2,
-				 bg.y + 220, descFont, isLocked ? LIGHTGRAY : borderColor);
-
-		Rectangle playBtn = {bg.x + 20, bg.y + bg.height - 60, bg.width - 40,
-							 40};
-		DrawRectangleRec(playBtn, card.isHovered
-									  ? borderColor
-									  : ColorAlpha(borderColor, 0.4f));
-		DrawText(btnText,
-				 playBtn.x + (playBtn.width - MeasureText(btnText, 20)) / 2,
-				 playBtn.y + 10, 20,
-				 isLocked && !card.isHovered ? LIGHTGRAY : BLACK);
-	};
-
 	easyGameButton.Draw();
 	mediumGameButton.Draw();
 	hardGameButton.Draw();
 	settingsButton.Draw();
 
-	drawSideCard(placeholderCard, Color{100, 110, 120, 200},
-				 Color{180, 200, 220, 255}, Color{40, 50, 60, 240}, "WEEKLY",
-				 "DUNGEON", "New modifiers.", "Special rewards.",
-				 "Coming soon.", "LOCKED", true);
-
-	drawSideCard(dailyCard, Color{184, 134, 11, 200}, Color{255, 215, 0, 255},
-				 Color{50, 40, 30, 240}, "DAILY", "CHALLENGE", "One Seed.",
-				 "One Attempt.", "Prove your worth.", "PLAY NOW", false);
+	dailyCard.Render();
+	placeholderCard.Render();
 }
 
 void Menu::Reset() {
 	IsStartGame = false;
+
 	currentState = MenuState::MainMenu;
 }
 
