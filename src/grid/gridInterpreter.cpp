@@ -100,8 +100,10 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 	if (playerStats.hp < 0 || playerStats.gameWon) {
 		for (size_t y = 0; y < grid->GetHeight(); ++y) {
 			for (size_t x = 0; x < grid->GetWidth(); ++x) {
-				if (grid->cells[y][x].state != CellState::Hinting)
+				if (grid->cells[y][x].state != CellState::Hinting &&
+					grid->cells[y][x].state != CellState::TakingDamage) {
 					grid->cells[y][x].state = CellState::Revealed;
+				}
 			}
 		}
 	}
@@ -146,7 +148,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 			playerStats.hp -= cell.val;
 			playerStats.currentPointsToEvo += 3;
 			cell.defeted = true;
-			cell.state = CellState::pointsNotTaken;
+			cell.state = CellState::TakingDamage;
 			return;
 		}
 
@@ -221,7 +223,7 @@ void GridInterpreter::OnRevealedClick(int x, int y, Grid *&grid,
 	}
 
 	playerStats.hp -= cell.val;
-	cell.state = CellState::pointsNotTaken;
+	cell.state = CellState::TakingDamage;
 	cell.defeted = false;
 }
 

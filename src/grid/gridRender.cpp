@@ -63,8 +63,8 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 								  grid, offset);
 				break;
 			case Grid::CellState::TakingDamage:
-				RevealingCellRender(static_cast<int>(x), static_cast<int>(y),
-									grid, offset);
+				ReveledCellRender(static_cast<int>(x), static_cast<int>(y),
+								  grid, offset);
 				TakingDamageCellRender(static_cast<int>(x), static_cast<int>(y),
 									   grid, offset);
 				break;
@@ -268,7 +268,17 @@ void GridRender::TakingDamageCellRender(int x, int y, Grid &grid,
 		break;
 	}
 
-	RenderTexture(x, y, scratchTexTd, offset);
+	const int size = Grid::CELL_SIZE;
+	const Texture2D &tex = textureManager->get(scratchTexTd);
+
+	const float scale = (size * 1.5f) / static_cast<float>(tex.width);
+	const float scaledW = tex.width * scale;
+	const float scaledH = tex.height * scale;
+
+	Vector2 pos = {x * size + offset.x + (size - scaledW) * 0.5f,
+				   y * size + offset.y + (size - scaledH) * 0.5f};
+
+	DrawTextureExCentered(tex, pos, 0.0f, scale, WHITE);
 }
 
 void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,
