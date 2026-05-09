@@ -24,6 +24,14 @@ enum class TextureId {
 	Explosion5,
 	Explosion6,
 	Explosion7,
+	Scratch0,
+	Scratch1,
+	Scratch2,
+	Scratch3,
+	Scratch4,
+	Scratch5,
+	Scratch6,
+	Scratch7,
 	OgreBig,
 	OgreSmall,
 	BeginButton,
@@ -76,6 +84,14 @@ class TextureManager {
 		load(TextureId::Explosion5, "assets/explosion005.png");
 		load(TextureId::Explosion6, "assets/explosion006.png");
 		load(TextureId::Explosion7, "assets/explosion007.png");
+		load(TextureId::Scratch0, "assets/CS001.png");
+		load(TextureId::Scratch1, "assets/CS002.png");
+		load(TextureId::Scratch2, "assets/CS003.png");
+		load(TextureId::Scratch3, "assets/CS004.png");
+		load(TextureId::Scratch4, "assets/CS005.png");
+		load(TextureId::Scratch5, "assets/CS006.png");
+		load(TextureId::Scratch6, "assets/CS007.png");
+		load(TextureId::Scratch7, "assets/CS008.png");
 		load(TextureId::Enemy10, "assets/enemy10.png");
 		load(TextureId::Enemy11, "assets/enemy11.png");
 		load(TextureId::OgreBig, "assets/ogreBig.png");

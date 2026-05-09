@@ -62,6 +62,12 @@ void GridRender::RenderGrid(TextureManager const *textureManager, Grid &grid,
 				ReveledCellRender(static_cast<int>(x), static_cast<int>(y),
 								  grid, offset);
 				break;
+			case Grid::CellState::TakingDamage:
+				RevealingCellRender(static_cast<int>(x), static_cast<int>(y),
+									grid, offset);
+				TakingDamageCellRender(static_cast<int>(x), static_cast<int>(y),
+									   grid, offset);
+				break;
 			case Grid::CellState::pointsNotTaken:
 				PointsNotTakenCellRender(static_cast<int>(x),
 										 static_cast<int>(y), grid, offset);
@@ -227,6 +233,42 @@ void GridRender::ReveledCellRender(int x, int y, Grid &grid, Vector2 offset) {
 		DrawText(text.c_str(), static_cast<int>(x * size + offset.x + 8),
 				 static_cast<int>(y * size + offset.y + 8), 20, RED);
 	}
+}
+
+void GridRender::TakingDamageCellRender(int x, int y, Grid &grid,
+										Vector2 offset) {
+	auto &current = grid.cells[y][x];
+
+	TextureId scratchTexTd;
+
+	switch (current.animationFrame) {
+	case 0:
+		scratchTexTd = TextureId::Scratch0;
+		break;
+	case 1:
+		scratchTexTd = TextureId::Scratch1;
+		break;
+	case 2:
+		scratchTexTd = TextureId::Scratch2;
+		break;
+	case 3:
+		scratchTexTd = TextureId::Scratch3;
+		break;
+	case 4:
+		scratchTexTd = TextureId::Scratch4;
+		break;
+	case 5:
+		scratchTexTd = TextureId::Scratch5;
+		break;
+	case 6:
+		scratchTexTd = TextureId::Scratch6;
+		break;
+	case 7:
+		scratchTexTd = TextureId::Scratch7;
+		break;
+	}
+
+	RenderTexture(x, y, scratchTexTd, offset);
 }
 
 void GridRender::PointsNotTakenCellRender(int x, int y, Grid &grid,

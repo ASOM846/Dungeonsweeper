@@ -11,7 +11,8 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 		for (size_t x = 0; x < grid->GetWidth(); ++x) {
 			Grid::Cell &cell = grid->cells[y][x];
 
-			if (cell.state == CellState::Revealing) {
+			if (cell.state == CellState::Revealing ||
+				cell.state == CellState::TakingDamage) {
 				cell.framesCounter++;
 
 				if (cell.framesCounter >= framesSpeed) {
@@ -19,7 +20,14 @@ void GridInterpreter::Update(Grid *&grid, PlayerStats &playerStats, UI &ui,
 					cell.animationFrame++;
 
 					if (cell.animationFrame > 7) {
-						cell.state = CellState::Revealed;
+
+						if (cell.state == Grid::CellState::Revealing) {
+							cell.state = CellState::Revealed;
+						} else if (cell.state ==
+								   Grid::CellState::TakingDamage) {
+							cell.state = CellState::pointsNotTaken;
+						}
+
 						cell.animationFrame = 0;
 						cell.framesCounter = 0;
 					}

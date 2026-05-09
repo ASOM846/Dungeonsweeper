@@ -1,4 +1,5 @@
 #pragma once
+#include <cstdint>
 #include <raylib.h>
 #include <string>
 #include <vector>
@@ -14,6 +15,7 @@ struct Grid {
 		Hidden,
 		Revealing,
 		Revealed,
+		TakingDamage,
 		pointsNotTaken,
 		Hinting,
 	};
