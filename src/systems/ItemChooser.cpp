@@ -1,4 +1,5 @@
 #include "ItemChooser.hpp"
+#include <algorithm>
 #include <memory>
 #include <raylib.h>
 
@@ -14,6 +15,10 @@ std::unique_ptr<PassiveItem> ItemChooser::CreateUncoverRandomRare() {
 	return std::make_unique<UncoverRandomRare>();
 }
 
+std::unique_ptr<PassiveItem> ItemChooser::CreateAddKey() {
+	return std::make_unique<AddChestKey>();
+}
+
 ItemChooser::ItemChooser() {}
 
 ItemChooser::~ItemChooser() {}
@@ -23,6 +28,7 @@ void ItemChooser::Init() {
 	allFactories.push_back(&ItemChooser::CreateRegen);
 	allFactories.push_back(&ItemChooser::CreatePointsToEvo);
 	allFactories.push_back(&ItemChooser::CreateUncoverRandomRare);
+	allFactories.push_back(&ItemChooser::CreateAddKey);
 
 	BuildWeightedPool();
 	RollChoices();
@@ -200,7 +206,7 @@ void ItemChooser::BuildWeightedPool() {
 	weightedPool.clear();
 
 	for (auto factory : allFactories) {
-		auto probe = factory(); // tworzymy chwilowo, żeby odczytać Rate
+		auto probe = factory();
 		const int weight = SpawnRateToWeight(probe->Rate);
 
 		for (int i = 0; i < weight; ++i) {
@@ -210,14 +216,28 @@ void ItemChooser::BuildWeightedPool() {
 }
 
 void ItemChooser::RollChoices() {
+
 	availableItems.clear();
 
 	if (weightedPool.empty())
 		return;
 
+	std::vector<FactoryFn> usedFactories;
+
 	for (int i = 0; i < numberOfChooses; ++i) {
-		const int idx = GetRandomValue(0, (int)weightedPool.size() - 1);
-		auto factory = weightedPool[idx];
+
+		FactoryFn factory = nullptr;
+
+		do {
+			const int idx = GetRandomValue(0, (int)weightedPool.size() - 1);
+
+			factory = weightedPool[idx];
+
+		} while (std::find(usedFactories.begin(), usedFactories.end(),
+						   factory) != usedFactories.end());
+
+		usedFactories.push_back(factory);
+
 		availableItems.push_back(factory());
 	}
 }

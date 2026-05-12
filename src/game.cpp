@@ -99,7 +99,7 @@ void Game::UpdatePlaying() {
 	}
 
 	if (IsKeyPressed(KEY_J)) {
-		playerStats.timer -= 10.0F;
+		playerStats.isChoosePending = true;
 	}
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);

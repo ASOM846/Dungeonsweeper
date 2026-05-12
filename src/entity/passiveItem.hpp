@@ -10,6 +10,7 @@ class PassiveItem {
 		Regen,
 		PointsToEvo,
 		UncoverRandom,
+		AddChestKey,
 	};
 
 	enum SpawnRate {
@@ -31,7 +32,7 @@ class PassiveItem {
 	int turnsToActivate;
 	int turnsCounter;
 
-	virtual PassiveType GetType() const = 0;
+	[[nodiscard]] virtual PassiveType GetType() const = 0;
 	virtual void ApplyEffect(Grid &grid, PlayerStats &playerStats) = 0;
 };
 
@@ -45,7 +46,7 @@ co x tur zabiera 1 hp i dodaje punkty ewolucji
 class Regen : public PassiveItem {
   public:
 	Regen() {
-		Rate = Medium;
+		Rate = Common;
 		turnsToActivate = 8;
 		turnsCounter = 0;
 
@@ -54,7 +55,9 @@ class Regen : public PassiveItem {
 		shortDesc = "+2 HP";
 	}
 
-	PassiveType GetType() const override { return PassiveType::Regen; }
+	[[nodiscard]] PassiveType GetType() const override {
+		return PassiveType::Regen;
+	}
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
 		(void)grid;
 		playerStats.Heal(4);
@@ -64,7 +67,7 @@ class Regen : public PassiveItem {
 class PointsToEvo : public PassiveItem {
   public:
 	PointsToEvo() {
-		Rate = Medium;
+		Rate = Common;
 		turnsToActivate = 8;
 		turnsCounter = 0;
 
@@ -73,7 +76,9 @@ class PointsToEvo : public PassiveItem {
 		shortDesc = "+4 EVO";
 	}
 
-	PassiveType GetType() const override { return PassiveType::PointsToEvo; }
+	[[nodiscard]] PassiveType GetType() const override {
+		return PassiveType::PointsToEvo;
+	}
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
 		(void)grid;
 		playerStats.currentPointsToEvo += 4;
@@ -83,7 +88,7 @@ class PointsToEvo : public PassiveItem {
 class UncoverRandomRare : public PassiveItem {
   public:
 	UncoverRandomRare() {
-		Rate = Rare;
+		Rate = Common;
 		turnsToActivate = 8;
 		turnsCounter = 0;
 
@@ -92,7 +97,9 @@ class UncoverRandomRare : public PassiveItem {
 		shortDesc = "show random";
 	}
 
-	PassiveType GetType() const override { return PassiveType::UncoverRandom; }
+	[[nodiscard]] PassiveType GetType() const override {
+		return PassiveType::UncoverRandom;
+	}
 	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
 		(void)playerStats;
 		int attempts = 500;
@@ -108,6 +115,29 @@ class UncoverRandomRare : public PassiveItem {
 				break;
 			}
 		}
+	}
+};
+
+class AddChestKey : public PassiveItem {
+  public:
+	AddChestKey() {
+		Rate = Common;
+		turnsToActivate = 25;
+		turnsCounter = 0;
+
+		color = MAGENTA;
+		desc = "add key";
+		shortDesc = desc;
+	}
+
+	[[nodiscard]] PassiveType GetType() const override {
+		return PassiveType::AddChestKey;
+	}
+
+	void ApplyEffect(Grid &grid, PlayerStats &playerStats) override {
+		(void)grid;
+
+		playerStats.keys++;
 	}
 };
 

@@ -16,10 +16,12 @@ class ItemChooser {
 
   private:
 	using ItemFactory = std::unique_ptr<PassiveItem> (*)();
+	using FactoryFn = std::unique_ptr<PassiveItem> (*)();
 
 	static std::unique_ptr<PassiveItem> CreateRegen();
 	static std::unique_ptr<PassiveItem> CreatePointsToEvo();
 	static std::unique_ptr<PassiveItem> CreateUncoverRandomRare();
+	static std::unique_ptr<PassiveItem> CreateAddKey();
 
 	int SpawnRateToWeight(PassiveItem::SpawnRate rate) const;
 	void BuildWeightedPool();
