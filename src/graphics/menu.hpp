@@ -33,10 +33,11 @@ class Menu {
 		return selectedDifficulty;
 	}
 
+	[[nodiscard]] GameMode GetSelectedMode() const { return selectedMode; }
+
   private:
 	void UpdateButtonsPosition();
 
-  private:
 	NewButton easyGameButton;
 	NewButton mediumGameButton;
 	NewButton hardGameButton;
@@ -46,6 +47,7 @@ class Menu {
 	SideCard placeholderCard;
 
 	Difficulty selectedDifficulty;
+	GameMode selectedMode;
 
 	bool IsStartGame;
 

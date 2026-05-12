@@ -17,6 +17,7 @@ enum class GameType {
 };
 
 struct GameConfig {
+	GameMode mode;
 	Difficulty difficulty;
 	GameType type;
 };

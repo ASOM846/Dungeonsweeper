@@ -69,8 +69,8 @@ void Menu::Init() {
 						Color{50, 40, 30, 240});
 
 	placeholderCard =
-		SideCard(0, 0, 0, 0, "WEEKLY", "DUNGEON", "New modifiers.",
-				 "Special rewards.", "Coming soon.", "LOCKED", true);
+		SideCard(0, 0, 0, 0, "ENDLESS", "DUNGEON", "New modifiers.",
+				 "Special rewards.", "Coming soon.", "LOCKED", false);
 
 	placeholderCard.SetColors(Color{100, 110, 120, 200},
 							  Color{180, 200, 220, 255},
@@ -133,10 +133,11 @@ void Menu::Update() {
 	dailyCard.Update();
 	placeholderCard.Update();
 
+	selectedMode = GameMode::Classic;
+
 	if (easyGameButton.IsClicked()) {
 
 		currentState = MenuState::ClassicGameShoudlStart;
-
 		selectedDifficulty = Difficulty::Easy;
 
 		IsStartGame = true;
@@ -157,6 +158,9 @@ void Menu::Update() {
 	} else if (dailyCard.IsClicked()) {
 
 	} else if (placeholderCard.IsClicked()) {
+		selectedMode = GameMode::Endless;
+		selectedDifficulty = Difficulty::Medium;
+		IsStartGame = true;
 	}
 
 	if (settingsButton.IsClicked()) {

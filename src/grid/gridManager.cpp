@@ -3,8 +3,6 @@
 
 void GridManager::InitGrid(PlayerStats &playerStats, GameMode gameMode,
 						   Difficulty difficulty) {
-	(void)gameMode;
-
 	currentGrid = new Grid(13, 10, nullptr);
 
 	GridConfig config = GetGridConfig(difficulty);

@@ -56,7 +56,7 @@ void Game::Reset() {
 
 void Game::RunGame(GameConfig conf) {
 	currentDiff = conf.difficulty;
-	gridManager.InitGrid(playerStats, gameMode, conf.difficulty);
+	gridManager.InitGrid(playerStats, conf.mode, conf.difficulty);
 	playerStats = PlayerStats();
 
 	if (conf.type == GameType::Challenge) {
@@ -87,6 +87,11 @@ void Game::UpdatePlaying() {
 	}
 
 	popup.Update(gridManager.GetGrid(), playerStats);
+
+	if (playerStats.shoudlNewLevelStart) {
+		playerStats.shoudlNewLevelStart = false;
+		gridManager.InitGrid(playerStats, gameMode, Difficulty::Medium);
+	}
 
 	if (playerStats.hp < 0 || playerStats.timer < 0) {
 		ui.TriggerMessageBox("You have lost! \n Press R to return to menu.");

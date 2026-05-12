@@ -48,7 +48,7 @@ class Game {
 	void RenderLose();
 
 	GameState gameState;
-	GameMode gameMode = GameMode::Classic;
+	GameMode gameMode;
 	Difficulty currentDiff;
 
 	Popup popup;

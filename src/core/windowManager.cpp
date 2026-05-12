@@ -45,6 +45,7 @@ void WindowManager::Update() {
 			menu.Update();
 			if (menu.GetCurrentState() == MenuState::ClassicGameShoudlStart) {
 				currentConfig.difficulty = menu.GetSelectedDifficulty();
+				currentConfig.mode = menu.GetSelectedMode();
 				SwitchMode(AppMode::SelectingGameType);
 			}
 			break;
