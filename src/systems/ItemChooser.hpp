@@ -23,7 +23,7 @@ class ItemChooser {
 	static std::unique_ptr<PassiveItem> CreateUncoverRandomRare();
 	static std::unique_ptr<PassiveItem> CreateAddKey();
 
-	int SpawnRateToWeight(PassiveItem::SpawnRate rate) const;
+	[[nodiscard]] int SpawnRateToWeight(PassiveItem::SpawnRate rate) const;
 	void BuildWeightedPool();
 	void RollChoices();
 

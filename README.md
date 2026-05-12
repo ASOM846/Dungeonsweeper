@@ -70,7 +70,8 @@ Copy assets folder to your build directory and run
 - [x] Working passive abilities
 - [ ] Add more passive abilities
 - [ ] Score saving
-- [ ] Time Chalange (almost working)
+- [ ] Reimplement and rethink endless mode
+- [X] Time Chalange
 - [ ] Time adding item for Chalange Modes
 - [ ] Random enemies with special abilities that might or might not spawn
 - [ ] Daily challange based on current date!!!
