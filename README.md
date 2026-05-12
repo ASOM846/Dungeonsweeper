@@ -42,6 +42,8 @@ while the right mouse button opens the flag menu, where you can flag cells.
 
 ## Building the project
 
+### arch linux
+
 ```
   sudo pacman -Syu --needed git base-devel cmake ninja ccache sccache pkgconf raylib
   git clone https://github.com/ASOM846/Dungeonsweeper.git
