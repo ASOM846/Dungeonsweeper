@@ -21,6 +21,25 @@ You don't need to build the project to try it out! You can play the WebAssembly 
 
 ![screenshot 1 (gameplay)](screenshots/screenshot1.png)
 
+## Gameplay
+
+### Goal of the game
+
+Defeat wizzard in possibly the shortest time
+
+### Game modes
+
+Currently, the game features only 3 modes.
+So far, the only difference between them is the spawn rate of pickups
+and enemies.
+Each mode except for standard gameplay also features timed challenge mode.
+
+### Controls
+
+Navigation is done using the mouse. In-game,
+the left mouse button interacts with cells,
+while the right mouse button opens the flag menu, where you can flag cells.
+
 ## Building the project
 
 ```
