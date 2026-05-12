@@ -38,9 +38,7 @@ class PassiveItem {
 
 /*
  pomysly na pasywki:
-co 25 tur dodaje kluczyk do skrynki
 co x tur zabiera 1 hp i dodaje punkty ewolucji
-
 */
 
 class Regen : public PassiveItem {
@@ -51,8 +49,8 @@ class Regen : public PassiveItem {
 		turnsCounter = 0;
 
 		color = RED;
-		desc = "+2 HP / 8";
-		shortDesc = "+2 HP";
+		desc = "+4 HP";
+		shortDesc = "+4 HP";
 	}
 
 	[[nodiscard]] PassiveType GetType() const override {
@@ -72,7 +70,7 @@ class PointsToEvo : public PassiveItem {
 		turnsCounter = 0;
 
 		color = GOLD;
-		desc = "+4 EVO / 8";
+		desc = "+4 EVO";
 		shortDesc = "+4 EVO";
 	}
 
@@ -93,7 +91,7 @@ class UncoverRandomRare : public PassiveItem {
 		turnsCounter = 0;
 
 		color = BLUE;
-		desc = "show random / 8";
+		desc = "uncover random";
 		shortDesc = "show random";
 	}
 
@@ -126,7 +124,7 @@ class AddChestKey : public PassiveItem {
 		turnsCounter = 0;
 
 		color = MAGENTA;
-		desc = "add key";
+		desc = "+1 key";
 		shortDesc = desc;
 	}
 

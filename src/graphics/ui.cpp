@@ -344,32 +344,6 @@ void UI::RenderUi(PlayerStats &playerStats, const GameState &gameState) {
 						contentBottomPad - rowGap * (totalSlots - 1)) /
 					   static_cast<float>(totalSlots);
 
-	auto itemLabel = [](PassiveItem::PassiveType t) -> const char * {
-		switch (t) {
-		case PassiveItem::PassiveType::Regen:
-			return "+2 HP";
-		case PassiveItem::PassiveType::PointsToEvo:
-			return "+1 EVO";
-		case PassiveItem::PassiveType::UncoverRandom:
-			return "uncover random cell";
-		default:
-			return "";
-		}
-	};
-
-	auto itemColor = [](PassiveItem::PassiveType t) -> Color {
-		switch (t) {
-		case PassiveItem::PassiveType::Regen:
-			return Color{185, 70, 70, 255};
-		case PassiveItem::PassiveType::PointsToEvo:
-			return Color{90, 170, 110, 255};
-		case PassiveItem::PassiveType::UncoverRandom:
-			return GOLD;
-		default:
-			return Color{100, 100, 100, 255};
-		}
-	};
-
 	for (int i = 0; i < totalSlots; ++i) {
 		const float rowX = static_cast<float>(cardX) + 10.0f;
 		const float rowY =
