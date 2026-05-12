@@ -72,7 +72,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 	for (size_t y = 0; y < grid.GetHeight(); ++y) {
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {
 			if (grid.cells[y][x].specialFunction ==
-				Grid::SpecialFunction::Necromancer)
+				Grid::SpecialFunction::Ladder)
 				grid.cells[y][x].state = Grid::CellState::Revealed;
 		}
 	}

@@ -158,6 +158,7 @@ void Menu::Update() {
 	} else if (dailyCard.IsClicked()) {
 
 	} else if (placeholderCard.IsClicked()) {
+		currentState = MenuState::ClassicGameShoudlStart;
 		selectedMode = GameMode::Endless;
 		selectedDifficulty = Difficulty::Medium;
 		IsStartGame = true;
