@@ -1,5 +1,4 @@
 #include "menu.hpp"
-#include "../grid/grid.hpp"
 #include "card.hpp"
 #include <algorithm>
 #include <raylib.h>
@@ -63,18 +62,16 @@ void Menu::Init() {
 	settingsButton = NewButton(0, 0, 0, 0, "Settings");
 
 	dailyCard = SideCard(0, 0, 0, 0, "DAILY", "CHALLENGE", "One Seed.",
-						 "One Attempt.", "Coming soon.", "PLAY NOW", false);
+						 "One Attempt.", "Coming soon.", "PLAY", false);
 
 	dailyCard.SetColors(Color{184, 134, 11, 200}, Color{255, 215, 0, 255},
 						Color{50, 40, 30, 240});
 
-	placeholderCard =
-		SideCard(0, 0, 0, 0, "ENDLESS", "DUNGEON", "New modifiers.",
-				 "Special rewards.", "Coming soon.", "LOCKED", false);
+	endlessCard = SideCard(0, 0, 0, 0, "ENDLESS", "DUNGEON", "New modifiers.",
+						   "Special rewards.", "Coming soon.", "PLAY", false);
 
-	placeholderCard.SetColors(Color{100, 110, 120, 200},
-							  Color{180, 200, 220, 255},
-							  Color{40, 50, 60, 240});
+	endlessCard.SetColors(Color{100, 110, 120, 200}, Color{180, 200, 220, 255},
+						  Color{40, 50, 60, 240});
 }
 
 void Menu::UpdateButtonsPosition() {
@@ -94,9 +91,9 @@ void Menu::UpdateButtonsPosition() {
 
 	float marginX = w * 0.05f;
 
-	placeholderCard.SetPosition(marginX, cardY);
+	endlessCard.SetPosition(marginX, cardY);
 
-	placeholderCard.SetSize(cardW, cardH);
+	endlessCard.SetSize(cardW, cardH);
 
 	dailyCard.SetPosition(w - cardW - marginX, cardY);
 
@@ -131,7 +128,7 @@ void Menu::Update() {
 	settingsButton.Update();
 
 	dailyCard.Update();
-	placeholderCard.Update();
+	endlessCard.Update();
 
 	selectedMode = GameMode::Classic;
 
@@ -157,7 +154,7 @@ void Menu::Update() {
 		IsStartGame = true;
 	} else if (dailyCard.IsClicked()) {
 
-	} else if (placeholderCard.IsClicked()) {
+	} else if (endlessCard.IsClicked()) {
 		currentState = MenuState::ClassicGameShoudlStart;
 		selectedMode = GameMode::Endless;
 		selectedDifficulty = Difficulty::Medium;
@@ -176,7 +173,7 @@ void Menu::Render(TextureManager &textureManager) {
 	settingsButton.Draw();
 
 	dailyCard.Render();
-	placeholderCard.Render();
+	endlessCard.Render();
 }
 
 void Menu::Reset() {

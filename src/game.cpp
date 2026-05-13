@@ -90,7 +90,8 @@ void Game::UpdatePlaying() {
 
 	if (playerStats.shoudlNewLevelStart) {
 		playerStats.shoudlNewLevelStart = false;
-		gridManager.InitGrid(playerStats, gameMode, Difficulty::Medium);
+		gridManager.InitGrid(playerStats, GameMode::Endless,
+							 Difficulty::Medium);
 	}
 
 	if (playerStats.hp < 0 || playerStats.timer < 0) {

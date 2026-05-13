@@ -44,7 +44,7 @@ class Menu {
 	NewButton settingsButton;
 
 	SideCard dailyCard;
-	SideCard placeholderCard;
+	SideCard endlessCard;
 
 	Difficulty selectedDifficulty;
 	GameMode selectedMode;
