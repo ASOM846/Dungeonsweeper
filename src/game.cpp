@@ -125,7 +125,7 @@ void Game::RenderPlaying() {
 }
 
 void Game::UpdateLose() {
-	if (IsKeyDown(KEY_R)) {
+	if (IsKeyDown(KEY_R) || !ui.IsMessageBoxOpen()) {
 		gameState = GameState::ShoudlReturnToMenu;
 		gridManager.Clear();
 	}
