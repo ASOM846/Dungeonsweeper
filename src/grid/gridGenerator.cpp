@@ -69,6 +69,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 		PlaceSpecialFunction(grid, Grid::SpecialFunction::GoUpGrid, 1, 0);
 	}
 
+#ifndef NDEBUG
 	for (size_t y = 0; y < grid.GetHeight(); ++y) {
 		for (size_t x = 0; x < grid.GetWidth(); ++x) {
 			if (grid.cells[y][x].specialFunction ==
@@ -76,6 +77,7 @@ void GridGenerator::Init(Grid &grid, PlayerStats &playerStats,
 				grid.cells[y][x].state = Grid::CellState::Revealed;
 		}
 	}
+#endif
 }
 
 Grid::GridType GridGenerator::GetGridTypeForGameMode(const GameMode &gm,

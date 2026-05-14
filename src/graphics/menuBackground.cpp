@@ -72,7 +72,9 @@ void MenuBackground::RenderBcg(const TextureManager &textureManager) {
 
 		Vector2 origin = {Grid::CELL_SIZE / 2.0f, Grid::CELL_SIZE / 2.0f};
 
-		DrawTexturePro(tex, source, dest, origin, rotation, WHITE);
+		// Color tint = Color{244, 244, 244, 200};
+
+		DrawTexturePro(tex, source, dest, origin, rotation, RAYWHITE);
 	}
 
 	const int fontSize = 60;

@@ -87,6 +87,7 @@ void Game::UpdatePlaying() {
 	}
 
 	popup.Update(gridManager.GetGrid(), playerStats);
+	screenShake.update(GetFrameTime());
 
 	if (playerStats.shoudlNewLevelStart) {
 		playerStats.shoudlNewLevelStart = false;
@@ -105,7 +106,7 @@ void Game::UpdatePlaying() {
 	}
 
 	if (IsKeyPressed(KEY_J)) {
-		playerStats.isChoosePending = true;
+		screenShake.trigger(1.0F, 1.0F);
 	}
 
 	passiveItemManager.Update(gridManager.GetGrid(), playerStats);

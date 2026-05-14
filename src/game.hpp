@@ -3,6 +3,7 @@
 #include "entity/playerStats.hpp"
 #include "gameMode.hpp"
 #include "graphics/popup.hpp"
+#include "graphics/screenShake.hpp"
 #include "grid/gridManager.hpp"
 #include "inputManager.hpp"
 #include "systems/ItemChooser.hpp"
@@ -59,5 +60,6 @@ class Game {
 	EvolutionSystem evolutionSystem;
 	GridManager gridManager;
 	TextureManager textureManager;
+	ScreenShake screenShake;
 	UI ui;
 };

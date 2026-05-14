@@ -100,7 +100,11 @@ void WindowManager::Render() {
 	}
 	mouseManager.Render(game.GetTextureManager());
 
+#ifndef NDEBUG
 	DrawFPS(GetScreenWidth() - 100, GetScreenHeight() - 40);
+	DrawText("DEBUG", GetScreenWidth() - 200, GetScreenHeight() - 100, 40, RED);
+#endif
+
 	EndDrawing();
 }
 

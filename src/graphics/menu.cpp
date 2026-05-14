@@ -177,7 +177,7 @@ void Menu::Render(TextureManager &textureManager) {
 }
 
 void Menu::Reset() {
-	placeholderCard.Reset();
+	endlessCard.Reset();
 	dailyCard.Reset();
 
 	IsStartGame = false;
