@@ -1,0 +1,41 @@
+#pragma once
+#include "../entity/playerStats.hpp"
+#include "../gameMode.hpp"
+#include "../graphics/shopPopup.hpp"
+#include "../textureManager.hpp"
+#include "grid.hpp"
+#include "gridUtils.hpp"
+#include <raylib.h>
+
+class GridRender {
+  public:
+	GridRender() = default;
+	~GridRender() = default;
+
+	void setPtr(const TextureManager &tm) { textureManager = &tm; }
+
+	void RenderGrid(TextureManager const *textureManager, Grid &grid,
+					GameMode gameMode, PlayerStats &playerStats);
+	void DrawEnemy(
+		TextureManager const *textureManager, const Vector2 position,
+		const int type,
+		Grid::SpecialFunction specialFunction = Grid::SpecialFunction::None);
+
+  private:
+	TextureId GetFloorTextureId(int type);
+	void HidenCellRender();
+	void RevealingCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void ReveledCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void ShopCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void TakingDamageCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void PointsNotTakenCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void HintingCellRender(int x, int y, Grid &grid, Vector2 offset,
+						   float scale);
+	void StartingCellRender(int x, int y, Grid &grid, Vector2 offset);
+	void RenderTexture(int x, int y, const TextureId &texId,
+					   const Vector2 offset, float rotation = 0.0f);
+
+	ShopPopupInfo GetPopupInfo(const Grid::Cell &cell);
+
+	const TextureManager *textureManager = nullptr;
+};
