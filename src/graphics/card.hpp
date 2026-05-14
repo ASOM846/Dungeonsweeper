@@ -15,6 +15,8 @@ class SideCard {
 	void Update();
 	void Render();
 
+	void Reset();
+
 	void SetPosition(float x, float y);
 	void SetSize(float width, float height);
 

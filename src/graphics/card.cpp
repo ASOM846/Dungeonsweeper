@@ -82,6 +82,10 @@ void SideCard::Render() {
 			 playBtn.y + 10, 20, isLocked && !isHovered ? LIGHTGRAY : BLACK);
 }
 
+void SideCard::Reset() {
+	isHovered = false;
+}
+
 void SideCard::SetPosition(float x, float y) {
 	rect.x = x;
 	rect.y = y;
