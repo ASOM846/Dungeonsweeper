@@ -5,6 +5,7 @@
 #include "../graphics/gameTypeMenu.hpp"
 #include "../graphics/menu.hpp"
 #include "../graphics/menuBackground.hpp"
+#include "../graphics/mouseManager.hpp"
 #include <raylib.h>
 
 enum class AppMode {
@@ -32,6 +33,7 @@ class WindowManager {
 	Menu menu;
 	GameTypeMenu gameTypeMenu;
 	MenuBackground background;
+	MouseManager mouseManager;
 
 	AppMode currentMode;
 

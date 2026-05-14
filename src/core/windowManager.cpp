@@ -1,6 +1,5 @@
 #include "windowManager.hpp"
 #include "../graphics/startAnim.hpp"
-#include "../utils/randomUtils.hpp"
 #include <raylib.h>
 
 void WindowManager::Init() {
@@ -17,6 +16,8 @@ void WindowManager::Init() {
 	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowState(FLAG_VSYNC_HINT);
 	// SetWindowState(FLAG_FULLSCREEN_MODE);
+
+	HideCursor();
 
 	currentMode = AppMode::Menu;
 
@@ -97,6 +98,7 @@ void WindowManager::Render() {
 			break;
 		}
 	}
+	mouseManager.Render(game.GetTextureManager());
 
 	DrawFPS(GetScreenWidth() - 100, GetScreenHeight() - 40);
 	EndDrawing();
