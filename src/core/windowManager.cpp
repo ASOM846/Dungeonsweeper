@@ -20,9 +20,9 @@ void WindowManager::Init() {
 
 	currentMode = AppMode::Menu;
 
-	menu.Init();
-	background.Init();
 	game.Init();
+	menu.Init(game.GetTextureManager());
+	background.Init();
 }
 
 void WindowManager::Run() {

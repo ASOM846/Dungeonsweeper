@@ -20,7 +20,7 @@ class Menu {
 	Menu() : IsStartGame(false), currentState(MenuState::MainMenu) {}
 	~Menu() = default;
 
-	void Init();
+	void Init(TextureManager &tm);
 	void Reset();
 	void Update();
 	void Render(TextureManager &textureManager);
@@ -52,6 +52,7 @@ class Menu {
 	bool IsStartGame;
 
 	MenuState currentState;
+
 	const int bigButtonHeight = 70;
 	const int bigButtonWidth = 300;
 	const int mainButtionsSpacing = 20;

@@ -100,10 +100,10 @@ void GameTypeMenu::InitButtons() {
 
 	int centerX = screenWidth / 2;
 
-	buttonStandard =
-		NewButton(leftButtonX, buttonY, buttonW, buttonH, "Standard Mode");
-	buttonChallenge =
-		NewButton(rightButtonX, buttonY, buttonW, buttonH, "Challenge Mode");
-	buttonGoBack =
-		NewButton(centerX - buttonW / 2, centerY + 100, buttonW, buttonH, "<");
+	buttonStandard = NewButton(leftButtonX, buttonY, buttonW, buttonH,
+							   "Standard Mode", GetFontDefault());
+	buttonChallenge = NewButton(rightButtonX, buttonY, buttonW, buttonH,
+								"Challenge Mode", GetFontDefault());
+	buttonGoBack = NewButton(centerX - buttonW / 2, centerY + 100, buttonW,
+							 buttonH, "<", GetFontDefault());
 }

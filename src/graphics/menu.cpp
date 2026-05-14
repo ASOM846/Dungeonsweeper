@@ -50,16 +50,17 @@ MenuLayout ComputeMainMenuLayout(int screenW, int screenH) {
 
 } // namespace
 
-void Menu::Init() {
+void Menu::Init(TextureManager &tm) {
 	currentState = MenuState::MainMenu;
 
-	easyGameButton = NewButton(0, 0, 0, 0, "Easy Mode");
+	easyGameButton = NewButton(0, 0, 0, 0, "Easy Mode", tm.getDefaultFont());
 
-	mediumGameButton = NewButton(0, 0, 0, 0, "Medium Mode");
+	mediumGameButton =
+		NewButton(0, 0, 0, 0, "Medium Mode", tm.getDefaultFont());
 
-	hardGameButton = NewButton(0, 0, 0, 0, "Hard Mode");
+	hardGameButton = NewButton(0, 0, 0, 0, "Hard Mode", tm.getDefaultFont());
 
-	settingsButton = NewButton(0, 0, 0, 0, "Settings");
+	settingsButton = NewButton(0, 0, 0, 0, "Settings", tm.getDefaultFont());
 
 	dailyCard = SideCard(0, 0, 0, 0, "DAILY", "CHALLENGE", "One Seed.",
 						 "One Attempt.", "Coming soon.", "PLAY", false);

@@ -479,7 +479,7 @@ void UI::RenderMessageBox() {
 	NewButton okBtn;
 	const float okW = 140.0f;
 	const float okH = 44.0f;
-	okBtn = NewButton(0.0f, 0.0f, okW, okH, "OK");
+	okBtn = NewButton(0.0f, 0.0f, okW, okH, "OK", GetFontDefault());
 	okBtn.SetColors(Color{34, 30, 26, 255}, Color{120, 96, 72, 255},
 					Color{220, 200, 170, 255});
 	const float okX = boxX + (boxW - okW) * 0.5f;

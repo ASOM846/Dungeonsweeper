@@ -35,7 +35,7 @@ class NewButton {
   public:
 	NewButton();
 	NewButton(float xPos, float yPos, float btnWidth, float btnHeight,
-			  const std::string &btnLabel);
+			  const std::string &btnLabel, const Font &font);
 	void SetColors(Color newFill, Color newBorder, Color newText);
 	void Draw() const;
 	bool IsClicked() const;
@@ -70,6 +70,7 @@ class NewButton {
 	int fontSize;
 	bool hovered;
 	bool pressed;
+	Font font;
 };
 
 #endif // BUTTON_HPP
