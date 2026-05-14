@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include <raylib.h>
 #include <stdexcept>
 #include <string>
@@ -67,6 +68,8 @@ class TextureManager {
 	~TextureManager() { unloadAll(); }
 
 	void loadAll() {
+		loadFont();
+
 		load(TextureId::Enemy1, "assets/enemy1.png");
 		load(TextureId::Enemy2, "assets/enemy2.png");
 		load(TextureId::Enemy3, "assets/enemy3.png");
@@ -130,11 +133,15 @@ class TextureManager {
 		return it->second;
 	}
 
+	const Font &getDefaultFont() const { return defaultFont; }
+
 	void unloadAll() {
 		for (auto &kv : textures) {
 			UnloadTexture(kv.second);
 		}
 		textures.clear();
+
+		UnloadFont(defaultFont);
 	}
 
   private:
@@ -146,5 +153,16 @@ class TextureManager {
 		textures.emplace(id, tex);
 	}
 
+	void loadFont() {
+		defaultFont = LoadFontEx("assets/SuperPixel.ttf", 60, 0, 0);
+
+		if (!IsFontValid(defaultFont)) {
+			std::cerr << "ERROR: Font loading failed using defaultFont.\n";
+
+			defaultFont = GetFontDefault();
+		}
+	}
+
 	std::unordered_map<TextureId, Texture2D> textures;
+	Font defaultFont;
 };

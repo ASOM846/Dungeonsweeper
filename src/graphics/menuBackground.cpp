@@ -3,17 +3,13 @@
 
 void MenuBackground::UpdatePositions() {
 	const int fontSize = 60;
-	auto textDungeonLength =
-		static_cast<float>(MeasureText("Dungeon", fontSize));
-	auto textSweeperLength =
-		static_cast<float>(MeasureText("Sweeper", fontSize));
 
 	const int fireSpacing = 50;
 	fire1.SetPosition(
-		{GetScreenWidth() / 2 - textDungeonLength / 2 - fireSpacing, 180});
+		{GetScreenWidth() / 2 - DungeonLength / 2 - fireSpacing, 180});
 
 	fire2.SetPosition(
-		{GetScreenWidth() / 2 + textDungeonLength / 2 + fireSpacing, 180});
+		{GetScreenWidth() / 2 + DungeonLength / 2 + fireSpacing, 180});
 }
 
 void MenuBackground::Update() {
@@ -34,7 +30,7 @@ void MenuBackground::Init() {
 	fire2.SetType(ParticleSystem::FIRE);
 }
 
-void MenuBackground::RenderBcg(const TextureManager &textureManager) const {
+void MenuBackground::RenderBcg(const TextureManager &textureManager) {
 	const int numberOfTilesX = GetScreenWidth() / Grid::CELL_SIZE + 1;
 	const int numberOfTilesY = GetScreenHeight() / Grid::CELL_SIZE + 1;
 
@@ -53,14 +49,22 @@ void MenuBackground::RenderBcg(const TextureManager &textureManager) const {
 
 	const int fontSize = 60;
 	const int offset = 20;
+	const float spacing = 3.0f;
 
-	auto textDungeonLength =
-		static_cast<float>(MeasureText("Dungeon", fontSize));
-	auto textSweeperLength =
-		static_cast<float>(MeasureText("Sweeper", fontSize));
+	Font font = textureManager.getDefaultFont();
 
-	DrawText("Dungeon", GetScreenWidth() / 2 - textDungeonLength / 2 - offset,
-			 100, fontSize, Color{200, 170, 140, 255});
-	DrawText("Sweeper", GetScreenWidth() / 2 - textSweeperLength / 2 + offset,
-			 150, fontSize, Color{200, 170, 140, 255});
+	Vector2 dungeonSize = MeasureTextEx(font, "Dungeon", fontSize, spacing);
+	DungeonLength = dungeonSize.x;
+
+	Vector2 sweeperSize = MeasureTextEx(font, "Sweeper", fontSize, spacing);
+
+	DrawTextEx(
+		font, "Dungeon",
+		{GetScreenWidth() / 2.0f - dungeonSize.x / 2.0f - offset, 100.0f},
+		fontSize, spacing, Color{200, 170, 140, 255});
+
+	DrawTextEx(
+		font, "Sweeper",
+		{GetScreenWidth() / 2.0f - sweeperSize.x / 2.0f + offset, 160.0f},
+		fontSize, spacing, Color{200, 170, 140, 255});
 }

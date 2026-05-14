@@ -16,9 +16,12 @@ class MenuBackground {
 
 	void Init();
 
-	void RenderBcg(const TextureManager &textureManager) const;
+	void RenderBcg(const TextureManager &textureManager);
 
   private:
 	ParticleSystem fire1;
 	ParticleSystem fire2;
+
+	float DungeonLength;
+	float SweeperLength;
 };
