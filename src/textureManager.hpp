@@ -145,6 +145,9 @@ class TextureManager {
 	}
 
   private:
+	// TODO: Zrobic singletona ASSETS, ktory zajmie sie teksturami oraz
+	// IsFontValid
+
 	void load(TextureId id, const char *path) {
 		Texture2D tex = LoadTexture(path);
 		if (tex.id == 0)

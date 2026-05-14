@@ -53,12 +53,11 @@ MenuLayout ComputeMainMenuLayout(int screenW, int screenH) {
 void Menu::Init(TextureManager &tm) {
 	currentState = MenuState::MainMenu;
 
-	easyGameButton = NewButton(0, 0, 0, 0, "Easy Mode", tm.getDefaultFont());
+	easyGameButton = NewButton(0, 0, 0, 0, "Easy", tm.getDefaultFont());
 
-	mediumGameButton =
-		NewButton(0, 0, 0, 0, "Medium Mode", tm.getDefaultFont());
+	mediumGameButton = NewButton(0, 0, 0, 0, "Medium", tm.getDefaultFont());
 
-	hardGameButton = NewButton(0, 0, 0, 0, "Hard Mode", tm.getDefaultFont());
+	hardGameButton = NewButton(0, 0, 0, 0, "Hard", tm.getDefaultFont());
 
 	settingsButton = NewButton(0, 0, 0, 0, "Settings", tm.getDefaultFont());
 
